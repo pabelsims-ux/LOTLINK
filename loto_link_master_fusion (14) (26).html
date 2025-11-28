@@ -17,17 +17,164 @@
   <!-- Chart.js (Gráficas para el Portal) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <!-- Apple SF Pro Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    body { -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    /* ========================================
+       APPLE-INSPIRED ELEGANT DESIGN SYSTEM
+       ======================================== */
     
-    /* Modo Oscuro */
-    .dark body { background-color: #0f172a; color: #f3f4f6; }
-    .dark .dark\:bg-slate-800 { background-color: #1f2937; }
-    .dark .dark\:bg-slate-900 { background-color: #0f172a; }
-    .dark .dark\:text-gray-100 { color: #f3f4f6; }
-    .dark .dark\:text-gray-300 { color: #d1d5db; }
-    .dark .dark\:text-gray-500 { color: #6b7280; }
-    .dark .dark\:border-gray-700 { border-color: #374151; }
+    :root {
+      /* Premium Color Palette - Apple inspired */
+      --primary: #0071e3;
+      --primary-dark: #0077ED;
+      --primary-light: #42a5f5;
+      --success: #34c759;
+      --warning: #ff9f0a;
+      --danger: #ff3b30;
+      --purple: #af52de;
+      
+      /* Neutral Grays - Apple style */
+      --gray-50: #fafafa;
+      --gray-100: #f5f5f7;
+      --gray-200: #e8e8ed;
+      --gray-300: #d2d2d7;
+      --gray-400: #86868b;
+      --gray-500: #6e6e73;
+      --gray-600: #1d1d1f;
+      
+      /* Glass Effect */
+      --glass-bg: rgba(255, 255, 255, 0.72);
+      --glass-border: rgba(255, 255, 255, 0.18);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      
+      /* Premium Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
+      --shadow-xl: 0 25px 50px rgba(0, 0, 0, 0.15);
+      
+      /* Border Radius - Apple style */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 24px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body { 
+      -webkit-font-smoothing: antialiased; 
+      -moz-osx-font-smoothing: grayscale;
+      background: linear-gradient(180deg, #f5f5f7 0%, #ffffff 100%);
+      letter-spacing: -0.01em;
+    }
+    
+    /* Premium Button Styles */
+    .btn-apple-primary {
+      background: linear-gradient(180deg, #0077ED 0%, #0071e3 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+      box-shadow: 0 4px 14px rgba(0, 113, 227, 0.35);
+    }
+    .btn-apple-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 113, 227, 0.45);
+    }
+    .btn-apple-primary:active {
+      transform: scale(0.98);
+    }
+    
+    .btn-apple-secondary {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--primary);
+      border: none;
+      padding: 12px 24px;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.2s ease;
+    }
+    .btn-apple-secondary:hover {
+      background: rgba(0, 113, 227, 0.1);
+    }
+
+    /* Glass Morphism Cards */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .premium-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    .premium-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    /* Premium Header */
+    .premium-header {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    /* Elegant Modal Backdrop */
+    .modal-backdrop {
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* Modo Oscuro - Premium Dark */
+    .dark body { 
+      background: linear-gradient(180deg, #000000 0%, #1c1c1e 100%);
+      color: #f5f5f7; 
+    }
+    .dark .dark\:bg-slate-800 { background-color: #1c1c1e; }
+    .dark .dark\:bg-slate-900 { background-color: #000000; }
+    .dark .dark\:text-gray-100 { color: #f5f5f7; }
+    .dark .dark\:text-gray-300 { color: #a1a1a6; }
+    .dark .dark\:text-gray-500 { color: #6e6e73; }
+    .dark .dark\:border-gray-700 { border-color: #38383a; }
+    
+    .dark .premium-header {
+      background: rgba(28, 28, 30, 0.85);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .dark .glass-card {
+      background: rgba(28, 28, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .dark .premium-card {
+      background: #1c1c1e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
     
     @media print {
       body * { visibility: hidden; }
@@ -35,25 +182,46 @@
       #ticket-print-area { position: absolute; left: 0; top: 0; width: 100%; }
     }
     
-    #demo-leaflet-map { width: 100%; height: 60vh; border-radius: 12px; z-index: 1; }
-    #banca-selection-map { width: 100%; height: 450px; border-radius: 12px; z-index: 1; }
+    #demo-leaflet-map { width: 100%; height: 60vh; border-radius: var(--radius-xl); z-index: 1; }
+    #banca-selection-map { width: 100%; height: 450px; border-radius: var(--radius-xl); z-index: 1; }
     
-    /* Toggle Switch */
+    /* Premium Toggle Switch - Apple style */
     .toggle {
-      width: 44px; height: 24px; border-radius: 999px; background: #e5e7eb; position: relative; display: inline-block; vertical-align: middle; cursor: pointer;
+      width: 51px; 
+      height: 31px; 
+      border-radius: var(--radius-full); 
+      background: #e9e9eb; 
+      position: relative; 
+      display: inline-block; 
+      vertical-align: middle; 
+      cursor: pointer;
+      transition: background 0.25s ease;
     }
     .toggle .knob {
-      width: 20px; height: 20px; border-radius: 999px; background: white; position: absolute; top: 2px; left: 2px; transition: transform 0.15s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      width: 27px; 
+      height: 27px; 
+      border-radius: var(--radius-full); 
+      background: white; 
+      position: absolute; 
+      top: 2px; 
+      left: 2px; 
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.1);
     }
-    .toggle.on { background: #10b981; }
+    .toggle.on { background: var(--success); }
     .toggle.on .knob { transform: translateX(20px); }
 
     .modal-scroll { max-height: calc(100vh - 160px); overflow: auto; }
     
-    /* Animación de Ticket e Impresora */
+    /* Elegant Ticket Print Animation */
     .ticket-print {
-      width: 340px; border-radius: 12px; background: linear-gradient(180deg,#fff,#fbfbfb); box-shadow: 0 18px 40px rgba(2,6,23,0.35); padding: 18px; transform-origin: top center; animation: printIn 700ms cubic-bezier(.2,.9,.3,1);
+      width: 340px; 
+      border-radius: var(--radius-xl); 
+      background: white;
+      box-shadow: var(--shadow-xl);
+      padding: 24px; 
+      transform-origin: top center; 
+      animation: printIn 700ms cubic-bezier(.25,.1,.25,1);
       color: #000 !important;
     }
     @keyframes printIn {
@@ -61,48 +229,131 @@
       60% { transform: translateY(-8px) scale(1.02); opacity: 1; }
       100% { transform: translateY(0) scale(1); }
     }
-    .printer-slot { width: 100%; height: 14px; background: linear-gradient(180deg,#111827,#06070a); border-bottom: 6px solid rgba(0,0,0,0.6); position: relative; box-shadow: inset 0 2px 4px rgba(255,255,255,0.02); margin-bottom: 8px; border-radius: 6px 6px 0 0; }
-    .printer-slot::after { content: ''; position: absolute; left: 50%; transform: translateX(-50%); top: 50%; width: 60%; height: 4px; background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); border-radius: 2px; opacity: 0.9; }
+    
+    .printer-slot { 
+      width: 100%; 
+      height: 14px; 
+      background: linear-gradient(180deg, #2c2c2e 0%, #1c1c1e 100%);
+      border-bottom: 4px solid rgba(0,0,0,0.4); 
+      position: relative; 
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.02); 
+      margin-bottom: 8px; 
+      border-radius: 8px 8px 0 0; 
+    }
+    .printer-slot::after { content: ''; position: absolute; left: 50%; transform: translateX(-50%); top: 50%; width: 60%; height: 4px; background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); border-radius: 2px; }
 
-    .ticket-entrance { transform-origin: top center; animation: slideFromTop 700ms cubic-bezier(.2,.9,.3,1); }
+    .ticket-entrance { transform-origin: top center; animation: slideFromTop 700ms cubic-bezier(.25,.1,.25,1); }
     @keyframes slideFromTop {
       0% { transform: translateY(-140%) scale(.98); opacity: 0; }
       60% { transform: translateY(10px) scale(1.02); opacity: 1; }
       100% { transform: translateY(0) scale(1); opacity: 1; }
     }
     
-    /* Dark mode for modal card - Fixed to use consistent dark class */
-    .dark #modal-card { background: #0b1220; color: #e6eef8; }
-    .dark #modal-card .bg-white { background: #1e293b !important; }
-    .dark #modal-card .text-gray-500 { color: #a8b6c9 !important; }
+    /* Dark mode for modal card */
+    .dark #modal-card { background: #1c1c1e; color: #f5f5f7; }
+    .dark #modal-card .bg-white { background: #2c2c2e !important; }
+    .dark #modal-card .text-gray-500 { color: #a1a1a6 !important; }
     .dark #modal-card .border { border-color: rgba(255,255,255,0.1) !important; }
-    .dark #modal-card .bg-gray-50 { background: rgba(255,255,255,0.03) !important; }
+    .dark #modal-card .bg-gray-50 { background: rgba(255,255,255,0.05) !important; }
     
-    /* Lottery modal specific dark mode toggle */
-    #modal-card.lottery-dark-mode { background: #0b1220; color: #e6eef8; }
-    #modal-card.lottery-dark-mode .bg-white { background: #1e293b !important; }
-    #modal-card.lottery-dark-mode .text-gray-500 { color: #a8b6c9 !important; }
-    #modal-card.lottery-dark-mode .text-gray-600 { color: #9fb7d6 !important; }
-    #modal-card.lottery-dark-mode .text-gray-700 { color: #cfe6ff !important; }
-    #modal-card.lottery-dark-mode .border { border-color: rgba(255,255,255,0.06) !important; }
-    #modal-card.lottery-dark-mode .bg-gray-50 { background: rgba(255,255,255,0.02) !important; }
-    #modal-card.lottery-dark-mode .bg-blue-50 { background: rgba(59, 130, 246, 0.1) !important; }
-    #modal-card.lottery-dark-mode .bg-green-50 { background: rgba(16, 185, 129, 0.1) !important; }
+    /* Lottery modal specific dark mode */
+    #modal-card.lottery-dark-mode { background: #1c1c1e; color: #f5f5f7; }
+    #modal-card.lottery-dark-mode .bg-white { background: #2c2c2e !important; }
+    #modal-card.lottery-dark-mode .text-gray-500 { color: #a1a1a6 !important; }
+    #modal-card.lottery-dark-mode .text-gray-600 { color: #8e8e93 !important; }
+    #modal-card.lottery-dark-mode .text-gray-700 { color: #c7c7cc !important; }
+    #modal-card.lottery-dark-mode .border { border-color: rgba(255,255,255,0.1) !important; }
+    #modal-card.lottery-dark-mode .bg-gray-50 { background: rgba(255,255,255,0.05) !important; }
+    #modal-card.lottery-dark-mode .bg-blue-50 { background: rgba(0, 113, 227, 0.15) !important; }
+    #modal-card.lottery-dark-mode .bg-green-50 { background: rgba(52, 199, 89, 0.15) !important; }
     
-    /* Number button selected state */
-    .num-btn { transition: all .12s; }
-    .num-btn.selected { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
-    
-    /* Estilo Específico del Portal (Brand Gradient) */
-    .bg-gradient-brand {
-      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    /* Premium Number Button */
+    .num-btn { 
+      transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+      border-radius: var(--radius-md);
     }
-    .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .num-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .num-btn.selected { 
+      transform: translateY(-2px); 
+      box-shadow: 0 8px 24px rgba(0, 113, 227, 0.3); 
+    }
+    
+    /* Premium Brand Gradient */
+    .bg-gradient-brand {
+      background: linear-gradient(135deg, #0071e3 0%, #42a5f5 100%);
+    }
+    
+    /* Premium Animations */
+    .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); }
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: translateY(12px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
     @keyframes loading { from { width: 0%; } to { width: 100%; } }
+    
+    /* Premium Input Fields */
+    input, select, textarea {
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15);
+    }
+    
+    /* Elegant Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Premium Trust Badge */
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, rgba(52, 199, 89, 0.1) 0%, rgba(0, 113, 227, 0.1) 100%);
+      border: 1px solid rgba(52, 199, 89, 0.2);
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--success);
+    }
+
+    /* Shimmer Effect for Loading */
+    .shimmer {
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
   </style>
 </head>
-<body class="min-h-screen bg-gray-50 text-gray-900 font-sans">
+<body class="min-h-screen text-gray-900 antialiased">
 
   <div id="root"></div>
 
@@ -147,6 +398,226 @@
     function rand(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
     function QRImage({ value, size = 100 }) { const src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(value)}`; return <img src={src} alt="QR" width={size} height={size} />; }
 
+    /* --- LOTTERY RESULTS API CONFIGURATION ---
+     * This configuration connects to loteriasdominicanas.com for real-time lottery results.
+     * The API scrapes data from the official Dominican lottery results website.
+     */
+    const LOTTERY_API_CONFIG = {
+      // Primary source: loteriasdominicanas.com
+      BASE_URL: 'https://loteriasdominicanas.com',
+      
+      // Lottery endpoints
+      ENDPOINTS: {
+        LOTEKA: '/loteka',
+        LEIDSA: '/leidsa', 
+        NACIONAL: '/loteria-nacional',
+        LA_PRIMERA: '/la-primera',
+        REAL: '/la-suerte',
+        AMERICANAS: '/americanas'
+      },
+      
+      // CORS proxy options for browser requests
+      CORS_PROXIES: [
+        'https://api.allorigins.win/raw?url=',
+        'https://corsproxy.io/?',
+        'https://api.codetabs.com/v1/proxy?quest='
+      ],
+      
+      // Update interval in milliseconds (30 seconds for real-time)
+      UPDATE_INTERVAL_MS: 30000,
+      
+      // Fallback to simulation if API fails
+      FALLBACK_TO_SIMULATION: true,
+      
+      // Cache duration in milliseconds (5 minutes)
+      CACHE_DURATION_MS: 300000
+    };
+
+    /* --- REAL LOTTERY RESULTS FETCHER ---
+     * Fetches real-time lottery results from loteriasdominicanas.com
+     * Uses CORS proxy for browser compatibility
+     */
+    async function fetchRealLotteryResults(lotteryType) {
+      const endpoint = LOTTERY_API_CONFIG.ENDPOINTS[lotteryType] || LOTTERY_API_CONFIG.ENDPOINTS.LOTEKA;
+      const url = LOTTERY_API_CONFIG.BASE_URL + endpoint;
+      
+      // Try each CORS proxy until one works
+      for (const proxy of LOTTERY_API_CONFIG.CORS_PROXIES) {
+        try {
+          const response = await fetch(proxy + encodeURIComponent(url), {
+            method: 'GET',
+            headers: {
+              'Accept': 'text/html,application/xhtml+xml,application/xml',
+              'Cache-Control': 'no-cache'
+            }
+          });
+          
+          if (!response.ok) continue;
+          
+          const html = await response.text();
+          
+          // Parse the HTML to extract lottery results
+          const results = parseLotteryHTML(html, lotteryType);
+          if (results && results.numbers && results.numbers.length > 0) {
+            return results;
+          }
+        } catch (error) {
+          console.warn(`CORS proxy failed: ${proxy}`, error);
+          continue;
+        }
+      }
+      
+      return null;
+    }
+
+    /* --- HTML PARSER FOR LOTTERY RESULTS ---
+     * Parses the loteriasdominicanas.com HTML to extract winning numbers
+     */
+    function parseLotteryHTML(html, lotteryType) {
+      try {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Look for result containers - loteriasdominicanas.com uses various class patterns
+        const resultPatterns = [
+          '.resultado', '.winning-numbers', '.numeros-ganadores',
+          '.lottery-result', '.draw-result', '[class*="result"]',
+          '.numero', '.ball', '.bola'
+        ];
+        
+        for (const pattern of resultPatterns) {
+          const elements = doc.querySelectorAll(pattern);
+          if (elements.length > 0) {
+            const numbers = [];
+            elements.forEach(el => {
+              const num = el.textContent?.trim();
+              if (num && /^\d{1,2}$/.test(num)) {
+                numbers.push(pad(parseInt(num)));
+              }
+            });
+            
+            if (numbers.length >= 3) {
+              return {
+                numbers: numbers.slice(0, 3),
+                time: new Date().toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' }),
+                isLive: true,
+                source: 'loteriasdominicanas.com'
+              };
+            }
+          }
+        }
+        
+        // Alternative: Look for numbers in specific table structures
+        const tables = doc.querySelectorAll('table');
+        for (const table of tables) {
+          const cells = table.querySelectorAll('td');
+          const numbers = [];
+          cells.forEach(cell => {
+            const num = cell.textContent?.trim();
+            if (num && /^\d{1,2}$/.test(num)) {
+              numbers.push(pad(parseInt(num)));
+            }
+          });
+          
+          if (numbers.length >= 3) {
+            return {
+              numbers: numbers.slice(0, 3),
+              time: new Date().toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' }),
+              isLive: true,
+              source: 'loteriasdominicanas.com'
+            };
+          }
+        }
+        
+        return null;
+      } catch (error) {
+        console.error('Error parsing lottery HTML:', error);
+        return null;
+      }
+    }
+
+    /* --- LOTTERY RESULTS HOOK WITH REAL API ---
+     * Fetches real lottery results from loteriasdominicanas.com
+     * Falls back to simulation if API is unavailable
+     */
+    function useLotteryResults(updateMs = 30000) {
+      const gen = () => ({ 
+        time: new Date().toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' }), 
+        numbers: [pad(rand(0,99)), pad(rand(0,99)), pad(rand(0,99))],
+        isLive: false,
+        source: 'simulación'
+      });
+      
+      const [feed, setFeed] = useState({ 
+        Leidsa: gen(), 
+        Loteka: gen(), 
+        "Lotería Nacional": gen(), 
+        "La Primera": gen() 
+      });
+      const [isConnected, setIsConnected] = useState(false);
+      const [lastUpdate, setLastUpdate] = useState(null);
+      const cacheRef = useRef({});
+      
+      // Fetch all lottery results
+      const fetchAllResults = async () => {
+        const lotteryMap = {
+          'Loteka': 'LOTEKA',
+          'Leidsa': 'LEIDSA',
+          'Lotería Nacional': 'NACIONAL',
+          'La Primera': 'LA_PRIMERA'
+        };
+        
+        const newFeed = {};
+        let anySuccess = false;
+        
+        for (const [displayName, apiKey] of Object.entries(lotteryMap)) {
+          // Check cache first
+          const cached = cacheRef.current[displayName];
+          const now = Date.now();
+          if (cached && (now - cached.timestamp) < LOTTERY_API_CONFIG.CACHE_DURATION_MS) {
+            newFeed[displayName] = cached.data;
+            anySuccess = true;
+            continue;
+          }
+          
+          try {
+            const result = await fetchRealLotteryResults(apiKey);
+            if (result) {
+              newFeed[displayName] = result;
+              cacheRef.current[displayName] = { data: result, timestamp: now };
+              anySuccess = true;
+            } else if (LOTTERY_API_CONFIG.FALLBACK_TO_SIMULATION) {
+              newFeed[displayName] = gen();
+            }
+          } catch (error) {
+            console.warn(`Failed to fetch ${displayName}:`, error);
+            if (LOTTERY_API_CONFIG.FALLBACK_TO_SIMULATION) {
+              newFeed[displayName] = gen();
+            }
+          }
+        }
+        
+        if (Object.keys(newFeed).length > 0) {
+          setFeed(prev => ({ ...prev, ...newFeed }));
+          setIsConnected(anySuccess);
+          setLastUpdate(new Date());
+        }
+      };
+      
+      useEffect(() => {
+        // Initial fetch
+        fetchAllResults();
+        
+        // Set up interval for real-time updates
+        const intervalId = setInterval(fetchAllResults, updateMs);
+        
+        return () => clearInterval(intervalId);
+      }, [updateMs]);
+      
+      return { feed, isConnected, lastUpdate };
+    }
+
+    /* --- LEGACY SIMULATED RESULTS (for compatibility) --- */
     function useSimulatedResults(updateMs = 10000) {
       const gen = () => ({ time: new Date().toLocaleTimeString(), numbers: [pad(rand(0,99)), pad(rand(0,99)), pad(rand(0,99))] });
       const [feed, setFeed] = useState({ Leidsa: gen(), Loteka: gen(), "Lotería Nacional": gen(), "La Primera": gen() });
@@ -747,31 +1218,47 @@
     /* --- STANDARD COMPONENTS (Header, Hero, etc.) --- */
     function Header({ theme, setTheme, user, onLogin, onLogout, onNav, onOpenPlay, cartCount, onToggleCart, winningTicketsCount, onShowWinningTickets, registeredCard, onManageCard }) {
       return (
-        <header className="bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-40 transition-colors">
-          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg grid place-items-center text-white font-bold cursor-pointer" onClick={()=>onNav('home')}>L</div>
-              <div className="font-bold text-xl hidden sm:block cursor-pointer text-blue-900 dark:text-white" onClick={()=>onNav('home')}>LotoLink</div>
-              <nav className="hidden md:flex gap-1 text-sm ml-4">
-                <button onClick={() => onNav('home')} className="px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-700 dark:text-gray-300">Inicio</button>
-                <button onClick={() => onNav('how')} className="px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-700 dark:text-gray-300">Cómo funciona</button>
-                <button onClick={() => onNav('demo')} className="px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-700 dark:text-gray-300">Demo</button>
-                <button onClick={() => onNav('loterias')} className="px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-700 dark:text-gray-300">Loterías</button>
-                <button onClick={() => onNav('bancas')} className="px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-700 dark:text-gray-300">Bancas</button>
-                <button onClick={() => onNav('rankings')} className="px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-700 dark:text-gray-300">Rankings</button>
-                <button onClick={() => onNav('masjugados')} className="px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-slate-700 dark:text-gray-300">Más Jugados</button>
+        <header className="premium-header sticky top-0 z-40 transition-all duration-300">
+          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-5">
+              {/* Premium Logo */}
+              <div 
+                className="w-11 h-11 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl grid place-items-center text-white font-bold text-lg cursor-pointer shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105" 
+                onClick={()=>onNav('home')}
+              >
+                L
+              </div>
+              <div className="font-semibold text-xl hidden sm:block cursor-pointer text-gray-900 dark:text-white tracking-tight" onClick={()=>onNav('home')}>
+                LotoLink
+                <span className="ml-2 text-xs font-medium text-gray-400 dark:text-gray-500">Premium</span>
+              </div>
+              <nav className="hidden lg:flex gap-1 text-sm ml-6">
+                <button onClick={() => onNav('home')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Inicio</button>
+                <button onClick={() => onNav('how')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Cómo funciona</button>
+                <button onClick={() => onNav('demo')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Demo/Mapa</button>
+                <button onClick={() => onNav('loterias')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Loterías</button>
+                <button onClick={() => onNav('bancas')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Bancas</button>
+                <button onClick={() => onNav('rankings')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Rankings</button>
               </nav>
             </div>
             <div className="flex items-center gap-3">
+              {/* Trust Badge */}
+              <div className="hidden md:flex trust-badge">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>Seguro</span>
+              </div>
+              
               {/* Winning Tickets Indicator */}
               {winningTicketsCount > 0 && (
                 <button 
                   onClick={onShowWinningTickets}
-                  className="relative px-3 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-lg font-medium text-sm flex items-center gap-2 animate-pulse hover:bg-green-200 dark:hover:bg-green-900/50 transition"
+                  className="relative px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full font-semibold text-sm flex items-center gap-2 shadow-lg shadow-green-500/30 hover:shadow-green-500/50 transition-all duration-300"
                 >
                   <span>🏆</span>
                   <span className="hidden sm:inline">Ganadores</span>
-                  <span className="bg-green-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">{winningTicketsCount}</span>
+                  <span className="bg-white text-green-600 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">{winningTicketsCount}</span>
                 </button>
               )}
               
@@ -779,20 +1266,61 @@
               {registeredCard && (
                 <button 
                   onClick={onManageCard}
-                  className="hidden sm:flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-slate-700 rounded text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600"
+                  className="hidden sm:flex items-center gap-2 px-3 py-2 bg-gray-100/80 dark:bg-white/10 backdrop-blur-sm rounded-xl text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all font-medium"
                   title={`${registeredCard.brand} terminada en ${registeredCard.lastFour}`}
                 >
-                  💳 •••{registeredCard.lastFour}
+                  <span className="text-lg">💳</span>
+                  <span className="font-mono">•••{registeredCard.lastFour}</span>
                 </button>
               )}
               
-              <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="hidden sm:inline px-3 py-2 border rounded text-xs dark:text-gray-300 dark:border-gray-600">{theme === 'dark' ? '☀️' : '🌙'}</button>
-              <button onClick={() => onNav('profile')} className="p-2 rounded hover:bg-gray-100 dark:hover:bg-slate-700 text-xl dark:text-white">👤</button>
-              <button onClick={onToggleCart} className="relative p-2 rounded hover:bg-gray-100 dark:hover:bg-slate-700 dark:text-white">
-                <span className="text-xl">🛍️</span>{cartCount > 0 && <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">{cartCount}</span>}
+              {/* Theme Toggle */}
+              <button 
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} 
+                className="hidden sm:flex w-10 h-10 items-center justify-center rounded-full bg-gray-100/80 dark:bg-white/10 backdrop-blur-sm hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all"
+              >
+                {theme === 'dark' ? '☀️' : '🌙'}
               </button>
-              {user ? <button onClick={onLogout} className="px-3 py-2 border rounded text-xs dark:text-gray-300">Salir</button> : <button onClick={onLogin} className="px-3 py-2 border rounded text-xs dark:text-gray-300">Entrar</button>}
-              <button onClick={onOpenPlay} className="bg-blue-600 text-white px-4 py-2 rounded-full font-bold shadow hover:bg-blue-700 transition">Jugar</button>
+              
+              {/* Profile */}
+              <button 
+                onClick={() => onNav('profile')} 
+                className="w-10 h-10 rounded-full bg-gray-100/80 dark:bg-white/10 backdrop-blur-sm hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all flex items-center justify-center text-xl"
+              >
+                👤
+              </button>
+              
+              {/* Cart */}
+              <button 
+                onClick={onToggleCart} 
+                className="relative w-10 h-10 rounded-full bg-gray-100/80 dark:bg-white/10 backdrop-blur-sm hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all flex items-center justify-center"
+              >
+                <span className="text-xl">🛒</span>
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-rose-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+              
+              {/* Auth Button */}
+              {user ? (
+                <button onClick={onLogout} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
+                  Salir
+                </button>
+              ) : (
+                <button onClick={onLogin} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
+                  Entrar
+                </button>
+              )}
+              
+              {/* Primary CTA */}
+              <button 
+                onClick={onOpenPlay} 
+                className="btn-apple-primary hidden sm:block"
+              >
+                Jugar Ahora
+              </button>
             </div>
           </div>
         </header>
@@ -801,18 +1329,95 @@
 
     function Hero({ onPlay, onBanca }) {
       return (
-        <section className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg mt-6 mb-8 transition-colors">
-          <div className="flex flex-col lg:flex-row items-center gap-8">
+        <section className="premium-card p-10 mt-8 mb-10 animate-fade-in">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="flex-1">
-              <h1 className="text-4xl font-extrabold text-slate-900 dark:text-white">Tu conexión con <span className="text-blue-600">la suerte</span></h1>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">Juega en tus bancas favoritas desde la app, gestiona tus tickets y cobra al instante.</p>
-              <div className="mt-6 flex gap-4">
-                <button onClick={onPlay} className="bg-slate-900 dark:bg-white dark:text-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition">Jugar ahora</button>
-                <button onClick={onBanca} className="px-8 py-3 rounded-full border-2 border-slate-200 dark:border-slate-600 dark:text-white font-bold hover:border-slate-400 transition">Soy una banca</button>
+              {/* Subtle Badge */}
+              <div className="flex items-center gap-3 mb-6">
+                <span className="trust-badge">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>100% Seguro</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-full text-xs font-medium text-gray-600 dark:text-gray-400">
+                  <span className="w-1.5 h-1.5 bg-gray-400 dark:bg-gray-500 rounded-full"></span>
+                  Luna IA
+                </span>
+              </div>
+              
+              {/* Headline */}
+              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight tracking-tight">
+                Tu conexión con<br/>
+                <span className="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">la suerte</span>
+              </h1>
+              
+              <p className="mt-6 text-xl text-gray-500 dark:text-gray-400 leading-relaxed max-w-lg">
+                Juega en tus bancas favoritas desde la app, gestiona tus tickets y cobra al instante. 
+                <span className="text-gray-700 dark:text-gray-300 font-medium">Luna, tu asistente IA,</span> te guía paso a paso.
+              </p>
+              
+              {/* CTA Buttons */}
+              <div className="mt-10 flex flex-col sm:flex-row gap-4">
+                <button 
+                  onClick={onPlay} 
+                  className="btn-apple-primary text-lg px-8 py-4"
+                >
+                  Jugar Ahora
+                  <span className="ml-2">→</span>
+                </button>
+                <button 
+                  onClick={onBanca} 
+                  className="btn-apple-secondary text-lg px-8 py-4"
+                >
+                  Soy una Banca
+                </button>
+              </div>
+              
+              {/* Trust Indicators */}
+              <div className="mt-10 flex items-center gap-6 text-sm text-gray-400">
+                <div className="flex items-center gap-2">
+                  <span className="text-green-500">✓</span>
+                  <span>Pagos seguros</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-green-500">✓</span>
+                  <span>Cobro instantáneo</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-green-500">✓</span>
+                  <span>24/7 Soporte</span>
+                </div>
               </div>
             </div>
-            <div className="w-full max-w-sm h-64 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-slate-700 dark:to-slate-800 rounded-2xl flex items-center justify-center border-2 border-dashed border-blue-200 dark:border-slate-600">
-              <div className="text-blue-300 font-bold text-2xl">App Preview</div>
+            
+            {/* Elegant App Preview - More subtle design */}
+            <div className="w-full max-w-sm">
+              <div className="relative">
+                {/* Subtle Phone Frame */}
+                <div className="bg-gray-900 dark:bg-gray-800 rounded-[2.5rem] p-2 shadow-2xl shadow-gray-900/20 dark:shadow-black/40">
+                  <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-[2rem] p-6 h-80 flex flex-col items-center justify-center border border-gray-100 dark:border-gray-700">
+                    {/* App Icon */}
+                    <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-blue-500/30 mb-4">
+                      L
+                    </div>
+                    <div className="text-xl font-semibold text-gray-900 dark:text-white mb-1">LotoLink</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Tu suerte, en tus manos</div>
+                    
+                    {/* Subtle loading indicator */}
+                    <div className="mt-6 flex gap-1.5">
+                      <div className="w-2 h-2 bg-gray-300 dark:bg-gray-600 rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                      <div className="w-2 h-2 bg-gray-500 dark:bg-gray-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Subtle floating badge */}
+                <div className="absolute -top-2 -right-2 w-12 h-12 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 flex items-center justify-center text-xl">
+                  🎯
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -829,19 +1434,30 @@
     };
 
     /* --- Wallet/Ticket Download Helper --- */
-    function downloadTicketForWallet(ticket, prizeMult) {
+    function downloadTicketForWallet(ticket, prizeMult, walletType = 'json') {
       const ticketData = {
         type: 'LotoLink Ticket',
         id: ticket.id,
         bank: ticket.bank,
-        prize: (ticket.total * prizeMult).toLocaleString('es-DO'),
-        status: 'Ganador - Pendiente de cobro'
+        total: ticket.total,
+        subtotal: ticket.subtotal || ticket.total,
+        commission: ticket.commission || 0,
+        paymentStatus: ticket.paymentStatus || 'paid',
+        createdAt: ticket.createdAt,
+        drawTime: ticket.drawTime,
+        prize: prizeMult > 1 ? (ticket.total * prizeMult).toLocaleString('es-DO') : null,
+        status: ticket.paymentStatus === 'pending' ? 'Pendiente de Pago en Sucursal' : 'Ticket Confirmado'
       };
-      const blob = new Blob([JSON.stringify(ticketData, null, 2)], {type: 'application/json'});
+      
+      // Generate filename based on wallet type
+      const fileExtension = walletType === 'pkpass' ? 'pkpass' : 'json';
+      const mimeType = walletType === 'pkpass' ? 'application/vnd.apple.pkpass' : 'application/json';
+      
+      const blob = new Blob([JSON.stringify(ticketData, null, 2)], {type: mimeType});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `LotoLink-Ticket-${ticket.id}.json`;
+      a.download = `LotoLink-Ticket-${ticket.id}.${fileExtension}`;
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -882,12 +1498,12 @@
       return ticket.total * PROFILE_CONFIG.PRIZE_MULTIPLIER;
     }
 
-    function Profile({ user, ticket }) {
+    function Profile({ user, ticket, registeredCards = [], onManageCards }) {
       const [visible, setVisible] = useState(() => localStorage.getItem("ll_visible_rank") === "true");
       const [wins, setWins] = useState(() => Number(localStorage.getItem("ll_user_wins") || 1));
       const [balance, setBalance] = useState(() => Number(localStorage.getItem("ll_user_balance") || 0));
       const [hist, setHist] = useState(() => JSON.parse(localStorage.getItem("ll_history") || "[]"));
-      const [profileView, setProfileView] = useState('overview'); // 'collect' | 'history' | 'overview' | 'wallet' | 'withdraw'
+      const [profileView, setProfileView] = useState('overview'); // 'collect' | 'history' | 'overview' | 'wallet' | 'withdraw' | 'cards'
       const [historyFilter, setHistoryFilter] = useState('all'); // 'all' | 'active' | 'won' | 'lost' | 'collected'
       const [historyPage, setHistoryPage] = useState(1);
       const [collectingTicket, setCollectingTicket] = useState(null);
@@ -1033,58 +1649,118 @@
       const pendingCollection = hist.filter(h => getTicketStatus(h) === 'won').reduce((sum, t) => sum + calculatePrize(t), 0);
 
       if (!user) return (
-        <div className="mt-10 p-10 text-center bg-white dark:bg-slate-800 rounded-2xl shadow border dark:border-slate-700">
-          <div className="text-5xl mb-4">🔒</div>
-          <h3 className="text-2xl font-bold dark:text-white">Acceso Restringido</h3>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">Debes iniciar sesión para ver tu perfil.</p>
+        <div className="mt-10 p-12 text-center premium-card animate-fade-in">
+          <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-3xl flex items-center justify-center text-4xl">
+            🔒
+          </div>
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Acceso Restringido</h3>
+          <p className="text-gray-500 dark:text-gray-400 mt-3 text-lg">Debes iniciar sesión para ver tu perfil.</p>
+          <button className="btn-apple-primary mt-6">
+            Iniciar Sesión
+          </button>
         </div>
       );
 
       return (
-        <section className="mt-6">
-          <h1 className="text-3xl font-bold mb-6 text-center dark:text-white">Mi Perfil</h1>
+        <section className="mt-8 animate-fade-in">
+          {/* Profile Header */}
+          <div className="text-center mb-10">
+            <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl flex items-center justify-center text-5xl shadow-lg shadow-blue-500/30">
+              👤
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{user?.name || 'Mi Perfil'}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-2">{user?.email}</p>
+            <div className="flex items-center justify-center gap-4 mt-4">
+              <div className="trust-badge">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>Cuenta Verificada</span>
+              </div>
+            </div>
+          </div>
           
           {/* Feedback Message */}
           {showFeedback.message && (
-            <div className={`mb-4 p-4 rounded-lg text-center font-medium animate-fade-in ${
-              showFeedback.type === 'success' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' : 
-              'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+            <div className={`mb-6 p-4 rounded-2xl text-center font-medium animate-fade-in backdrop-blur-sm ${
+              showFeedback.type === 'success' 
+                ? 'bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20' 
+                : 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20'
             }`}>
               {showFeedback.message}
             </div>
           )}
 
-          {/* Navigation Tabs */}
-          <div className="flex flex-wrap gap-2 mb-6 justify-center">
+          {/* Premium Navigation Tabs */}
+          <div className="flex flex-wrap gap-2 mb-8 justify-center p-2 bg-gray-100/80 dark:bg-white/5 rounded-2xl backdrop-blur-sm">
             <button 
               onClick={() => setProfileView('overview')}
-              className={`px-4 py-2 rounded-lg font-medium transition ${profileView === 'overview' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'}`}
+              className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${
+                profileView === 'overview' 
+                  ? 'bg-white dark:bg-white/10 text-blue-600 dark:text-blue-400 shadow-md' 
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
             >
               📊 Resumen
             </button>
             <button 
               onClick={() => { setProfileView('wallet'); refreshHistory(); }}
-              className={`px-4 py-2 rounded-lg font-medium transition ${profileView === 'wallet' ? 'bg-indigo-600 text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'}`}
+              className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 flex items-center gap-2 ${
+                profileView === 'wallet' 
+                  ? 'bg-white dark:bg-white/10 text-indigo-600 dark:text-indigo-400 shadow-md' 
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
             >
-              💼 Mi Cartera {activeTicketsCount > 0 && <span className="ml-1 bg-indigo-500 text-white text-xs px-2 py-0.5 rounded-full">{activeTicketsCount}</span>}
+              💼 Mi Cartera
+              {activeTicketsCount > 0 && (
+                <span className="bg-indigo-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{activeTicketsCount}</span>
+              )}
+            </button>
+            <button 
+              onClick={() => setProfileView('cards')}
+              className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 flex items-center gap-2 ${
+                profileView === 'cards' 
+                  ? 'bg-white dark:bg-white/10 text-blue-600 dark:text-blue-400 shadow-md' 
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              💳 Mis Tarjetas
+              {registeredCards.length > 0 && (
+                <span className="bg-blue-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{registeredCards.length}</span>
+              )}
             </button>
             <button 
               onClick={() => { setProfileView('history'); refreshHistory(); }}
-              className={`px-4 py-2 rounded-lg font-medium transition ${profileView === 'history' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'}`}
+              className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${
+                profileView === 'history' 
+                  ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-md' 
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
             >
-              📜 Historial Completo
+              📜 Historial
             </button>
             <button 
               onClick={() => { setProfileView('collect'); refreshHistory(); }}
-              className={`px-4 py-2 rounded-lg font-medium transition ${profileView === 'collect' ? 'bg-green-600 text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'}`}
+              className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 flex items-center gap-2 ${
+                profileView === 'collect' 
+                  ? 'bg-white dark:bg-white/10 text-green-600 dark:text-green-400 shadow-md' 
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
             >
-              💰 Cobrar Premios {pendingCollection > 0 && <span className="ml-1 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{wonTickets.filter(t => getTicketStatus(t) === 'won').length}</span>}
+              💰 Cobrar
+              {pendingCollection > 0 && (
+                <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">{wonTickets.filter(t => getTicketStatus(t) === 'won').length}</span>
+              )}
             </button>
             <button 
               onClick={() => setProfileView('withdraw')}
-              className={`px-4 py-2 rounded-lg font-medium transition ${profileView === 'withdraw' ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'}`}
+              className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${
+                profileView === 'withdraw' 
+                  ? 'bg-white dark:bg-white/10 text-blue-600 dark:text-blue-400 shadow-md' 
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
             >
-              🏦 Retirar Fondos
+              🏦 Retirar
             </button>
           </div>
 
@@ -1092,36 +1768,41 @@
           {profileView === 'overview' && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Personal Data Card */}
-              <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow border border-gray-100 dark:border-slate-700">
-                <h3 className="font-bold text-lg mb-4 border-b pb-2 dark:text-white dark:border-slate-700">Datos Personales</h3>
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-500 dark:text-gray-400">Nombre:</span>
-                    <span className="font-medium dark:text-white">{user.name}</span>
+              <div className="premium-card p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center">
+                    <span className="text-xl">👤</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500 dark:text-gray-400">Email:</span>
-                    <span className="font-medium dark:text-white">{user.email}</span>
+                  <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Datos Personales</h3>
+                </div>
+                <div className="space-y-4 text-sm">
+                  <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-white/5 rounded-xl">
+                    <span className="text-gray-500 dark:text-gray-400">Nombre</span>
+                    <span className="font-medium text-gray-900 dark:text-white">{user.name}</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-white/5 rounded-xl">
+                    <span className="text-gray-500 dark:text-gray-400">Email</span>
+                    <span className="font-medium text-gray-900 dark:text-white">{user.email}</span>
                   </div>
                 </div>
-                <div className="mt-6 pt-4 border-t dark:border-slate-700">
-                  <h4 className="font-bold text-xs uppercase text-gray-400 mb-3">Privacidad</h4>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-sm dark:text-gray-300">Visible en Ranking</span>
+                <div className="mt-6 pt-6 border-t border-gray-100 dark:border-white/10">
+                  <h4 className="text-xs font-semibold uppercase text-gray-400 mb-4 tracking-wider">Privacidad</h4>
+                  <div className="flex items-center justify-between mb-4 p-3 bg-gray-50 dark:bg-white/5 rounded-xl">
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Visible en Ranking</span>
                     <div onClick={toggleVisible} className={`toggle ${visible ? 'on' : ''}`}>
                       <div className="knob"></div>
                     </div>
                   </div>
-                  <form onSubmit={saveWins} className="flex gap-2 items-center">
-                    <span className="text-xs text-gray-500 dark:text-gray-400">Victorias:</span>
+                  <form onSubmit={saveWins} className="flex gap-3 items-center p-3 bg-gray-50 dark:bg-white/5 rounded-xl">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Victorias</span>
                     <input 
                       type="number" 
                       min="1" 
                       value={wins} 
                       onChange={e => setWins(Number(e.target.value) || 1)} 
-                      className="w-16 p-1 border rounded text-center text-sm dark:bg-slate-900 dark:text-white dark:border-slate-600" 
+                      className="w-20 p-2 border border-gray-200 dark:border-white/10 rounded-xl text-center text-sm bg-white dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30" 
                     />
-                    <button type="submit" className="text-xs bg-blue-100 text-blue-700 px-3 py-1.5 rounded font-bold hover:bg-blue-200">
+                    <button type="submit" className="btn-apple-primary text-xs px-4 py-2">
                       Guardar
                     </button>
                   </form>
@@ -1129,14 +1810,19 @@
               </div>
 
               {/* Recent Tickets Card */}
-              <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow border border-gray-100 dark:border-slate-700">
-                <div className="flex justify-between items-center mb-4 border-b pb-2 dark:border-slate-700">
-                  <h3 className="font-bold text-lg dark:text-white">Tickets Recientes</h3>
+              <div className="premium-card p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center">
+                      <span className="text-xl">🎫</span>
+                    </div>
+                    <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Tickets Recientes</h3>
+                  </div>
                   <button 
                     onClick={() => { setProfileView('wallet'); refreshHistory(); }}
-                    className="text-xs text-blue-600 hover:underline"
+                    className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 font-medium"
                   >
-                    Ver cartera →
+                    Ver todos →
                   </button>
                 </div>
                 {hist.slice(0, 3).map(h => {
@@ -1145,7 +1831,7 @@
                   return (
                     <div 
                       key={h.id} 
-                      className="mb-3 p-3 bg-gray-50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 cursor-pointer hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600 transition"
+                      className="mb-3 p-4 bg-gray-50 dark:bg-white/5 rounded-xl cursor-pointer hover:bg-gray-100 dark:hover:bg-white/10 transition-all duration-300"
                       onClick={() => setViewingTicket(h)}
                     >
                       <div className="flex justify-between items-center mb-1">
@@ -1167,48 +1853,53 @@
                     </div>
                   );
                 })}
-                {hist.length === 0 && <p className="text-sm text-gray-400 italic text-center py-4">No tienes historial de tickets.</p>}
+                {hist.length === 0 && <p className="text-sm text-gray-400 italic text-center py-6">No tienes historial de tickets.</p>}
               </div>
 
               {/* Balance Card */}
-              <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow border border-gray-100 dark:border-slate-700 flex flex-col justify-center items-center text-center">
-                <div className="w-16 h-16 bg-green-50 dark:bg-green-900/20 rounded-full flex items-center justify-center text-3xl mb-4">💰</div>
-                <h3 className="font-bold text-lg dark:text-white">Saldo Disponible</h3>
-                <p className="text-3xl font-bold text-green-600 my-2">RD$ {balance.toLocaleString('es-DO')}</p>
+              <div className="premium-card p-6 flex flex-col justify-center items-center text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-600 rounded-3xl flex items-center justify-center text-4xl mb-4 shadow-lg shadow-green-500/30">
+                  💰
+                </div>
+                <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Saldo Disponible</h3>
+                <p className="text-4xl font-bold bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent my-3">
+                  RD$ {balance.toLocaleString('es-DO')}
+                </p>
                 
                 {pendingCollection > 0 && (
-                  <div className="w-full p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg mb-4">
-                    <p className="text-xs text-yellow-700 dark:text-yellow-300 font-medium">
-                      🏆 Premios pendientes: RD$ {pendingCollection.toLocaleString('es-DO')}
+                  <div className="w-full p-4 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-amber-500/20 rounded-2xl mb-4">
+                    <p className="text-sm text-amber-600 dark:text-amber-400 font-medium flex items-center justify-center gap-2">
+                      <span className="text-lg">🏆</span>
+                      Premios pendientes: <span className="font-bold">RD$ {pendingCollection.toLocaleString('es-DO')}</span>
                     </p>
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-2 w-full mt-2">
+                <div className="grid grid-cols-2 gap-3 w-full mt-2">
                   <button 
                     onClick={() => setProfileView('collect')}
-                    className="bg-green-600 text-white py-2 rounded-lg font-bold text-sm hover:bg-green-700 transition"
+                    className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-semibold text-sm shadow-lg shadow-green-500/30 hover:shadow-green-500/50 transition-all duration-300"
                   >
                     Cobrar Premio
                   </button>
                   <button 
                     onClick={() => setProfileView('withdraw')}
-                    className="bg-slate-900 dark:bg-slate-600 text-white py-2 rounded-lg font-bold text-sm hover:bg-slate-700 dark:hover:bg-slate-500 transition"
+                    className="bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-white py-3 rounded-xl font-semibold text-sm hover:bg-gray-200 dark:hover:bg-white/20 transition-all duration-300"
                   >
                     Retirar
                   </button>
                 </div>
 
                 {/* Quick Stats */}
-                <div className="w-full mt-4 pt-4 border-t dark:border-slate-700">
-                  <div className="grid grid-cols-2 gap-4 text-center">
-                    <div>
-                      <p className="text-2xl font-bold text-blue-600">{hist.length}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Total Tickets</p>
+                <div className="w-full mt-6 pt-6 border-t border-gray-100 dark:border-white/10">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-blue-500/10 rounded-2xl">
+                      <p className="text-3xl font-bold text-blue-600">{hist.length}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Tickets</p>
                     </div>
-                    <div>
-                      <p className="text-2xl font-bold text-green-600">{wonTickets.length}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Ganados</p>
+                    <div className="p-4 bg-green-500/10 rounded-2xl">
+                      <p className="text-3xl font-bold text-green-600">{wonTickets.length}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Ganados</p>
                     </div>
                   </div>
                 </div>
@@ -1218,18 +1909,23 @@
 
           {/* HISTORY VIEW */}
           {profileView === 'history' && (
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow border border-gray-100 dark:border-slate-700">
+            <div className="premium-card p-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                <h3 className="font-bold text-xl dark:text-white">📜 Historial de Tickets</h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center">
+                    <span className="text-xl">📜</span>
+                  </div>
+                  <h3 className="font-semibold text-xl text-gray-900 dark:text-white">Historial de Tickets</h3>
+                </div>
+                <div className="flex flex-wrap gap-2 p-1 bg-gray-100/80 dark:bg-white/5 rounded-xl">
                   {['all', 'active', 'won', 'lost', 'collected'].map(filter => (
                     <button
                       key={filter}
                       onClick={() => { setHistoryFilter(filter); setHistoryPage(1); }}
-                      className={`px-3 py-1 rounded-full text-xs font-medium transition ${
+                      className={`px-4 py-2 rounded-lg text-xs font-medium transition-all duration-300 ${
                         historyFilter === filter 
-                          ? 'bg-blue-600 text-white' 
-                          : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'
+                          ? 'bg-white dark:bg-white/10 text-blue-600 dark:text-blue-400 shadow-sm' 
+                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                       }`}
                     >
                       {filter === 'all' ? 'Todos' : filter === 'active' ? 'Activos' : filter === 'won' ? 'Ganados' : filter === 'lost' ? 'Perdidos' : 'Cobrados'}
@@ -1506,11 +2202,101 @@
                   <button
                     type="submit"
                     disabled={!withdrawAmount || Number(withdrawAmount) < 100 || Number(withdrawAmount) > balance}
-                    className="w-full bg-purple-600 text-white py-3 rounded-lg font-bold hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Confirmar Retiro
                   </button>
                 </form>
+              )}
+            </div>
+          )}
+
+          {/* CARDS VIEW - My Payment Cards */}
+          {profileView === 'cards' && (
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow border border-gray-100 dark:border-slate-700">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="font-bold text-xl dark:text-white">💳 Mis Tarjetas</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Gestiona tus tarjetas de débito y crédito</p>
+                </div>
+                <button 
+                  onClick={onManageCards}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2"
+                >
+                  <span>➕</span> Agregar Tarjeta
+                </button>
+              </div>
+
+              {registeredCards.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-5xl mb-4">💳</p>
+                  <p className="text-gray-500 dark:text-gray-400 text-lg">No tienes tarjetas registradas</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">Agrega una tarjeta para poder pagar en la app</p>
+                  <button 
+                    onClick={onManageCards}
+                    className="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition"
+                  >
+                    Agregar Primera Tarjeta
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {registeredCards.map((card, index) => {
+                    // Brand-specific styling
+                    const brandStyles = {
+                      'Visa': { gradient: 'from-blue-600 to-blue-800', icon: '𝗩' },
+                      'Mastercard': { gradient: 'from-red-500 to-orange-600', icon: '◉◉' },
+                      'Tarjeta': { gradient: 'from-gray-500 to-gray-700', icon: '💳' }
+                    };
+                    const style = brandStyles[card.brand] || brandStyles['Tarjeta'];
+                    
+                    return (
+                      <div 
+                        key={card.id} 
+                        className="p-5 rounded-xl border-2 border-gray-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-blue-500 transition bg-gradient-to-r from-gray-50 to-white dark:from-slate-700 dark:to-slate-800"
+                      >
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-4">
+                            <div className={`w-14 h-14 bg-gradient-to-br ${style.gradient} rounded-xl flex items-center justify-center text-white text-2xl shadow-lg font-bold`}>
+                              {style.icon}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-bold text-lg dark:text-white">{card.brand}</span>
+                                {index === 0 && (
+                                  <span className="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full">Principal</span>
+                                )}
+                              </div>
+                              <div className="text-sm font-mono text-gray-500 dark:text-gray-400 mt-1">
+                                •••• •••• •••• {card.lastFour}
+                              </div>
+                              {card.name && (
+                              <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                                {card.name}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs text-gray-400 dark:text-gray-500">
+                            Registrada {new Date(card.registeredAt).toLocaleDateString('es-DO')}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                  })}
+                  
+                  <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <span className="text-blue-600 text-xl">ℹ️</span>
+                      <div className="text-sm text-blue-700 dark:text-blue-300">
+                        <strong>Seguridad:</strong> Solo almacenamos los últimos 4 dígitos de tus tarjetas. 
+                        Nunca guardamos el número completo ni el CVV.
+                      </div>
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           )}
@@ -1794,14 +2580,28 @@
       const [showAuthModal, setShowAuthModal] = useState(false);
       const [isCartOpen, setIsCartOpen] = useState(false);
       const [theme, setTheme] = useState(() => localStorage.getItem('ll_theme') || 'light');
-      const resultsFeed = useSimulatedResults(9000);
+      
+      // Real-time lottery results from loteriasdominicanas.com
+      const { feed: resultsFeed, isConnected: isLotteryConnected, lastUpdate: lotteryLastUpdate } = useLotteryResults(30000);
       
       // NEW: Card registration and winning tickets notification system
-      const [registeredCard, setRegisteredCard] = useState(() => JSON.parse(localStorage.getItem("ll_registered_card") || "null"));
+      const [registeredCards, setRegisteredCards] = useState(() => JSON.parse(localStorage.getItem("ll_registered_cards") || "[]"));
+      const [selectedCardIndex, setSelectedCardIndex] = useState(0);
+      const registeredCard = registeredCards.length > 0 ? registeredCards[selectedCardIndex] : null;
       const [showCardRegistration, setShowCardRegistration] = useState(false);
+      const [showCardManagement, setShowCardManagement] = useState(false); // New: Card management modal
       const [showWinningTicketsModal, setShowWinningTicketsModal] = useState(false);
       const [winningTickets, setWinningTickets] = useState([]);
       const [cardForm, setCardForm] = useState({ number: '', expiry: '', cvv: '', name: '' });
+      
+      // NEW: Payment options and checkout flow
+      const [showPaymentOptions, setShowPaymentOptions] = useState(false);
+      const [paymentMethod, setPaymentMethod] = useState('app'); // 'app' | 'branch'
+      const [showTicketConfirmation, setShowTicketConfirmation] = useState(false);
+      const [confirmedTicket, setConfirmedTicket] = useState(null);
+      
+      // App commission configuration
+      const APP_COMMISSION_RATE = 0.07; // 7% commission
 
       // Voice Assistant state - Natural language AI with personality, context memory, and varied responses
       const [isVoiceAssistantOpen, setIsVoiceAssistantOpen] = useState(false);
@@ -1820,14 +2620,67 @@
       const [assistantMode, setAssistantMode] = useState('idle'); // 'idle' | 'guided_play' | 'select_banca' | 'select_lottery' | 'select_modality' | 'select_numbers'
       const [guidedPlayData, setGuidedPlayData] = useState({ banca: null, lottery: null, modality: null, numbers: [] });
       
-      // AI Assistant configuration constants
+      // AI Assistant configuration constants - Enhanced for LLM and TTS Integration
       const AI_CONFIG = {
-        MAX_CONVERSATION_HISTORY: 10,
+        MAX_CONVERSATION_HISTORY: 20,
         MIN_THINKING_TIME_MS: 300,
         MAX_THINKING_TIME_MS: 800,
         SPEECH_RATE: 0.95,
-        SPEECH_PITCH: 1.05
+        SPEECH_PITCH: 1.05,
+        
+        // LLM Integration Settings (for future GPT-5 or similar API integration)
+        LLM_ENDPOINT: '/api/ai/chat',  // Backend endpoint for LLM requests
+        LLM_MODEL: 'gpt-5',            // Target model
+        LLM_MAX_TOKENS: 150,           // Max response length
+        LLM_TEMPERATURE: 0.7,          // Response creativity (0-1)
+        
+        // Text-to-Speech (TTS) Settings - Configurable voice options
+        TTS_ENABLED: true,
+        TTS_PROVIDER: 'browser',       // 'browser' | 'google_wavenet' | 'amazon_polly'
+        TTS_VOICE_GENDER: 'female',    // 'male' | 'female'
+        TTS_VOICE_ACCENT: 'es-ES',     // Spanish (Spain), 'es-MX' for Mexico, 'es-DO' for Dominican
+        TTS_VOICE_NAME: null,          // Auto-selected based on gender/accent
+        TTS_VOLUME: 1.0,               // 0.0 to 1.0
+        TTS_RATE_SLOW: 0.8,
+        TTS_RATE_NORMAL: 0.95,
+        TTS_RATE_FAST: 1.2,
+        
+        // Backend API Settings
+        API_BASE_URL: '/api',
+        API_TIMEOUT_MS: 10000,
+        
+        // Privacy and Security
+        ANONYMIZE_USER_DATA: true,
+        LOG_CONVERSATIONS: false,
+        ENCRYPTION_ENABLED: true
       };
+      
+      // AI Voice Preferences State
+      const [voiceSettings, setVoiceSettings] = useState({
+        enabled: true,
+        gender: 'female',
+        accent: 'es-ES',
+        speed: 'normal',
+        volume: 1.0
+      });
+      
+      // Available voices cache
+      const [availableVoices, setAvailableVoices] = useState([]);
+      
+      // Load available TTS voices
+      useEffect(() => {
+        const loadVoices = () => {
+          if ('speechSynthesis' in window) {
+            const voices = window.speechSynthesis.getVoices();
+            const spanishVoices = voices.filter(v => v.lang.startsWith('es'));
+            setAvailableVoices(spanishVoices);
+          }
+        };
+        loadVoices();
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
+      }, []);
       
       const [assistantPersonality] = useState({
         name: 'Luna',
@@ -1867,10 +2720,10 @@
         return () => clearTimeout(timer);
       }, [user]);
 
-      // Persist registered card (only non-sensitive display info)
+      // Persist registered cards (only non-sensitive display info)
       useEffect(() => {
-        localStorage.setItem("ll_registered_card", JSON.stringify(registeredCard));
-      }, [registeredCard]);
+        localStorage.setItem("ll_registered_cards", JSON.stringify(registeredCards));
+      }, [registeredCards]);
 
       const registerCard = () => {
         // Basic validation
@@ -1880,33 +2733,207 @@
         
         // Only store non-sensitive display information (no CVV, no full card number)
         const maskedCard = {
+          id: 'CARD-' + Date.now().toString(36).toUpperCase(),
           lastFour: cardForm.number.slice(-4),
           brand: cardForm.number.startsWith('4') ? 'Visa' : cardForm.number.startsWith('5') ? 'Mastercard' : 'Tarjeta',
+          name: cardForm.name,
           registeredAt: new Date().toISOString()
         };
-        setRegisteredCard(maskedCard);
+        setRegisteredCards(prev => [...prev, maskedCard]);
+        setSelectedCardIndex(registeredCards.length); // Select the new card
         setShowCardRegistration(false);
+        setShowCardManagement(false);
         setCardForm({ number: '', expiry: '', cvv: '', name: '' });
       };
+      
+      const deleteCard = (cardId) => {
+        const updatedCards = registeredCards.filter(c => c.id !== cardId);
+        setRegisteredCards(updatedCards);
+        if (selectedCardIndex >= updatedCards.length) {
+          setSelectedCardIndex(Math.max(0, updatedCards.length - 1));
+        }
+      };
 
-      // Voice Assistant Functions
+      // Voice Assistant Functions - Enhanced TTS with configurable voice options
       const speakText = (text) => {
+        // Check if TTS is enabled in settings
+        if (!voiceSettings.enabled || !AI_CONFIG.TTS_ENABLED) {
+          console.log('TTS disabled:', text);
+          return;
+        }
+        
         if ('speechSynthesis' in window) {
           // Cancel any ongoing speech before starting new one
           if (window.speechSynthesis.speaking) {
             window.speechSynthesis.cancel();
           }
+          
           const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = 'es-ES';
-          utterance.rate = AI_CONFIG.SPEECH_RATE;
+          
+          // Configure language/accent based on settings
+          utterance.lang = voiceSettings.accent || AI_CONFIG.TTS_VOICE_ACCENT;
+          
+          // Configure speech rate based on settings
+          const rates = {
+            'slow': AI_CONFIG.TTS_RATE_SLOW,
+            'normal': AI_CONFIG.TTS_RATE_NORMAL,
+            'fast': AI_CONFIG.TTS_RATE_FAST
+          };
+          utterance.rate = rates[voiceSettings.speed] || AI_CONFIG.SPEECH_RATE;
+          
+          // Configure pitch and volume
           utterance.pitch = AI_CONFIG.SPEECH_PITCH;
+          utterance.volume = voiceSettings.volume || AI_CONFIG.TTS_VOLUME;
+          
+          // Select appropriate voice based on gender preference
+          // Uses a robust matching approach that works across browsers/OS
+          if (availableVoices.length > 0) {
+            // Common Spanish voice name patterns by gender (cross-browser compatible)
+            const femalePatterns = [
+              'female', 'mujer', 'femenin', 'woman',
+              // Common Spanish female voice names across platforms
+              'paulina', 'mónica', 'monica', 'helena', 'conchita', 
+              'lucia', 'carmen', 'rosa', 'maria', 'elena', 'sara',
+              'google español', 'microsoft helena', 'microsoft laura'
+            ];
+            const malePatterns = [
+              'male', 'hombre', 'masculin', 'man',
+              // Common Spanish male voice names across platforms
+              'jorge', 'diego', 'enrique', 'pablo', 'carlos', 'juan',
+              'antonio', 'andres', 'miguel', 'pedro',
+              'microsoft pablo'
+            ];
+            
+            const patterns = voiceSettings.gender === 'female' ? femalePatterns : malePatterns;
+            
+            // First, try to find a voice matching the selected accent
+            let preferredVoice = availableVoices.find(v => {
+              const voiceName = v.name.toLowerCase();
+              const voiceLang = v.lang.toLowerCase();
+              const matchesGender = patterns.some(p => voiceName.includes(p));
+              const matchesAccent = voiceLang === voiceSettings.accent.toLowerCase();
+              return matchesGender && matchesAccent;
+            });
+            
+            // If no match with accent, try gender only
+            if (!preferredVoice) {
+              preferredVoice = availableVoices.find(v => {
+                const voiceName = v.name.toLowerCase();
+                return patterns.some(p => voiceName.includes(p));
+              });
+            }
+            
+            // Fallback to first available voice
+            utterance.voice = preferredVoice || availableVoices[0];
+          }
+          
           utterance.onstart = () => setIsSpeaking(true);
           utterance.onend = () => setIsSpeaking(false);
           utterance.onerror = () => setIsSpeaking(false);
+          
           window.speechSynthesis.speak(utterance);
         } else {
           // Fallback: just show the text without speaking
           console.log('Speech synthesis not supported');
+        }
+      };
+      
+      // LLM API Service - For future GPT-5 or similar integration
+      const callLLMService = async (userMessage, conversationContext) => {
+        // This is the structure for future LLM API integration
+        // Currently uses local pattern matching, but ready for API upgrade
+        
+        const requestPayload = {
+          model: AI_CONFIG.LLM_MODEL,
+          messages: [
+            {
+              role: 'system',
+              content: `Eres Luna, una asistente virtual amigable y entusiasta para la app de lotería LotoLink. 
+                Tu objetivo es guiar a los usuarios a través del proceso de juego de lotería, desde la bienvenida 
+                hasta la selección final de números. Mantén un tono cálido y servicial. Las loterías disponibles 
+                son: Leidsa, Loteka, La Primera, y Lotería Nacional. Las modalidades de juego son: Quiniela (1 número), 
+                Palé (2 números), y Tripleta (3 números). Responde siempre en español.`
+            },
+            ...conversationContext.map(msg => ({
+              role: msg.role,
+              content: msg.message
+            })),
+            {
+              role: 'user',
+              content: userMessage
+            }
+          ],
+          max_tokens: AI_CONFIG.LLM_MAX_TOKENS,
+          temperature: AI_CONFIG.LLM_TEMPERATURE
+        };
+        
+        // For production: Uncomment and configure actual API call
+        /*
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), AI_CONFIG.API_TIMEOUT_MS);
+          
+          // getSecureToken should be implemented to retrieve API token securely
+          // Example: return sessionStorage.getItem('ai_api_token') or fetch from secure backend
+          const getSecureToken = () => {
+            // In production, implement secure token retrieval
+            // Never hard-code tokens in client-side code
+            return sessionStorage.getItem('ll_ai_token') || '';
+          };
+          
+          const response = await fetch(AI_CONFIG.API_BASE_URL + AI_CONFIG.LLM_ENDPOINT, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${getSecureToken()}`
+            },
+            body: JSON.stringify(requestPayload),
+            signal: controller.signal
+          });
+          
+          clearTimeout(timeoutId);
+          
+          if (!response.ok) throw new Error('LLM API error');
+          
+          const data = await response.json();
+          return {
+            success: true,
+            response: data.choices[0].message.content,
+            intent: data.intent || 'general'
+          };
+        } catch (error) {
+          console.error('LLM API error:', error);
+          return {
+            success: false,
+            response: null,
+            error: error.message
+          };
+        }
+        */
+        
+        // Current fallback: return null to use local pattern matching
+        return { success: false, response: null };
+      };
+      
+      // Context Manager - Maintains conversation state and user preferences
+      const contextManager = {
+        getFullContext: () => ({
+          user: user ? { name: user.name } : null,
+          selectedBanca: selectedBank,
+          currentView: view,
+          assistantMode: assistantMode,
+          guidedPlayData: guidedPlayData,
+          conversationHistory: conversationHistory.slice(-AI_CONFIG.MAX_CONVERSATION_HISTORY)
+        }),
+        
+        summarizeContext: () => {
+          const ctx = contextManager.getFullContext();
+          let summary = '';
+          if (ctx.user) summary += `Usuario: ${ctx.user.name}. `;
+          if (ctx.selectedBanca) summary += `Banca: ${ctx.selectedBanca.name}. `;
+          if (ctx.guidedPlayData.lottery) summary += `Lotería: ${ctx.guidedPlayData.lottery}. `;
+          if (ctx.guidedPlayData.modality) summary += `Modalidad: ${ctx.guidedPlayData.modality}. `;
+          return summary;
         }
       };
 
@@ -2017,7 +3044,7 @@
         setConversationHistory(prev => [...prev.slice(-AI_CONFIG.MAX_CONVERSATION_HISTORY), { role, message, timestamp: Date.now() }]);
       };
 
-      const processVoiceCommand = (transcript) => {
+      const processVoiceCommand = async (transcript) => {
         // Sanitize and validate input
         if (!transcript || typeof transcript !== 'string') {
           setAssistantResponse('No pude procesar el comando. Intenta de nuevo.');
@@ -2031,13 +3058,24 @@
         setIsThinking(true);
         setAssistantResponse('');
         
-        // Simulate AI processing time for natural feel
-        const thinkingTime = AI_CONFIG.MIN_THINKING_TIME_MS + Math.random() * (AI_CONFIG.MAX_THINKING_TIME_MS - AI_CONFIG.MIN_THINKING_TIME_MS);
+        // Try LLM service first (for future API integration)
+        const llmResult = await callLLMService(transcript, conversationHistory);
         
-        setTimeout(() => {
+        if (llmResult.success && llmResult.response) {
+          // Use LLM response
           setIsThinking(false);
-          processCommandInternal(transcript);
-        }, thinkingTime);
+          setAssistantResponse(llmResult.response);
+          addToConversation('assistant', llmResult.response);
+          speakText(llmResult.response);
+        } else {
+          // Fallback to local pattern matching
+          const thinkingTime = AI_CONFIG.MIN_THINKING_TIME_MS + Math.random() * (AI_CONFIG.MAX_THINKING_TIME_MS - AI_CONFIG.MIN_THINKING_TIME_MS);
+          
+          setTimeout(() => {
+            setIsThinking(false);
+            processCommandInternal(transcript);
+          }, thinkingTime);
+        }
       };
       
       const processCommandInternal = (transcript) => {
@@ -2355,31 +3393,64 @@
         }
       };
       const removeCartIndex = (i) => setCart(c => c.filter((_, idx) => idx !== i));
-      const checkout = () => { 
+      
+      // Memoized cart totals for consistent display and calculation
+      const cartTotals = useMemo(() => {
+        const subtotal = cart.reduce((s, p) => s + Number(p.amount||0), 0);
+        const commission = Math.round(subtotal * APP_COMMISSION_RATE * 100) / 100;
+        const total = subtotal + commission;
+        return { subtotal, commission, total };
+      }, [cart]);
+      
+      // Show payment options before checkout
+      const initiateCheckout = () => { 
         if (!cart.length) {
-          // Visual feedback instead of alert - button is already disabled, so this is just a fallback
           return;
         }
-        // Require card registration to play in app
-        if (!registeredCard) {
-          setShowCardRegistration(true);
-          return;
-        }
+        setShowPaymentOptions(true);
+      };
+      
+      // Draw time configuration
+      const DRAW_TIME_HOURS = 4; // Hours until draw (for simulation)
+      
+      // Process checkout with selected payment method
+      const processCheckout = () => { 
         const t = { 
           id: uid("TK"), 
           plays: cart, 
           bank: cartBanca || selectedBank?.name, 
-          total: cart.reduce((s, p) => s + Number(p.amount||0), 0), 
-          createdAt: new Date().toISOString() 
+          subtotal: cartTotals.subtotal,
+          commission: cartTotals.commission,
+          total: cartTotals.total,
+          paymentMethod: paymentMethod,
+          paymentStatus: paymentMethod === 'app' ? 'paid' : 'pending',
+          paymentCard: paymentMethod === 'app' && registeredCard ? registeredCard.lastFour : null,
+          createdAt: new Date().toISOString(),
+          drawTime: new Date(Date.now() + DRAW_TIME_HOURS * 60 * 60 * 1000).toISOString()
         }; 
-        setTicket(t); 
+        
+        // If paying in app, require card
+        if (paymentMethod === 'app' && !registeredCard) {
+          setShowPaymentOptions(false);
+          setShowCardRegistration(true);
+          return;
+        }
+        
+        setTicket(t); // Set main ticket state for consistency
+        setConfirmedTicket(t);
         const h = JSON.parse(localStorage.getItem("ll_history") || "[]"); 
         h.unshift(t); 
         localStorage.setItem("ll_history", JSON.stringify(h.slice(0,50))); 
         setCart([]); 
-        setCartBanca(null); // Reset banca lock
-        setIsCartOpen(false); 
-        setView("ticket"); 
+        setCartBanca(null);
+        setIsCartOpen(false);
+        setShowPaymentOptions(false);
+        setShowTicketConfirmation(true);
+      };
+      
+      // Legacy checkout function for compatibility
+      const checkout = () => {
+        initiateCheckout();
       };
 
       useEffect(() => { window.addGlobalCartItem = (item) => addPlayToCart({ type: `${item.lottery} - ${item.modality}`, numbers: item.numbers, amount: item.stake, banca: item.banca || selectedBank?.name || 'Sin banca' }); return () => delete window.addGlobalCartItem; }, [selectedBank]);
@@ -2436,12 +3507,12 @@
         <div className={theme === 'dark' ? 'dark' : ''}>
           {/* Welcome Screen with AI Assistant */}
           {showWelcomeScreen && (
-            <div className="fixed inset-0 z-[100] bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center">
+            <div className="fixed inset-0 z-[100] bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 flex items-center justify-center">
               <div className="text-center text-white p-8 max-w-lg">
                 {/* Loading Animation */}
                 {welcomeStep === 0 && (
                   <div className="animate-pulse">
-                    <div className="w-32 h-32 mx-auto mb-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-6xl shadow-2xl">
+                    <div className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-6xl shadow-2xl">
                       🎰
                     </div>
                     <div className="h-2 bg-white/30 rounded-full w-48 mx-auto overflow-hidden">
@@ -2453,11 +3524,11 @@
                 {/* Greeting */}
                 {welcomeStep >= 1 && (
                   <div className="animate-fade-in">
-                    <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-600 rounded-full flex items-center justify-center text-6xl shadow-2xl animate-bounce border-4 border-white/30">
+                    <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-gray-700 to-gray-800 rounded-full flex items-center justify-center text-6xl shadow-2xl border-4 border-white/20">
                       🌙
                     </div>
                     <h1 className="text-4xl font-bold mb-2 animate-fade-in">¡Hola! Soy Luna</h1>
-                    <p className="text-xl text-purple-200 mb-8">Tu asistente inteligente de LotoLink</p>
+                    <p className="text-xl text-gray-300 mb-8">Tu asistente inteligente de LotoLink</p>
                     
                     {welcomeStep >= 2 && (
                       <div className="space-y-4 animate-fade-in">
@@ -2484,7 +3555,7 @@
                           </button>
                         </div>
                         
-                        <p className="text-sm text-purple-300 mt-6">
+                        <p className="text-sm text-gray-400 mt-6">
                           💡 Puedes hablar conmigo en cualquier momento tocando el botón 🌙
                         </p>
                       </div>
@@ -2503,35 +3574,56 @@
             </div>
           )}
 
-          {view !== 'portal' && (<Header theme={theme} setTheme={setTheme} user={user} onLogin={()=>setShowAuthModal(true)} onLogout={()=>{setUser(null);localStorage.removeItem("ll_user")}} onNav={setView} onOpenPlay={()=>openPlayModal(DEFAULT_BANKS[0])} cartCount={cart.length} onToggleCart={()=>setIsCartOpen(true)} winningTicketsCount={winningTickets.length} onShowWinningTickets={() => setShowWinningTicketsModal(true)} registeredCard={registeredCard} onManageCard={() => setShowCardRegistration(true)} />)}
+          {view !== 'portal' && (<Header theme={theme} setTheme={setTheme} user={user} onLogin={()=>setShowAuthModal(true)} onLogout={()=>{setUser(null);localStorage.removeItem("ll_user")}} onNav={setView} onOpenPlay={()=>openPlayModal(DEFAULT_BANKS[0])} cartCount={cart.length} onToggleCart={()=>setIsCartOpen(true)} winningTicketsCount={winningTickets.length} onShowWinningTickets={() => setShowWinningTicketsModal(true)} registeredCard={registeredCard} onManageCard={() => setShowCardManagement(true)} />)}
 
-          <main className="max-w-7xl mx-auto p-4 pb-32">
+          <main className="max-w-7xl mx-auto px-6 pb-32">
             {view === "home" && (
               <>
                 <Hero onPlay={() => openPlayModal()} onBanca={() => setView("bancas")} />
-                <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                {/* Premium Section: Nearby Banks */}
+                <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
                   {/* Left Column - Bancas cercanas y Resultados */}
-                  <div className="lg:col-span-2 space-y-6">
+                  <div className="lg:col-span-2 space-y-8">
                     {/* Bancas cercanas */}
-                    <div>
-                      <h3 className="font-bold text-lg mb-3 dark:text-white">Bancas cercanas</h3>
-                      <div className="space-y-3">
+                    <section>
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <h3 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Bancas Cercanas</h3>
+                          <p className="text-gray-500 dark:text-gray-400 mt-1">Encuentra tu banca favorita</p>
+                        </div>
+                        <button 
+                          onClick={() => setView('bancas')}
+                          className="text-blue-600 dark:text-blue-400 font-medium text-sm hover:text-blue-700"
+                        >
+                          Ver todas →
+                        </button>
+                      </div>
+                      <div className="space-y-4">
                         {DEFAULT_BANKS.map((b) => (
-                          <div key={b.id} className="p-4 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 flex justify-between items-center">
-                            <div>
-                              <div className="font-semibold dark:text-white">{b.name}</div>
-                              <div className="text-sm text-gray-500 dark:text-gray-400">{b.hours}</div>
+                          <div key={b.id} className="premium-card p-5 flex justify-between items-center">
+                            <div className="flex items-center gap-4">
+                              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-xl shadow-lg shadow-blue-500/25">
+                                🏪
+                              </div>
+                              <div>
+                                <div className="font-semibold text-gray-900 dark:text-white">{b.name}</div>
+                                <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                                  {b.hours}
+                                </div>
+                              </div>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex gap-3">
                               <button 
                                 onClick={() => openPlayModal(b)} 
-                                className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+                                className="btn-apple-primary px-5 py-2.5 text-sm"
                               >
                                 Jugar
                               </button>
                               <button 
                                 onClick={() => setSelectedBank(b)} 
-                                className="px-4 py-2 border dark:border-slate-600 rounded-lg dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition"
+                                className="px-4 py-2.5 bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-300 rounded-full font-medium text-sm hover:bg-gray-200 dark:hover:bg-white/20 transition-all"
                               >
                                 Ver
                               </button>
@@ -2539,41 +3631,84 @@
                           </div>
                         ))}
                       </div>
-                    </div>
+                    </section>
                     
                     {/* Resultados en vivo */}
-                    <div>
-                      <h3 className="font-bold text-lg mb-3 dark:text-white">Resultados en vivo</h3>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <section>
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <h3 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Resultados en Vivo</h3>
+                          <p className="text-gray-500 dark:text-gray-400 mt-1">
+                            {isLotteryConnected ? (
+                              <>Conectado a <span className="text-blue-500 font-medium">loteriasdominicanas.com</span></>
+                            ) : (
+                              'Últimos números ganadores'
+                            )}
+                          </p>
+                        </div>
+                        <div className="flex flex-col items-end gap-1">
+                          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full ${isLotteryConnected ? 'bg-green-500/10' : 'bg-yellow-500/10'}`}>
+                            <span className={`w-2 h-2 rounded-full animate-pulse ${isLotteryConnected ? 'bg-green-500' : 'bg-yellow-500'}`}></span>
+                            <span className={`text-xs font-medium ${isLotteryConnected ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'}`}>
+                              {isLotteryConnected ? 'En vivo' : 'Simulación'}
+                            </span>
+                          </div>
+                          {lotteryLastUpdate && (
+                            <span className="text-[10px] text-gray-400">
+                              Actualizado: {lotteryLastUpdate.toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         {Object.entries(resultsFeed).map(([k,v]) => (
-                          <div key={k} className="p-4 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700">
-                            <div className="font-bold text-sm dark:text-white mb-1">{k}</div>
-                            <div className="font-mono text-lg font-bold text-blue-600">{v.numbers.join('-')}</div>
-                            <div className="text-xs text-gray-400 mt-1">{v.time}</div>
+                          <div key={k} className="premium-card p-5 text-center group hover:scale-105 transition-all duration-300 relative">
+                            {v.isLive && (
+                              <span className="absolute top-2 right-2 w-2 h-2 bg-green-500 rounded-full animate-pulse" title="Datos en vivo"></span>
+                            )}
+                            <div className="font-semibold text-sm text-gray-900 dark:text-white mb-3">{k}</div>
+                            <div className="flex justify-center gap-1.5">
+                              {v.numbers.map((num, i) => (
+                                <span key={i} className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-lg ${
+                                  v.isLive 
+                                    ? 'bg-gradient-to-br from-green-500 to-emerald-600 shadow-green-500/25' 
+                                    : 'bg-gradient-to-br from-blue-500 to-blue-600 shadow-blue-500/25'
+                                }`}>
+                                  {num}
+                                </span>
+                              ))}
+                            </div>
+                            <div className="text-xs text-gray-400 mt-3">{v.time}</div>
+                            {v.source && (
+                              <div className="text-[9px] text-gray-400 mt-1 opacity-60">{v.source}</div>
+                            )}
                           </div>
                         ))}
                       </div>
-                    </div>
+                    </section>
                   </div>
                   
                   {/* Right Column - Sidebar */}
-                  <aside className="space-y-4">
+                  <aside className="space-y-6">
                     {/* Jugadas más populares */}
                     <PopularPlays 
                       mostPlayed={MOST_PLAYED} 
                       onQuick={(type, sample) => addPlayToCart({ type, numbers: sample, amount: 10, banca: selectedBank?.name || 'Sin banca' })} 
                     />
                     
-                    {/* Bolso reminder */}
-                    <div className="p-4 bg-blue-50 dark:bg-slate-800 rounded-xl border border-blue-100 dark:border-blue-900 text-center">
-                      <p className="text-sm text-blue-800 dark:text-blue-300 mb-3 font-medium">
-                        Tu bolso está listo en todo momento.
+                    {/* Cart Reminder */}
+                    <div className="premium-card p-6 text-center bg-gradient-to-br from-blue-500/5 to-indigo-500/5">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-blue-500/30">
+                        🛒
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 font-medium">
+                        Tu carrito está listo en todo momento.
                       </p>
                       <button 
                         onClick={() => setIsCartOpen(true)} 
-                        className="bg-blue-600 text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-blue-700 transition"
+                        className="btn-apple-primary w-full"
                       >
-                        Ver Bolso ({cart.length})
+                        Ver Carrito ({cart.length})
                       </button>
                     </div>
                     
@@ -2586,7 +3721,7 @@
 
             {view === "bancas" && <Bancas banks={DEFAULT_BANKS} onPlay={(b) => openPlayModal(b)} onJoin={() => setView("portal")} />}
             {view === "portal" && <BancaPortal onBack={() => setView("home")} />}
-            {view === "profile" && <Profile user={user} ticket={ticket} />}
+            {view === "profile" && <Profile user={user} ticket={ticket} registeredCards={registeredCards} onManageCards={() => setShowCardManagement(true)} />}
             {view === "rankings" && <Rankings />}
             {view === "masjugados" && <MostPlayedSection most={MOST_PLAYED} />}
             {view === "join" && <JoinUs />}
@@ -3014,34 +4149,70 @@
             </div>
           )}
           
-          {showAuthModal && (<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"><div className="bg-white w-full max-w-sm rounded-2xl p-8 text-center shadow-2xl"><div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">👋</div><h3 className="text-2xl font-bold mb-2">Bienvenido</h3><input id="loginName" className="w-full border p-3 rounded-lg mb-3" placeholder="Tu nombre" /><input className="w-full border p-3 rounded-lg mb-6" placeholder="Tu email" /><button onClick={() => { const n = document.getElementById('loginName').value; if(n) { setUser({ name: n, email: "usuario@lotolink.com", id: uid("U") }); setShowAuthModal(false); } }} className="w-full bg-slate-900 text-white py-3 rounded-lg font-bold hover:bg-slate-800">Entrar</button><button onClick={() => setShowAuthModal(false)} className="mt-4 text-gray-500 text-sm hover:underline">Cancelar</button></div></div>)}
+          {showAuthModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center modal-backdrop p-4">
+              <div className="premium-card w-full max-w-sm p-8 text-center animate-fade-in">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 text-4xl shadow-lg shadow-blue-500/30">
+                  👋
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Bienvenido a LotoLink</h3>
+                <p className="text-gray-500 dark:text-gray-400 mb-6">Ingresa tus datos para continuar</p>
+                <input 
+                  id="loginName" 
+                  className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl mb-4 bg-gray-50 dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all" 
+                  placeholder="Tu nombre" 
+                />
+                <input 
+                  className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl mb-6 bg-gray-50 dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all" 
+                  placeholder="Tu email" 
+                />
+                <button 
+                  onClick={() => { 
+                    const n = document.getElementById('loginName').value; 
+                    if(n) { 
+                      setUser({ name: n, email: "usuario@lotolink.com", id: uid("U") }); 
+                      setShowAuthModal(false); 
+                    } 
+                  }} 
+                  className="btn-apple-primary w-full py-4"
+                >
+                  Entrar
+                </button>
+                <button 
+                  onClick={() => setShowAuthModal(false)} 
+                  className="mt-4 text-gray-500 dark:text-gray-400 text-sm hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Card Registration Modal */}
           {showCardRegistration && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-              <div className="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl p-6 shadow-2xl">
-                <div className="text-center mb-6">
-                  <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">💳</div>
-                  <h3 className="text-2xl font-bold mb-2 dark:text-white">Registra tu Tarjeta</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">
-                    Para jugar en la app, necesitas registrar una tarjeta de débito o crédito.
+            <div className="fixed inset-0 z-50 flex items-center justify-center modal-backdrop p-4">
+              <div className="premium-card w-full max-w-md p-8 animate-fade-in">
+                <div className="text-center mb-8">
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 text-4xl shadow-lg shadow-blue-500/30">💳</div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Registra tu Tarjeta</h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">
+                    Para jugar en la app, necesitas registrar una tarjeta.
                   </p>
-                  <p className="text-xs text-gray-400 mt-1">Tus ganancias se depositarán directamente a esta tarjeta.</p>
                 </div>
                 
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <div>
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Nombre en la tarjeta</label>
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Nombre en la tarjeta</label>
                     <input 
                       type="text"
                       value={cardForm.name}
                       onChange={(e) => setCardForm({...cardForm, name: e.target.value})}
-                      className="w-full border dark:border-slate-600 p-3 rounded-lg dark:bg-slate-700 dark:text-white" 
+                      className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl bg-gray-50 dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all" 
                       placeholder="JUAN PÉREZ"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Número de tarjeta</label>
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Número de tarjeta</label>
                     <input 
                       type="text"
                       value={cardForm.number}
@@ -3049,16 +4220,22 @@
                         const num = e.target.value.replace(/\D/g, '').slice(0, 16);
                         setCardForm({...cardForm, number: num});
                       }}
-                      className={`w-full border dark:border-slate-600 p-3 rounded-lg dark:bg-slate-700 dark:text-white font-mono ${cardForm.number.length > 0 && cardForm.number.length < 16 ? 'border-yellow-400' : ''}`}
+                      className={`w-full border p-4 rounded-xl bg-gray-50 dark:bg-white/5 dark:text-white font-mono focus:ring-2 focus:ring-blue-500/30 transition-all ${
+                        cardForm.number.length > 0 && cardForm.number.length < 16 
+                          ? 'border-amber-400 dark:border-amber-500/50' 
+                          : 'border-gray-200 dark:border-white/10'
+                      }`}
                       placeholder="4000 1234 5678 9012"
                     />
                     {cardForm.number.length > 0 && cardForm.number.length < 16 && (
-                      <p className="text-xs text-yellow-600 mt-1">Ingresa los 16 dígitos de tu tarjeta</p>
+                      <p className="text-xs text-amber-600 dark:text-amber-400 mt-2 flex items-center gap-1">
+                        <span>⚠️</span> Ingresa los 16 dígitos de tu tarjeta
+                      </p>
                     )}
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Expiración</label>
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Expiración</label>
                       <input 
                         type="text"
                         value={cardForm.expiry}
@@ -3067,43 +4244,432 @@
                           if (val.length >= 2) val = val.slice(0, 2) + '/' + val.slice(2);
                           setCardForm({...cardForm, expiry: val});
                         }}
-                        className="w-full border dark:border-slate-600 p-3 rounded-lg dark:bg-slate-700 dark:text-white font-mono" 
+                        className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl bg-gray-50 dark:bg-white/5 dark:text-white font-mono focus:ring-2 focus:ring-blue-500/30 transition-all" 
                         placeholder="MM/YY"
                         maxLength={5}
                       />
                     </div>
                     <div>
-                      <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">CVV</label>
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">CVV</label>
                       <input 
                         type="password"
                         value={cardForm.cvv}
                         onChange={(e) => setCardForm({...cardForm, cvv: e.target.value.replace(/\D/g, '').slice(0, 4)})}
-                        className="w-full border dark:border-slate-600 p-3 rounded-lg dark:bg-slate-700 dark:text-white font-mono" 
+                        className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl bg-gray-50 dark:bg-white/5 dark:text-white font-mono focus:ring-2 focus:ring-blue-500/30 transition-all" 
                         placeholder="***"
                       />
                     </div>
                   </div>
                 </div>
                 
-                <div className="mt-6 space-y-3">
+                <div className="mt-8 space-y-3">
                   <button 
                     onClick={registerCard}
                     disabled={!cardForm.number || cardForm.number.length < 16 || !cardForm.expiry || cardForm.expiry.length < 5 || !cardForm.cvv || cardForm.cvv.length < 3 || !cardForm.name}
-                    className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn-apple-primary w-full py-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
                   >
                     Registrar Tarjeta
                   </button>
                   <button 
                     onClick={() => setShowCardRegistration(false)}
-                    className="w-full text-gray-500 dark:text-gray-400 text-sm hover:underline"
+                    className="w-full text-gray-500 dark:text-gray-400 text-sm hover:text-gray-700 dark:hover:text-gray-200 transition-colors py-2"
                   >
                     Cancelar
                   </button>
                 </div>
                 
-                <p className="text-xs text-center text-gray-400 mt-4">
-                  🔒 Solo guardamos los últimos 4 dígitos de tu tarjeta para tu seguridad
-                </p>
+                <div className="mt-6 p-4 bg-green-500/10 rounded-xl border border-green-500/20 flex items-center gap-3">
+                  <span className="text-green-600 text-xl">🔒</span>
+                  <p className="text-xs text-green-700 dark:text-green-400">
+                    Solo guardamos los últimos 4 dígitos para tu seguridad
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Card Management Modal - View/Add/Delete Cards */}
+          {showCardManagement && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center modal-backdrop p-4">
+              <div className="premium-card w-full max-w-md overflow-hidden animate-fade-in">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-8 text-white">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-2xl font-bold">Mis Tarjetas</h3>
+                      <p className="text-blue-100 text-sm mt-2">Gestiona tus métodos de pago</p>
+                    </div>
+                    <button 
+                      onClick={() => setShowCardManagement(false)}
+                      className="w-10 h-10 flex items-center justify-center hover:bg-white/20 rounded-full transition-all"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="p-6">
+                  {/* Cards List */}
+                  {registeredCards.length > 0 ? (
+                    <div className="space-y-4 mb-6">
+                      {registeredCards.map((card, index) => {
+                        const brandStyles = {
+                          'Visa': { gradient: 'from-blue-500 to-blue-700', icon: '𝗩' },
+                          'Mastercard': { gradient: 'from-red-500 to-orange-500', icon: '◉◉' },
+                          'Tarjeta': { gradient: 'from-gray-500 to-gray-700', icon: '💳' }
+                        };
+                        const style = brandStyles[card.brand] || brandStyles['Tarjeta'];
+                        
+                        return (
+                          <div 
+                            key={card.id} 
+                            className={`p-5 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
+                              selectedCardIndex === index 
+                                ? 'border-blue-500 bg-blue-500/5 shadow-lg shadow-blue-500/10' 
+                                : 'border-gray-200 dark:border-white/10 hover:border-blue-300 dark:hover:border-blue-500/50'
+                            }`}
+                            onClick={() => setSelectedCardIndex(index)}
+                          >
+                            <div className="flex justify-between items-start">
+                              <div className="flex items-center gap-4">
+                                <div className={`w-12 h-12 bg-gradient-to-br ${style.gradient} rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
+                                  {style.icon}
+                                </div>
+                                <div>
+                                  <div className="font-semibold text-gray-900 dark:text-white">{card.brand}</div>
+                                  <div className="text-sm text-gray-500 dark:text-gray-400 font-mono">•••• •••• •••• {card.lastFour}</div>
+                                  {card.name && <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">{card.name}</div>}
+                                </div>
+                              </div>
+                              <div className="flex flex-col items-end gap-2">
+                                {selectedCardIndex === index && (
+                                  <span className="text-xs bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-3 py-1 rounded-full font-medium shadow-md">Principal</span>
+                                )}
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); deleteCard(card.id); }}
+                                  className="text-xs text-red-500 hover:text-red-600 font-medium transition-colors"
+                                >
+                                  Eliminar
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 mb-6">
+                      <div className="text-5xl mb-4">💳</div>
+                      <h4 className="font-bold text-lg mb-2 dark:text-white">No tienes tarjetas registradas</h4>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Agrega una tarjeta para pagar en la app</p>
+                    </div>
+                  )}
+                  
+                  {/* Add New Card Button */}
+                  <button 
+                    onClick={() => { setShowCardManagement(false); setShowCardRegistration(true); }}
+                    className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2"
+                  >
+                    <span>➕</span> Agregar Nueva Tarjeta
+                  </button>
+                  
+                  {/* Info */}
+                  <p className="text-xs text-center text-gray-400 mt-4">
+                    🔒 Tus tarjetas están protegidas. Solo guardamos los últimos 4 dígitos.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Payment Options Modal */}
+          {showPaymentOptions && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+              <div className="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-6 text-white text-center">
+                  <div className="text-4xl mb-2">💰</div>
+                  <h3 className="text-xl font-bold">Método de Pago</h3>
+                  <p className="text-green-100 text-sm mt-1">¿Cómo deseas pagar tu ticket?</p>
+                </div>
+                
+                <div className="p-6">
+                  {/* Order Summary */}
+                  <div className="bg-gray-50 dark:bg-slate-700 rounded-xl p-4 mb-6">
+                    <h4 className="font-bold text-sm text-gray-600 dark:text-gray-300 mb-3">Resumen del Pedido</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">Subtotal ({cart.length} jugada{cart.length > 1 ? 's' : ''}):</span>
+                        <span className="font-medium dark:text-white">RD$ {cartTotals.subtotal.toLocaleString('es-DO')}</span>
+                      </div>
+                      <div className="flex justify-between text-orange-600 dark:text-orange-400">
+                        <span>Servicio App (7%):</span>
+                        <span className="font-medium">RD$ {cartTotals.commission.toLocaleString('es-DO')}</span>
+                      </div>
+                      <div className="border-t dark:border-slate-600 pt-2 mt-2">
+                        <div className="flex justify-between text-lg font-bold">
+                          <span className="dark:text-white">Total a Pagar:</span>
+                          <span className="text-green-600">RD$ {cartTotals.total.toLocaleString('es-DO')}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Payment Method Selection */}
+                  <div className="space-y-3 mb-6">
+                    {/* Pay in App */}
+                    <button 
+                      onClick={() => setPaymentMethod('app')}
+                      className={`w-full p-4 rounded-xl border-2 text-left transition ${
+                        paymentMethod === 'app' 
+                          ? 'border-green-500 bg-green-50 dark:bg-green-900/20' 
+                          : 'border-gray-200 dark:border-slate-600 hover:border-green-300'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-2xl">
+                          💳
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-bold dark:text-white">Pagar Aquí en la App</div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                            {registeredCard 
+                              ? `Usar ${registeredCard.brand} •••${registeredCard.lastFour}` 
+                              : 'Agrega una tarjeta para continuar'}
+                          </div>
+                        </div>
+                        {paymentMethod === 'app' && <span className="text-green-600 text-xl">✓</span>}
+                      </div>
+                    </button>
+                    
+                    {/* Pay at Branch */}
+                    <button 
+                      onClick={() => setPaymentMethod('branch')}
+                      className={`w-full p-4 rounded-xl border-2 text-left transition ${
+                        paymentMethod === 'branch' 
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+                          : 'border-gray-200 dark:border-slate-600 hover:border-blue-300'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-2xl">
+                          🏪
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-bold dark:text-white">Pagar en la Sucursal</div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                            Lleva el ticket y paga antes del sorteo
+                          </div>
+                        </div>
+                        {paymentMethod === 'branch' && <span className="text-blue-600 text-xl">✓</span>}
+                      </div>
+                    </button>
+                  </div>
+                  
+                  {/* Branch Payment Warning */}
+                  {paymentMethod === 'branch' && (
+                    <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-3 mb-4">
+                      <div className="flex items-start gap-2">
+                        <span className="text-yellow-600">⚠️</span>
+                        <div className="text-sm text-yellow-700 dark:text-yellow-300">
+                          <strong>Importante:</strong> Debes pagar en la sucursal <strong>antes del sorteo</strong>. 
+                          El ticket no será válido si no se paga a tiempo.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Action Buttons */}
+                  <div className="space-y-3">
+                    <button 
+                      onClick={processCheckout}
+                      disabled={paymentMethod === 'app' && !registeredCard}
+                      className="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {paymentMethod === 'app' ? (
+                        <>
+                          <span>💳</span> Pagar RD$ {cartTotals.total.toLocaleString('es-DO')}
+                        </>
+                      ) : (
+                        <>
+                          <span>🎟️</span> Generar Ticket para Pagar en Sucursal
+                        </>
+                      )}
+                    </button>
+                    
+                    {paymentMethod === 'app' && !registeredCard && (
+                      <button 
+                        onClick={() => { setShowPaymentOptions(false); setShowCardRegistration(true); }}
+                        className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition"
+                      >
+                        Agregar Tarjeta
+                      </button>
+                    )}
+                    
+                    <button 
+                      onClick={() => setShowPaymentOptions(false)}
+                      className="w-full text-gray-500 dark:text-gray-400 text-sm hover:underline"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Ticket Confirmation Modal - After Payment */}
+          {showTicketConfirmation && confirmedTicket && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+              <div className="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+                {/* Header */}
+                <div className={`p-6 text-white text-center ${
+                  confirmedTicket.paymentMethod === 'app' 
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-600' 
+                    : 'bg-gradient-to-r from-blue-500 to-indigo-600'
+                }`}>
+                  <div className="text-5xl mb-2">{confirmedTicket.paymentMethod === 'app' ? '✅' : '🎟️'}</div>
+                  <h3 className="text-2xl font-bold">
+                    {confirmedTicket.paymentMethod === 'app' ? '¡Ticket Pagado!' : '¡Ticket Generado!'}
+                  </h3>
+                  <p className="text-white/80 text-sm mt-1">
+                    {confirmedTicket.paymentMethod === 'app' 
+                      ? 'Tu jugada está confirmada' 
+                      : 'Recuerda pagar en la sucursal antes del sorteo'}
+                  </p>
+                </div>
+                
+                <div className="p-6" id="ticket-print-area">
+                  {/* Ticket Details */}
+                  <div className="bg-gray-50 dark:bg-slate-700 rounded-xl p-4 mb-4">
+                    <div className="text-center mb-4">
+                      <div className="font-mono text-lg font-bold text-blue-600">#{confirmedTicket.id}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">{confirmedTicket.bank}</div>
+                    </div>
+                    
+                    {/* Plays */}
+                    <div className="space-y-2 mb-4">
+                      {confirmedTicket.plays.map((play, i) => (
+                        <div key={i} className="flex justify-between text-sm">
+                          <span className="text-gray-600 dark:text-gray-400">{play.type}</span>
+                          <span className="font-mono font-bold dark:text-white">{Array.isArray(play.numbers) ? play.numbers.join(' - ') : play.numbers}</span>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Payment Breakdown */}
+                    <div className="border-t dark:border-slate-600 pt-3 space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">Subtotal:</span>
+                        <span className="dark:text-white">RD$ {confirmedTicket.subtotal.toLocaleString('es-DO')}</span>
+                      </div>
+                      <div className="flex justify-between text-sm text-orange-600 dark:text-orange-400">
+                        <span>Servicio App:</span>
+                        <span>RD$ {confirmedTicket.commission.toLocaleString('es-DO')}</span>
+                      </div>
+                      <div className="flex justify-between text-lg font-bold">
+                        <span className="dark:text-white">Total:</span>
+                        <span className="text-green-600">RD$ {confirmedTicket.total.toLocaleString('es-DO')}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Payment Status */}
+                    <div className="mt-4 pt-3 border-t dark:border-slate-600">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">Estado:</span>
+                        <span className={`font-bold ${confirmedTicket.paymentStatus === 'paid' ? 'text-green-600' : 'text-yellow-600'}`}>
+                          {confirmedTicket.paymentStatus === 'paid' ? '✓ PAGADO' : '⏳ PENDIENTE DE PAGO'}
+                        </span>
+                      </div>
+                      {confirmedTicket.paymentCard && (
+                        <div className="flex justify-between text-sm mt-1">
+                          <span className="text-gray-600 dark:text-gray-400">Pagado con:</span>
+                          <span className="dark:text-white">•••• {confirmedTicket.paymentCard}</span>
+                        </div>
+                      )}
+                      {confirmedTicket.paymentMethod === 'branch' && (
+                        <div className="flex justify-between text-sm mt-1">
+                          <span className="text-gray-600 dark:text-gray-400">Pagar antes de:</span>
+                          <span className="text-red-600 font-bold">{new Date(confirmedTicket.drawTime).toLocaleString('es-DO', { 
+                            weekday: 'short',
+                            month: 'short', 
+                            day: 'numeric',
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                          })}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* QR Code for Branch Payment */}
+                  {confirmedTicket.paymentMethod === 'branch' && (
+                    <div className="flex justify-center mb-4">
+                      <div className="bg-white p-3 rounded-lg">
+                        <QRImage 
+                          value={JSON.stringify({
+                            id: confirmedTicket.id, 
+                            total: confirmedTicket.total, 
+                            status: confirmedTicket.paymentStatus,
+                            bank: confirmedTicket.bank
+                          })} 
+                          size={120} 
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Wallet Save Options */}
+                <div className="px-6 pb-6 space-y-3">
+                  <p className="text-xs text-center text-gray-500 dark:text-gray-400 mb-3">
+                    💼 Guarda tu ticket para tenerlo siempre a mano
+                  </p>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <button 
+                      onClick={() => downloadTicketForWallet(confirmedTicket, 1, 'pkpass')}
+                      className="bg-black text-white py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-center gap-1 hover:bg-gray-800 transition"
+                    >
+                      🍎 Apple Wallet
+                    </button>
+                    <button 
+                      onClick={() => downloadTicketForWallet(confirmedTicket, 1, 'json')}
+                      className="bg-blue-700 text-white py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-center gap-1 hover:bg-blue-800 transition"
+                    >
+                      📱 Google Wallet
+                    </button>
+                  </div>
+                  
+                  <button 
+                    onClick={() => { 
+                      // Store ticket in app's local storage for later access
+                      const savedTickets = JSON.parse(localStorage.getItem('ll_saved_tickets') || '[]');
+                      if (!savedTickets.find(t => t.id === confirmedTicket.id)) {
+                        savedTickets.push(confirmedTicket);
+                        localStorage.setItem('ll_saved_tickets', JSON.stringify(savedTickets));
+                      }
+                      alert('✅ Ticket guardado en la app');
+                    }}
+                    className="w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
+                  >
+                    📲 Guardar en la App
+                  </button>
+                  
+                  <button 
+                    onClick={() => window.print()}
+                    className="w-full bg-gray-200 dark:bg-slate-600 text-gray-700 dark:text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-300 dark:hover:bg-slate-500 transition"
+                  >
+                    🖨️ Imprimir Ticket
+                  </button>
+                  
+                  <button 
+                    onClick={() => { setShowTicketConfirmation(false); setConfirmedTicket(null); setView('home'); }}
+                    className="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition"
+                  >
+                    Listo ✓
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -3241,7 +4807,7 @@
           {/* Luna AI Assistant Floating Button */}
           <button
             onClick={openVoiceAssistant}
-            className="fixed bottom-24 right-6 w-16 h-16 bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 flex items-center justify-center z-40 animate-pulse"
+            className="fixed bottom-24 right-6 w-16 h-16 bg-gradient-to-br from-gray-800 to-gray-900 dark:from-gray-700 dark:to-gray-800 text-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center justify-center z-40 border border-gray-700"
             title="Luna - Tu Asistente IA"
           >
             <span className="text-3xl">🌙</span>
@@ -3252,15 +4818,15 @@
             <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 p-4">
               <div className="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-600 p-4 text-white">
+                <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-4 text-white">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center border-2 border-white/40">
+                      <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center border-2 border-white/20">
                         <span className="text-2xl">🌙</span>
                       </div>
                       <div>
                         <h3 className="font-bold text-lg">Luna</h3>
-                        <p className="text-xs text-purple-200">
+                        <p className="text-xs text-gray-300">
                           {assistantMode === 'idle' ? '✨ Tu asistente IA de LotoLink' :
                            assistantMode === 'select_banca' ? '📍 Paso 1: Selecciona Banca' :
                            assistantMode === 'select_lottery' ? '🎰 Paso 2: Selecciona Lotería' :
@@ -3291,9 +4857,9 @@
 
                 {/* Guided Play Current Selections */}
                 {assistantMode !== 'idle' && (guidedPlayData.banca || guidedPlayData.lottery || guidedPlayData.modality) && (
-                  <div className="px-4 py-2 bg-purple-50 dark:bg-purple-900/20 border-b dark:border-slate-700 flex flex-wrap gap-2 text-xs">
+                  <div className="px-4 py-2 bg-gray-50 dark:bg-gray-900/30 border-b dark:border-slate-700 flex flex-wrap gap-2 text-xs">
                     {guidedPlayData.banca && (
-                      <span className="bg-purple-200 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-2 py-1 rounded-full">
+                      <span className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2 py-1 rounded-full">
                         📍 {guidedPlayData.banca.name.split(' - ')[0]}
                       </span>
                     )}
@@ -3313,25 +4879,25 @@
                 {/* Luna AI Avatar Animation */}
                 <div className="p-6 text-center">
                   <div className={`w-24 h-24 mx-auto rounded-full flex items-center justify-center text-5xl mb-4 transition-all ${
-                    isThinking ? 'bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30' :
+                    isThinking ? 'bg-gray-100 dark:bg-gray-800' :
                     isListening ? 'bg-red-100 dark:bg-red-900/30 animate-pulse scale-110' : 
-                    isSpeaking ? 'bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 animate-bounce' :
-                    'bg-gradient-to-r from-gray-100 to-purple-50 dark:from-slate-700 dark:to-purple-900/20'
+                    isSpeaking ? 'bg-blue-50 dark:bg-blue-900/20 animate-bounce' :
+                    'bg-gray-50 dark:bg-gray-800'
                   }`}>
                     {isThinking ? (
                       <div className="flex gap-1">
-                        <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></span>
-                        <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></span>
-                        <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></span>
+                        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></span>
+                        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></span>
+                        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></span>
                       </div>
                     ) : isListening ? '👂' : isSpeaking ? '🌙' : '🌙'}
                   </div>
                   
                   {/* Status */}
                   <p className={`text-sm font-medium mb-2 ${
-                    isThinking ? 'text-purple-600 dark:text-purple-400' :
+                    isThinking ? 'text-gray-600 dark:text-gray-400' :
                     isListening ? 'text-red-600 dark:text-red-400' : 
-                    isSpeaking ? 'text-purple-600 dark:text-purple-400' : 
+                    isSpeaking ? 'text-blue-600 dark:text-blue-400' : 
                     'text-gray-600 dark:text-gray-400'
                   }`}>
                     {isThinking ? '💭 Luna está pensando...' : 
@@ -3350,10 +4916,94 @@
 
                   {/* Assistant response */}
                   {assistantResponse && (
-                    <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4">
-                      <p className="text-purple-800 dark:text-purple-200">{assistantResponse}</p>
+                    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                      <p className="text-gray-700 dark:text-gray-200">{assistantResponse}</p>
                     </div>
                   )}
+                </div>
+
+                {/* Voice Settings Panel - TTS Customization */}
+                <div className="px-6 py-3 border-t dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
+                  <details className="group">
+                    <summary className="flex items-center justify-between cursor-pointer text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                      <span className="flex items-center gap-2">
+                        <span>⚙️</span>
+                        <span>Configuración de Voz</span>
+                      </span>
+                      <span className="group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div className="mt-3 space-y-3">
+                      {/* Voice Enable Toggle */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600 dark:text-gray-300">Voz habilitada</span>
+                        <button
+                          onClick={() => setVoiceSettings(prev => ({ ...prev, enabled: !prev.enabled }))}
+                          className={`w-12 h-6 rounded-full transition-colors ${voiceSettings.enabled ? 'bg-blue-600' : 'bg-gray-300 dark:bg-slate-600'}`}
+                        >
+                          <span className={`block w-5 h-5 bg-white rounded-full shadow transform transition-transform ${voiceSettings.enabled ? 'translate-x-6' : 'translate-x-0.5'}`}></span>
+                        </button>
+                      </div>
+                      
+                      {/* Voice Gender Selection */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600 dark:text-gray-300">Tipo de voz</span>
+                        <div className="flex gap-1">
+                          <button
+                            onClick={() => setVoiceSettings(prev => ({ ...prev, gender: 'female' }))}
+                            className={`px-3 py-1 text-xs rounded-full transition ${voiceSettings.gender === 'female' ? 'bg-pink-500 text-white' : 'bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-gray-300'}`}
+                          >
+                            👩 Femenina
+                          </button>
+                          <button
+                            onClick={() => setVoiceSettings(prev => ({ ...prev, gender: 'male' }))}
+                            className={`px-3 py-1 text-xs rounded-full transition ${voiceSettings.gender === 'male' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-gray-300'}`}
+                          >
+                            👨 Masculina
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {/* Speech Speed */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600 dark:text-gray-300">Velocidad</span>
+                        <div className="flex gap-1">
+                          {['slow', 'normal', 'fast'].map(speed => (
+                            <button
+                              key={speed}
+                              onClick={() => setVoiceSettings(prev => ({ ...prev, speed }))}
+                              className={`px-2 py-1 text-xs rounded transition ${voiceSettings.speed === speed ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-gray-300'}`}
+                            >
+                              {speed === 'slow' ? '🐢' : speed === 'fast' ? '🐰' : '🚶'}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Accent Selection */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600 dark:text-gray-300">Acento</span>
+                        <select
+                          value={voiceSettings.accent}
+                          onChange={(e) => setVoiceSettings(prev => ({ ...prev, accent: e.target.value }))}
+                          className="text-xs border dark:border-slate-600 rounded px-2 py-1 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200"
+                        >
+                          <option value="es-ES">🇪🇸 España</option>
+                          <option value="es-MX">🇲🇽 México</option>
+                          <option value="es-DO">🇩🇴 Dominicano</option>
+                          <option value="es-AR">🇦🇷 Argentina</option>
+                          <option value="es-CO">🇨🇴 Colombia</option>
+                        </select>
+                      </div>
+                      
+                      {/* Test Voice Button */}
+                      <button
+                        onClick={() => speakText('¡Hola! Esta es una prueba de voz. ¿Cómo se escucha?')}
+                        className="w-full py-2 text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition border border-gray-200 dark:border-gray-700"
+                      >
+                        🔊 Probar Voz
+                      </button>
+                    </div>
+                  </details>
                 </div>
 
                 {/* Microphone Button */}
@@ -3364,7 +5014,7 @@
                     className={`w-full py-4 rounded-xl font-bold text-lg transition flex items-center justify-center gap-3 ${
                       isListening 
                         ? 'bg-red-500 text-white animate-pulse' 
-                        : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:shadow-lg'
+                        : 'bg-gradient-to-r from-gray-800 to-gray-900 text-white hover:shadow-lg'
                     }`}
                   >
                     <span className="text-2xl">{isListening ? '⏹️' : '🎤'}</span>
