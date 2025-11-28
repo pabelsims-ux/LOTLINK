@@ -1979,20 +1979,45 @@
           utterance.volume = voiceSettings.volume || AI_CONFIG.TTS_VOLUME;
           
           // Select appropriate voice based on gender preference
+          // Uses a robust matching approach that works across browsers/OS
           if (availableVoices.length > 0) {
-            const preferredVoice = availableVoices.find(v => {
+            // Common Spanish voice name patterns by gender (cross-browser compatible)
+            const femalePatterns = [
+              'female', 'mujer', 'femenin', 'woman',
+              // Common Spanish female voice names across platforms
+              'paulina', 'mónica', 'monica', 'helena', 'conchita', 
+              'lucia', 'carmen', 'rosa', 'maria', 'elena', 'sara',
+              'google español', 'microsoft helena', 'microsoft laura'
+            ];
+            const malePatterns = [
+              'male', 'hombre', 'masculin', 'man',
+              // Common Spanish male voice names across platforms
+              'jorge', 'diego', 'enrique', 'pablo', 'carlos', 'juan',
+              'antonio', 'andres', 'miguel', 'pedro',
+              'microsoft pablo'
+            ];
+            
+            const patterns = voiceSettings.gender === 'female' ? femalePatterns : malePatterns;
+            
+            // First, try to find a voice matching the selected accent
+            let preferredVoice = availableVoices.find(v => {
               const voiceName = v.name.toLowerCase();
-              if (voiceSettings.gender === 'female') {
-                return voiceName.includes('female') || voiceName.includes('mujer') || 
-                       voiceName.includes('paulina') || voiceName.includes('mónica') ||
-                       voiceName.includes('helena') || voiceName.includes('conchita');
-              } else {
-                return voiceName.includes('male') || voiceName.includes('hombre') ||
-                       voiceName.includes('jorge') || voiceName.includes('diego') ||
-                       voiceName.includes('enrique');
-              }
-            }) || availableVoices[0];
-            utterance.voice = preferredVoice;
+              const voiceLang = v.lang.toLowerCase();
+              const matchesGender = patterns.some(p => voiceName.includes(p));
+              const matchesAccent = voiceLang === voiceSettings.accent.toLowerCase();
+              return matchesGender && matchesAccent;
+            });
+            
+            // If no match with accent, try gender only
+            if (!preferredVoice) {
+              preferredVoice = availableVoices.find(v => {
+                const voiceName = v.name.toLowerCase();
+                return patterns.some(p => voiceName.includes(p));
+              });
+            }
+            
+            // Fallback to first available voice
+            utterance.voice = preferredVoice || availableVoices[0];
           }
           
           utterance.onstart = () => setIsSpeaking(true);
@@ -2040,6 +2065,14 @@
         try {
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), AI_CONFIG.API_TIMEOUT_MS);
+          
+          // getSecureToken should be implemented to retrieve API token securely
+          // Example: return sessionStorage.getItem('ai_api_token') or fetch from secure backend
+          const getSecureToken = () => {
+            // In production, implement secure token retrieval
+            // Never hard-code tokens in client-side code
+            return sessionStorage.getItem('ll_ai_token') || '';
+          };
           
           const response = await fetch(AI_CONFIG.API_BASE_URL + AI_CONFIG.LLM_ENDPOINT, {
             method: 'POST',
