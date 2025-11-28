@@ -3898,34 +3898,70 @@
             </div>
           )}
           
-          {showAuthModal && (<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"><div className="bg-white w-full max-w-sm rounded-2xl p-8 text-center shadow-2xl"><div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">👋</div><h3 className="text-2xl font-bold mb-2">Bienvenido</h3><input id="loginName" className="w-full border p-3 rounded-lg mb-3" placeholder="Tu nombre" /><input className="w-full border p-3 rounded-lg mb-6" placeholder="Tu email" /><button onClick={() => { const n = document.getElementById('loginName').value; if(n) { setUser({ name: n, email: "usuario@lotolink.com", id: uid("U") }); setShowAuthModal(false); } }} className="w-full bg-slate-900 text-white py-3 rounded-lg font-bold hover:bg-slate-800">Entrar</button><button onClick={() => setShowAuthModal(false)} className="mt-4 text-gray-500 text-sm hover:underline">Cancelar</button></div></div>)}
+          {showAuthModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center modal-backdrop p-4">
+              <div className="premium-card w-full max-w-sm p-8 text-center animate-fade-in">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 text-4xl shadow-lg shadow-blue-500/30">
+                  👋
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Bienvenido a LotoLink</h3>
+                <p className="text-gray-500 dark:text-gray-400 mb-6">Ingresa tus datos para continuar</p>
+                <input 
+                  id="loginName" 
+                  className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl mb-4 bg-gray-50 dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all" 
+                  placeholder="Tu nombre" 
+                />
+                <input 
+                  className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl mb-6 bg-gray-50 dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all" 
+                  placeholder="Tu email" 
+                />
+                <button 
+                  onClick={() => { 
+                    const n = document.getElementById('loginName').value; 
+                    if(n) { 
+                      setUser({ name: n, email: "usuario@lotolink.com", id: uid("U") }); 
+                      setShowAuthModal(false); 
+                    } 
+                  }} 
+                  className="btn-apple-primary w-full py-4"
+                >
+                  Entrar
+                </button>
+                <button 
+                  onClick={() => setShowAuthModal(false)} 
+                  className="mt-4 text-gray-500 dark:text-gray-400 text-sm hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Card Registration Modal */}
           {showCardRegistration && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-              <div className="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl p-6 shadow-2xl">
-                <div className="text-center mb-6">
-                  <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">💳</div>
-                  <h3 className="text-2xl font-bold mb-2 dark:text-white">Registra tu Tarjeta</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">
-                    Para jugar en la app, necesitas registrar una tarjeta de débito o crédito.
+            <div className="fixed inset-0 z-50 flex items-center justify-center modal-backdrop p-4">
+              <div className="premium-card w-full max-w-md p-8 animate-fade-in">
+                <div className="text-center mb-8">
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 text-4xl shadow-lg shadow-blue-500/30">💳</div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Registra tu Tarjeta</h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">
+                    Para jugar en la app, necesitas registrar una tarjeta.
                   </p>
-                  <p className="text-xs text-gray-400 mt-1">Tus ganancias se depositarán directamente a esta tarjeta.</p>
                 </div>
                 
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <div>
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Nombre en la tarjeta</label>
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Nombre en la tarjeta</label>
                     <input 
                       type="text"
                       value={cardForm.name}
                       onChange={(e) => setCardForm({...cardForm, name: e.target.value})}
-                      className="w-full border dark:border-slate-600 p-3 rounded-lg dark:bg-slate-700 dark:text-white" 
+                      className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl bg-gray-50 dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all" 
                       placeholder="JUAN PÉREZ"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Número de tarjeta</label>
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Número de tarjeta</label>
                     <input 
                       type="text"
                       value={cardForm.number}
@@ -3933,16 +3969,22 @@
                         const num = e.target.value.replace(/\D/g, '').slice(0, 16);
                         setCardForm({...cardForm, number: num});
                       }}
-                      className={`w-full border dark:border-slate-600 p-3 rounded-lg dark:bg-slate-700 dark:text-white font-mono ${cardForm.number.length > 0 && cardForm.number.length < 16 ? 'border-yellow-400' : ''}`}
+                      className={`w-full border p-4 rounded-xl bg-gray-50 dark:bg-white/5 dark:text-white font-mono focus:ring-2 focus:ring-blue-500/30 transition-all ${
+                        cardForm.number.length > 0 && cardForm.number.length < 16 
+                          ? 'border-amber-400 dark:border-amber-500/50' 
+                          : 'border-gray-200 dark:border-white/10'
+                      }`}
                       placeholder="4000 1234 5678 9012"
                     />
                     {cardForm.number.length > 0 && cardForm.number.length < 16 && (
-                      <p className="text-xs text-yellow-600 mt-1">Ingresa los 16 dígitos de tu tarjeta</p>
+                      <p className="text-xs text-amber-600 dark:text-amber-400 mt-2 flex items-center gap-1">
+                        <span>⚠️</span> Ingresa los 16 dígitos de tu tarjeta
+                      </p>
                     )}
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Expiración</label>
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Expiración</label>
                       <input 
                         type="text"
                         value={cardForm.expiry}
@@ -3951,61 +3993,64 @@
                           if (val.length >= 2) val = val.slice(0, 2) + '/' + val.slice(2);
                           setCardForm({...cardForm, expiry: val});
                         }}
-                        className="w-full border dark:border-slate-600 p-3 rounded-lg dark:bg-slate-700 dark:text-white font-mono" 
+                        className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl bg-gray-50 dark:bg-white/5 dark:text-white font-mono focus:ring-2 focus:ring-blue-500/30 transition-all" 
                         placeholder="MM/YY"
                         maxLength={5}
                       />
                     </div>
                     <div>
-                      <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">CVV</label>
+                      <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">CVV</label>
                       <input 
                         type="password"
                         value={cardForm.cvv}
                         onChange={(e) => setCardForm({...cardForm, cvv: e.target.value.replace(/\D/g, '').slice(0, 4)})}
-                        className="w-full border dark:border-slate-600 p-3 rounded-lg dark:bg-slate-700 dark:text-white font-mono" 
+                        className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl bg-gray-50 dark:bg-white/5 dark:text-white font-mono focus:ring-2 focus:ring-blue-500/30 transition-all" 
                         placeholder="***"
                       />
                     </div>
                   </div>
                 </div>
                 
-                <div className="mt-6 space-y-3">
+                <div className="mt-8 space-y-3">
                   <button 
                     onClick={registerCard}
                     disabled={!cardForm.number || cardForm.number.length < 16 || !cardForm.expiry || cardForm.expiry.length < 5 || !cardForm.cvv || cardForm.cvv.length < 3 || !cardForm.name}
-                    className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn-apple-primary w-full py-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
                   >
                     Registrar Tarjeta
                   </button>
                   <button 
                     onClick={() => setShowCardRegistration(false)}
-                    className="w-full text-gray-500 dark:text-gray-400 text-sm hover:underline"
+                    className="w-full text-gray-500 dark:text-gray-400 text-sm hover:text-gray-700 dark:hover:text-gray-200 transition-colors py-2"
                   >
                     Cancelar
                   </button>
                 </div>
                 
-                <p className="text-xs text-center text-gray-400 mt-4">
-                  🔒 Solo guardamos los últimos 4 dígitos de tu tarjeta para tu seguridad
-                </p>
+                <div className="mt-6 p-4 bg-green-500/10 rounded-xl border border-green-500/20 flex items-center gap-3">
+                  <span className="text-green-600 text-xl">🔒</span>
+                  <p className="text-xs text-green-700 dark:text-green-400">
+                    Solo guardamos los últimos 4 dígitos para tu seguridad
+                  </p>
+                </div>
               </div>
             </div>
           )}
 
           {/* Card Management Modal - View/Add/Delete Cards */}
           {showCardManagement && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-              <div className="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+            <div className="fixed inset-0 z-50 flex items-center justify-center modal-backdrop p-4">
+              <div className="premium-card w-full max-w-md overflow-hidden animate-fade-in">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
-                  <div className="flex justify-between items-center">
+                <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-8 text-white">
+                  <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="text-xl font-bold">Mis Tarjetas</h3>
-                      <p className="text-blue-100 text-sm mt-1">Gestiona tus métodos de pago</p>
+                      <h3 className="text-2xl font-bold">Mis Tarjetas</h3>
+                      <p className="text-blue-100 text-sm mt-2">Gestiona tus métodos de pago</p>
                     </div>
                     <button 
                       onClick={() => setShowCardManagement(false)}
-                      className="p-2 hover:bg-white/20 rounded-full transition"
+                      className="w-10 h-10 flex items-center justify-center hover:bg-white/20 rounded-full transition-all"
                     >
                       ✕
                     </button>
@@ -4015,43 +4060,43 @@
                 <div className="p-6">
                   {/* Cards List */}
                   {registeredCards.length > 0 ? (
-                    <div className="space-y-3 mb-6">
+                    <div className="space-y-4 mb-6">
                       {registeredCards.map((card, index) => {
                         const brandStyles = {
-                          'Visa': { bg: 'bg-blue-600', icon: '𝗩' },
-                          'Mastercard': { bg: 'bg-red-500', icon: '◉◉' },
-                          'Tarjeta': { bg: 'bg-gray-500', icon: '💳' }
+                          'Visa': { gradient: 'from-blue-500 to-blue-700', icon: '𝗩' },
+                          'Mastercard': { gradient: 'from-red-500 to-orange-500', icon: '◉◉' },
+                          'Tarjeta': { gradient: 'from-gray-500 to-gray-700', icon: '💳' }
                         };
                         const style = brandStyles[card.brand] || brandStyles['Tarjeta'];
                         
                         return (
                           <div 
                             key={card.id} 
-                            className={`p-4 rounded-xl border-2 transition cursor-pointer ${
+                            className={`p-5 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
                               selectedCardIndex === index 
-                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
-                                : 'border-gray-200 dark:border-slate-600 hover:border-blue-300'
+                                ? 'border-blue-500 bg-blue-500/5 shadow-lg shadow-blue-500/10' 
+                                : 'border-gray-200 dark:border-white/10 hover:border-blue-300 dark:hover:border-blue-500/50'
                             }`}
                             onClick={() => setSelectedCardIndex(index)}
                           >
                             <div className="flex justify-between items-start">
-                              <div className="flex items-center gap-3">
-                                <div className={`w-10 h-10 ${style.bg} rounded-lg flex items-center justify-center text-white font-bold text-lg`}>
+                              <div className="flex items-center gap-4">
+                                <div className={`w-12 h-12 bg-gradient-to-br ${style.gradient} rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
                                   {style.icon}
                                 </div>
                                 <div>
-                                  <div className="font-bold dark:text-white">{card.brand}</div>
-                                  <div className="text-sm text-gray-500 dark:text-gray-400">•••• •••• •••• {card.lastFour}</div>
+                                  <div className="font-semibold text-gray-900 dark:text-white">{card.brand}</div>
+                                  <div className="text-sm text-gray-500 dark:text-gray-400 font-mono">•••• •••• •••• {card.lastFour}</div>
                                   {card.name && <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">{card.name}</div>}
                                 </div>
                               </div>
                               <div className="flex flex-col items-end gap-2">
                                 {selectedCardIndex === index && (
-                                  <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded-full">Principal</span>
+                                  <span className="text-xs bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-3 py-1 rounded-full font-medium shadow-md">Principal</span>
                                 )}
                                 <button 
                                   onClick={(e) => { e.stopPropagation(); deleteCard(card.id); }}
-                                  className="text-xs text-red-500 hover:text-red-700 hover:underline"
+                                  className="text-xs text-red-500 hover:text-red-600 font-medium transition-colors"
                                 >
                                   Eliminar
                                 </button>
