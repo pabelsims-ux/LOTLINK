@@ -2718,6 +2718,14 @@
       };
       const removeCartIndex = (i) => setCart(c => c.filter((_, idx) => idx !== i));
       
+      // Memoized cart totals for consistent display and calculation
+      const cartTotals = useMemo(() => {
+        const subtotal = cart.reduce((s, p) => s + Number(p.amount||0), 0);
+        const commission = Math.round(subtotal * APP_COMMISSION_RATE * 100) / 100;
+        const total = subtotal + commission;
+        return { subtotal, commission, total };
+      }, [cart]);
+      
       // Show payment options before checkout
       const initiateCheckout = () => { 
         if (!cart.length) {
@@ -2731,17 +2739,13 @@
       
       // Process checkout with selected payment method
       const processCheckout = () => { 
-        const subtotal = cart.reduce((s, p) => s + Number(p.amount||0), 0);
-        const commission = Math.round(subtotal * APP_COMMISSION_RATE * 100) / 100; // Proper rounding for financial calculations
-        const total = subtotal + commission;
-        
         const t = { 
           id: uid("TK"), 
           plays: cart, 
           bank: cartBanca || selectedBank?.name, 
-          subtotal: subtotal,
-          commission: commission,
-          total: total,
+          subtotal: cartTotals.subtotal,
+          commission: cartTotals.commission,
+          total: cartTotals.total,
           paymentMethod: paymentMethod,
           paymentStatus: paymentMethod === 'app' ? 'paid' : 'pending',
           paymentCard: paymentMethod === 'app' && registeredCard ? registeredCard.lastFour : null,
@@ -3611,16 +3615,16 @@
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-gray-600 dark:text-gray-400">Subtotal ({cart.length} jugada{cart.length > 1 ? 's' : ''}):</span>
-                        <span className="font-medium dark:text-white">RD$ {cart.reduce((s, p) => s + Number(p.amount||0), 0).toLocaleString('es-DO')}</span>
+                        <span className="font-medium dark:text-white">RD$ {cartTotals.subtotal.toLocaleString('es-DO')}</span>
                       </div>
                       <div className="flex justify-between text-orange-600 dark:text-orange-400">
                         <span>Comisión App (5%):</span>
-                        <span className="font-medium">RD$ {Math.ceil(cart.reduce((s, p) => s + Number(p.amount||0), 0) * APP_COMMISSION_RATE).toLocaleString('es-DO')}</span>
+                        <span className="font-medium">RD$ {cartTotals.commission.toLocaleString('es-DO')}</span>
                       </div>
                       <div className="border-t dark:border-slate-600 pt-2 mt-2">
                         <div className="flex justify-between text-lg font-bold">
                           <span className="dark:text-white">Total a Pagar:</span>
-                          <span className="text-green-600">RD$ {(cart.reduce((s, p) => s + Number(p.amount||0), 0) + Math.ceil(cart.reduce((s, p) => s + Number(p.amount||0), 0) * APP_COMMISSION_RATE)).toLocaleString('es-DO')}</span>
+                          <span className="text-green-600">RD$ {cartTotals.total.toLocaleString('es-DO')}</span>
                         </div>
                       </div>
                     </div>
@@ -3699,7 +3703,7 @@
                     >
                       {paymentMethod === 'app' ? (
                         <>
-                          <span>💳</span> Pagar RD$ {(cart.reduce((s, p) => s + Number(p.amount||0), 0) + Math.ceil(cart.reduce((s, p) => s + Number(p.amount||0), 0) * APP_COMMISSION_RATE)).toLocaleString('es-DO')}
+                          <span>💳</span> Pagar RD$ {cartTotals.total.toLocaleString('es-DO')}
                         </>
                       ) : (
                         <>
