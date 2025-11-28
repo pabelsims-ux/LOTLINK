@@ -31,9 +31,9 @@ export class WebhookService {
 
     // Process confirmation
     if (dto.status === 'confirmed') {
-      await this.playService.confirmPlay(dto.requestId, dto.playIdBanca, dto.ticketCode);
+      await this.playService.confirmPlayByRequestId(dto.requestId, dto.playIdBanca, dto.ticketCode);
     } else if (dto.status === 'rejected') {
-      await this.playService.rejectPlay(dto.requestId, dto.reason);
+      await this.playService.rejectPlayByRequestId(dto.requestId, dto.reason);
     }
 
     return {

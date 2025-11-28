@@ -83,10 +83,38 @@ export class PlayService {
     );
   }
 
+  async confirmPlayByRequestId(requestId: string, playIdBanca: string, ticketCode: string): Promise<void> {
+    const play = await this.playRepository.findByRequestId(requestId);
+    if (!play) {
+      throw new NotFoundException(`Play with requestId ${requestId} not found`);
+    }
+
+    play.confirm(playIdBanca, ticketCode);
+    await this.playRepository.update(play);
+
+    await this.eventPublisher.publish(
+      new PlayConfirmedEvent(play.id, playIdBanca, ticketCode),
+    );
+  }
+
   async rejectPlay(playId: string, reason?: string): Promise<void> {
     const play = await this.playRepository.findById(playId);
     if (!play) {
       throw new NotFoundException(`Play with id ${playId} not found`);
+    }
+
+    play.reject(reason);
+    await this.playRepository.update(play);
+
+    await this.eventPublisher.publish(
+      new PlayRejectedEvent(play.id, reason),
+    );
+  }
+
+  async rejectPlayByRequestId(requestId: string, reason?: string): Promise<void> {
+    const play = await this.playRepository.findByRequestId(requestId);
+    if (!play) {
+      throw new NotFoundException(`Play with requestId ${requestId} not found`);
     }
 
     play.reject(reason);

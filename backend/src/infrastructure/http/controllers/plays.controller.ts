@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { PlayService } from '../../../application/services/play.service';
 import { CreatePlayDto, PlayResponseDto, GetPlayDto } from '../../../application/dtos/play.dto';
@@ -26,9 +27,11 @@ export class PlaysController {
     @Body() createPlayDto: CreatePlayDto,
     @Headers('Idempotency-Key') idempotencyKey: string,
   ): Promise<PlayResponseDto> {
-    // The idempotency key should match the request_id in body
+    // Validate that idempotency key matches request_id if both are provided
     if (idempotencyKey && idempotencyKey !== createPlayDto.requestId) {
-      createPlayDto.requestId = idempotencyKey;
+      throw new BadRequestException(
+        'Idempotency-Key header must match request_id in the body',
+      );
     }
     return this.playService.createPlay(createPlayDto);
   }
