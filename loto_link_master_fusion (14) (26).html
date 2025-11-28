@@ -804,8 +804,13 @@
         <section className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg mt-6 mb-8 transition-colors">
           <div className="flex flex-col lg:flex-row items-center gap-8">
             <div className="flex-1">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="bg-gradient-to-r from-purple-600 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+                  🌙 Asistente IA integrado
+                </span>
+              </div>
               <h1 className="text-4xl font-extrabold text-slate-900 dark:text-white">Tu conexión con <span className="text-blue-600">la suerte</span></h1>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">Juega en tus bancas favoritas desde la app, gestiona tus tickets y cobra al instante.</p>
+              <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">Juega en tus bancas favoritas desde la app, gestiona tus tickets y cobra al instante. <span className="text-purple-600 dark:text-purple-400 font-medium">Luna, tu asistente IA,</span> te guía paso a paso.</p>
               <div className="mt-6 flex gap-4">
                 <button onClick={onPlay} className="bg-slate-900 dark:bg-white dark:text-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition">Jugar ahora</button>
                 <button onClick={onBanca} className="px-8 py-3 rounded-full border-2 border-slate-200 dark:border-slate-600 dark:text-white font-bold hover:border-slate-400 transition">Soy una banca</button>
@@ -1820,14 +1825,67 @@
       const [assistantMode, setAssistantMode] = useState('idle'); // 'idle' | 'guided_play' | 'select_banca' | 'select_lottery' | 'select_modality' | 'select_numbers'
       const [guidedPlayData, setGuidedPlayData] = useState({ banca: null, lottery: null, modality: null, numbers: [] });
       
-      // AI Assistant configuration constants
+      // AI Assistant configuration constants - Enhanced for LLM and TTS Integration
       const AI_CONFIG = {
-        MAX_CONVERSATION_HISTORY: 10,
+        MAX_CONVERSATION_HISTORY: 20,
         MIN_THINKING_TIME_MS: 300,
         MAX_THINKING_TIME_MS: 800,
         SPEECH_RATE: 0.95,
-        SPEECH_PITCH: 1.05
+        SPEECH_PITCH: 1.05,
+        
+        // LLM Integration Settings (for future GPT-5 or similar API integration)
+        LLM_ENDPOINT: '/api/ai/chat',  // Backend endpoint for LLM requests
+        LLM_MODEL: 'gpt-5',            // Target model
+        LLM_MAX_TOKENS: 150,           // Max response length
+        LLM_TEMPERATURE: 0.7,          // Response creativity (0-1)
+        
+        // Text-to-Speech (TTS) Settings - Configurable voice options
+        TTS_ENABLED: true,
+        TTS_PROVIDER: 'browser',       // 'browser' | 'google_wavenet' | 'amazon_polly'
+        TTS_VOICE_GENDER: 'female',    // 'male' | 'female'
+        TTS_VOICE_ACCENT: 'es-ES',     // Spanish (Spain), 'es-MX' for Mexico, 'es-DO' for Dominican
+        TTS_VOICE_NAME: null,          // Auto-selected based on gender/accent
+        TTS_VOLUME: 1.0,               // 0.0 to 1.0
+        TTS_RATE_SLOW: 0.8,
+        TTS_RATE_NORMAL: 0.95,
+        TTS_RATE_FAST: 1.2,
+        
+        // Backend API Settings
+        API_BASE_URL: '/api',
+        API_TIMEOUT_MS: 10000,
+        
+        // Privacy and Security
+        ANONYMIZE_USER_DATA: true,
+        LOG_CONVERSATIONS: false,
+        ENCRYPTION_ENABLED: true
       };
+      
+      // AI Voice Preferences State
+      const [voiceSettings, setVoiceSettings] = useState({
+        enabled: true,
+        gender: 'female',
+        accent: 'es-ES',
+        speed: 'normal',
+        volume: 1.0
+      });
+      
+      // Available voices cache
+      const [availableVoices, setAvailableVoices] = useState([]);
+      
+      // Load available TTS voices
+      useEffect(() => {
+        const loadVoices = () => {
+          if ('speechSynthesis' in window) {
+            const voices = window.speechSynthesis.getVoices();
+            const spanishVoices = voices.filter(v => v.lang.startsWith('es'));
+            setAvailableVoices(spanishVoices);
+          }
+        };
+        loadVoices();
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
+      }, []);
       
       const [assistantPersonality] = useState({
         name: 'Luna',
@@ -1889,24 +1947,153 @@
         setCardForm({ number: '', expiry: '', cvv: '', name: '' });
       };
 
-      // Voice Assistant Functions
+      // Voice Assistant Functions - Enhanced TTS with configurable voice options
       const speakText = (text) => {
+        // Check if TTS is enabled in settings
+        if (!voiceSettings.enabled || !AI_CONFIG.TTS_ENABLED) {
+          console.log('TTS disabled:', text);
+          return;
+        }
+        
         if ('speechSynthesis' in window) {
           // Cancel any ongoing speech before starting new one
           if (window.speechSynthesis.speaking) {
             window.speechSynthesis.cancel();
           }
+          
           const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = 'es-ES';
-          utterance.rate = AI_CONFIG.SPEECH_RATE;
+          
+          // Configure language/accent based on settings
+          utterance.lang = voiceSettings.accent || AI_CONFIG.TTS_VOICE_ACCENT;
+          
+          // Configure speech rate based on settings
+          const rates = {
+            'slow': AI_CONFIG.TTS_RATE_SLOW,
+            'normal': AI_CONFIG.TTS_RATE_NORMAL,
+            'fast': AI_CONFIG.TTS_RATE_FAST
+          };
+          utterance.rate = rates[voiceSettings.speed] || AI_CONFIG.SPEECH_RATE;
+          
+          // Configure pitch and volume
           utterance.pitch = AI_CONFIG.SPEECH_PITCH;
+          utterance.volume = voiceSettings.volume || AI_CONFIG.TTS_VOLUME;
+          
+          // Select appropriate voice based on gender preference
+          if (availableVoices.length > 0) {
+            const preferredVoice = availableVoices.find(v => {
+              const voiceName = v.name.toLowerCase();
+              if (voiceSettings.gender === 'female') {
+                return voiceName.includes('female') || voiceName.includes('mujer') || 
+                       voiceName.includes('paulina') || voiceName.includes('mónica') ||
+                       voiceName.includes('helena') || voiceName.includes('conchita');
+              } else {
+                return voiceName.includes('male') || voiceName.includes('hombre') ||
+                       voiceName.includes('jorge') || voiceName.includes('diego') ||
+                       voiceName.includes('enrique');
+              }
+            }) || availableVoices[0];
+            utterance.voice = preferredVoice;
+          }
+          
           utterance.onstart = () => setIsSpeaking(true);
           utterance.onend = () => setIsSpeaking(false);
           utterance.onerror = () => setIsSpeaking(false);
+          
           window.speechSynthesis.speak(utterance);
         } else {
           // Fallback: just show the text without speaking
           console.log('Speech synthesis not supported');
+        }
+      };
+      
+      // LLM API Service - For future GPT-5 or similar integration
+      const callLLMService = async (userMessage, conversationContext) => {
+        // This is the structure for future LLM API integration
+        // Currently uses local pattern matching, but ready for API upgrade
+        
+        const requestPayload = {
+          model: AI_CONFIG.LLM_MODEL,
+          messages: [
+            {
+              role: 'system',
+              content: `Eres Luna, una asistente virtual amigable y entusiasta para la app de lotería LotoLink. 
+                Tu objetivo es guiar a los usuarios a través del proceso de juego de lotería, desde la bienvenida 
+                hasta la selección final de números. Mantén un tono cálido y servicial. Las loterías disponibles 
+                son: Leidsa, Loteka, La Primera, y Lotería Nacional. Las modalidades de juego son: Quiniela (1 número), 
+                Palé (2 números), y Tripleta (3 números). Responde siempre en español.`
+            },
+            ...conversationContext.map(msg => ({
+              role: msg.role,
+              content: msg.message
+            })),
+            {
+              role: 'user',
+              content: userMessage
+            }
+          ],
+          max_tokens: AI_CONFIG.LLM_MAX_TOKENS,
+          temperature: AI_CONFIG.LLM_TEMPERATURE
+        };
+        
+        // For production: Uncomment and configure actual API call
+        /*
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), AI_CONFIG.API_TIMEOUT_MS);
+          
+          const response = await fetch(AI_CONFIG.API_BASE_URL + AI_CONFIG.LLM_ENDPOINT, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${getSecureToken()}`
+            },
+            body: JSON.stringify(requestPayload),
+            signal: controller.signal
+          });
+          
+          clearTimeout(timeoutId);
+          
+          if (!response.ok) throw new Error('LLM API error');
+          
+          const data = await response.json();
+          return {
+            success: true,
+            response: data.choices[0].message.content,
+            intent: data.intent || 'general'
+          };
+        } catch (error) {
+          console.error('LLM API error:', error);
+          return {
+            success: false,
+            response: null,
+            error: error.message
+          };
+        }
+        */
+        
+        // Current fallback: return null to use local pattern matching
+        return { success: false, response: null };
+      };
+      
+      // Context Manager - Maintains conversation state and user preferences
+      const contextManager = {
+        getFullContext: () => ({
+          user: user ? { name: user.name } : null,
+          selectedBanca: selectedBank,
+          currentView: view,
+          assistantMode: assistantMode,
+          guidedPlayData: guidedPlayData,
+          conversationHistory: conversationHistory.slice(-AI_CONFIG.MAX_CONVERSATION_HISTORY)
+        }),
+        
+        summarizeContext: () => {
+          const ctx = contextManager.getFullContext();
+          let summary = '';
+          if (ctx.user) summary += `Usuario: ${ctx.user.name}. `;
+          if (ctx.selectedBanca) summary += `Banca: ${ctx.selectedBanca.name}. `;
+          if (ctx.guidedPlayData.lottery) summary += `Lotería: ${ctx.guidedPlayData.lottery}. `;
+          if (ctx.guidedPlayData.modality) summary += `Modalidad: ${ctx.guidedPlayData.modality}. `;
+          return summary;
         }
       };
 
@@ -2017,7 +2204,7 @@
         setConversationHistory(prev => [...prev.slice(-AI_CONFIG.MAX_CONVERSATION_HISTORY), { role, message, timestamp: Date.now() }]);
       };
 
-      const processVoiceCommand = (transcript) => {
+      const processVoiceCommand = async (transcript) => {
         // Sanitize and validate input
         if (!transcript || typeof transcript !== 'string') {
           setAssistantResponse('No pude procesar el comando. Intenta de nuevo.');
@@ -2031,13 +2218,24 @@
         setIsThinking(true);
         setAssistantResponse('');
         
-        // Simulate AI processing time for natural feel
-        const thinkingTime = AI_CONFIG.MIN_THINKING_TIME_MS + Math.random() * (AI_CONFIG.MAX_THINKING_TIME_MS - AI_CONFIG.MIN_THINKING_TIME_MS);
+        // Try LLM service first (for future API integration)
+        const llmResult = await callLLMService(transcript, conversationHistory);
         
-        setTimeout(() => {
+        if (llmResult.success && llmResult.response) {
+          // Use LLM response
           setIsThinking(false);
-          processCommandInternal(transcript);
-        }, thinkingTime);
+          setAssistantResponse(llmResult.response);
+          addToConversation('assistant', llmResult.response);
+          speakText(llmResult.response);
+        } else {
+          // Fallback to local pattern matching
+          const thinkingTime = AI_CONFIG.MIN_THINKING_TIME_MS + Math.random() * (AI_CONFIG.MAX_THINKING_TIME_MS - AI_CONFIG.MIN_THINKING_TIME_MS);
+          
+          setTimeout(() => {
+            setIsThinking(false);
+            processCommandInternal(transcript);
+          }, thinkingTime);
+        }
       };
       
       const processCommandInternal = (transcript) => {
@@ -3354,6 +3552,90 @@
                       <p className="text-purple-800 dark:text-purple-200">{assistantResponse}</p>
                     </div>
                   )}
+                </div>
+
+                {/* Voice Settings Panel - TTS Customization */}
+                <div className="px-6 py-3 border-t dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
+                  <details className="group">
+                    <summary className="flex items-center justify-between cursor-pointer text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                      <span className="flex items-center gap-2">
+                        <span>⚙️</span>
+                        <span>Configuración de Voz</span>
+                      </span>
+                      <span className="group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div className="mt-3 space-y-3">
+                      {/* Voice Enable Toggle */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600 dark:text-gray-300">Voz habilitada</span>
+                        <button
+                          onClick={() => setVoiceSettings(prev => ({ ...prev, enabled: !prev.enabled }))}
+                          className={`w-12 h-6 rounded-full transition-colors ${voiceSettings.enabled ? 'bg-purple-600' : 'bg-gray-300 dark:bg-slate-600'}`}
+                        >
+                          <span className={`block w-5 h-5 bg-white rounded-full shadow transform transition-transform ${voiceSettings.enabled ? 'translate-x-6' : 'translate-x-0.5'}`}></span>
+                        </button>
+                      </div>
+                      
+                      {/* Voice Gender Selection */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600 dark:text-gray-300">Tipo de voz</span>
+                        <div className="flex gap-1">
+                          <button
+                            onClick={() => setVoiceSettings(prev => ({ ...prev, gender: 'female' }))}
+                            className={`px-3 py-1 text-xs rounded-full transition ${voiceSettings.gender === 'female' ? 'bg-pink-500 text-white' : 'bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-gray-300'}`}
+                          >
+                            👩 Femenina
+                          </button>
+                          <button
+                            onClick={() => setVoiceSettings(prev => ({ ...prev, gender: 'male' }))}
+                            className={`px-3 py-1 text-xs rounded-full transition ${voiceSettings.gender === 'male' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-gray-300'}`}
+                          >
+                            👨 Masculina
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {/* Speech Speed */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600 dark:text-gray-300">Velocidad</span>
+                        <div className="flex gap-1">
+                          {['slow', 'normal', 'fast'].map(speed => (
+                            <button
+                              key={speed}
+                              onClick={() => setVoiceSettings(prev => ({ ...prev, speed }))}
+                              className={`px-2 py-1 text-xs rounded transition ${voiceSettings.speed === speed ? 'bg-purple-500 text-white' : 'bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-gray-300'}`}
+                            >
+                              {speed === 'slow' ? '🐢' : speed === 'fast' ? '🐰' : '🚶'}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Accent Selection */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600 dark:text-gray-300">Acento</span>
+                        <select
+                          value={voiceSettings.accent}
+                          onChange={(e) => setVoiceSettings(prev => ({ ...prev, accent: e.target.value }))}
+                          className="text-xs border dark:border-slate-600 rounded px-2 py-1 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200"
+                        >
+                          <option value="es-ES">🇪🇸 España</option>
+                          <option value="es-MX">🇲🇽 México</option>
+                          <option value="es-DO">🇩🇴 Dominicano</option>
+                          <option value="es-AR">🇦🇷 Argentina</option>
+                          <option value="es-CO">🇨🇴 Colombia</option>
+                        </select>
+                      </div>
+                      
+                      {/* Test Voice Button */}
+                      <button
+                        onClick={() => speakText('¡Hola! Esta es una prueba de voz. ¿Cómo se escucha?')}
+                        className="w-full py-2 text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-900/50 transition"
+                      >
+                        🔊 Probar Voz
+                      </button>
+                    </div>
+                  </details>
                 </div>
 
                 {/* Microphone Button */}
