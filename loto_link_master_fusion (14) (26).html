@@ -834,19 +834,30 @@
     };
 
     /* --- Wallet/Ticket Download Helper --- */
-    function downloadTicketForWallet(ticket, prizeMult) {
+    function downloadTicketForWallet(ticket, prizeMult, walletType = 'json') {
       const ticketData = {
         type: 'LotoLink Ticket',
         id: ticket.id,
         bank: ticket.bank,
-        prize: (ticket.total * prizeMult).toLocaleString('es-DO'),
-        status: 'Ganador - Pendiente de cobro'
+        total: ticket.total,
+        subtotal: ticket.subtotal || ticket.total,
+        commission: ticket.commission || 0,
+        paymentStatus: ticket.paymentStatus || 'paid',
+        createdAt: ticket.createdAt,
+        drawTime: ticket.drawTime,
+        prize: prizeMult > 1 ? (ticket.total * prizeMult).toLocaleString('es-DO') : null,
+        status: ticket.paymentStatus === 'pending' ? 'Pendiente de Pago en Sucursal' : 'Ticket Confirmado'
       };
-      const blob = new Blob([JSON.stringify(ticketData, null, 2)], {type: 'application/json'});
+      
+      // Generate filename based on wallet type
+      const fileExtension = walletType === 'pkpass' ? 'pkpass' : 'json';
+      const mimeType = walletType === 'pkpass' ? 'application/vnd.apple.pkpass' : 'application/json';
+      
+      const blob = new Blob([JSON.stringify(ticketData, null, 2)], {type: mimeType});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `LotoLink-Ticket-${ticket.id}.json`;
+      a.download = `LotoLink-Ticket-${ticket.id}.${fileExtension}`;
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -887,12 +898,12 @@
       return ticket.total * PROFILE_CONFIG.PRIZE_MULTIPLIER;
     }
 
-    function Profile({ user, ticket }) {
+    function Profile({ user, ticket, registeredCards = [], onManageCards }) {
       const [visible, setVisible] = useState(() => localStorage.getItem("ll_visible_rank") === "true");
       const [wins, setWins] = useState(() => Number(localStorage.getItem("ll_user_wins") || 1));
       const [balance, setBalance] = useState(() => Number(localStorage.getItem("ll_user_balance") || 0));
       const [hist, setHist] = useState(() => JSON.parse(localStorage.getItem("ll_history") || "[]"));
-      const [profileView, setProfileView] = useState('overview'); // 'collect' | 'history' | 'overview' | 'wallet' | 'withdraw'
+      const [profileView, setProfileView] = useState('overview'); // 'collect' | 'history' | 'overview' | 'wallet' | 'withdraw' | 'cards'
       const [historyFilter, setHistoryFilter] = useState('all'); // 'all' | 'active' | 'won' | 'lost' | 'collected'
       const [historyPage, setHistoryPage] = useState(1);
       const [collectingTicket, setCollectingTicket] = useState(null);
@@ -1072,6 +1083,12 @@
               className={`px-4 py-2 rounded-lg font-medium transition ${profileView === 'wallet' ? 'bg-indigo-600 text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'}`}
             >
               💼 Mi Cartera {activeTicketsCount > 0 && <span className="ml-1 bg-indigo-500 text-white text-xs px-2 py-0.5 rounded-full">{activeTicketsCount}</span>}
+            </button>
+            <button 
+              onClick={() => setProfileView('cards')}
+              className={`px-4 py-2 rounded-lg font-medium transition ${profileView === 'cards' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600'}`}
+            >
+              💳 Mis Tarjetas {registeredCards.length > 0 && <span className="ml-1 bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">{registeredCards.length}</span>}
             </button>
             <button 
               onClick={() => { setProfileView('history'); refreshHistory(); }}
@@ -1520,6 +1537,96 @@
             </div>
           )}
 
+          {/* CARDS VIEW - My Payment Cards */}
+          {profileView === 'cards' && (
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow border border-gray-100 dark:border-slate-700">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="font-bold text-xl dark:text-white">💳 Mis Tarjetas</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Gestiona tus tarjetas de débito y crédito</p>
+                </div>
+                <button 
+                  onClick={onManageCards}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2"
+                >
+                  <span>➕</span> Agregar Tarjeta
+                </button>
+              </div>
+
+              {registeredCards.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-5xl mb-4">💳</p>
+                  <p className="text-gray-500 dark:text-gray-400 text-lg">No tienes tarjetas registradas</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">Agrega una tarjeta para poder pagar en la app</p>
+                  <button 
+                    onClick={onManageCards}
+                    className="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition"
+                  >
+                    Agregar Primera Tarjeta
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {registeredCards.map((card, index) => {
+                    // Brand-specific styling
+                    const brandStyles = {
+                      'Visa': { gradient: 'from-blue-600 to-blue-800', icon: '𝗩' },
+                      'Mastercard': { gradient: 'from-red-500 to-orange-600', icon: '◉◉' },
+                      'Tarjeta': { gradient: 'from-gray-500 to-gray-700', icon: '💳' }
+                    };
+                    const style = brandStyles[card.brand] || brandStyles['Tarjeta'];
+                    
+                    return (
+                      <div 
+                        key={card.id} 
+                        className="p-5 rounded-xl border-2 border-gray-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-blue-500 transition bg-gradient-to-r from-gray-50 to-white dark:from-slate-700 dark:to-slate-800"
+                      >
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-4">
+                            <div className={`w-14 h-14 bg-gradient-to-br ${style.gradient} rounded-xl flex items-center justify-center text-white text-2xl shadow-lg font-bold`}>
+                              {style.icon}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-bold text-lg dark:text-white">{card.brand}</span>
+                                {index === 0 && (
+                                  <span className="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full">Principal</span>
+                                )}
+                              </div>
+                              <div className="text-sm font-mono text-gray-500 dark:text-gray-400 mt-1">
+                                •••• •••• •••• {card.lastFour}
+                              </div>
+                              {card.name && (
+                              <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                                {card.name}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs text-gray-400 dark:text-gray-500">
+                            Registrada {new Date(card.registeredAt).toLocaleDateString('es-DO')}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                  })}
+                  
+                  <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <span className="text-blue-600 text-xl">ℹ️</span>
+                      <div className="text-sm text-blue-700 dark:text-blue-300">
+                        <strong>Seguridad:</strong> Solo almacenamos los últimos 4 dígitos de tus tarjetas. 
+                        Nunca guardamos el número completo ni el CVV.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* WALLET VIEW - Digital Ticket Wallet */}
           {profileView === 'wallet' && (
             <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow border border-gray-100 dark:border-slate-700">
@@ -1802,11 +1909,23 @@
       const resultsFeed = useSimulatedResults(9000);
       
       // NEW: Card registration and winning tickets notification system
-      const [registeredCard, setRegisteredCard] = useState(() => JSON.parse(localStorage.getItem("ll_registered_card") || "null"));
+      const [registeredCards, setRegisteredCards] = useState(() => JSON.parse(localStorage.getItem("ll_registered_cards") || "[]"));
+      const [selectedCardIndex, setSelectedCardIndex] = useState(0);
+      const registeredCard = registeredCards.length > 0 ? registeredCards[selectedCardIndex] : null;
       const [showCardRegistration, setShowCardRegistration] = useState(false);
+      const [showCardManagement, setShowCardManagement] = useState(false); // New: Card management modal
       const [showWinningTicketsModal, setShowWinningTicketsModal] = useState(false);
       const [winningTickets, setWinningTickets] = useState([]);
       const [cardForm, setCardForm] = useState({ number: '', expiry: '', cvv: '', name: '' });
+      
+      // NEW: Payment options and checkout flow
+      const [showPaymentOptions, setShowPaymentOptions] = useState(false);
+      const [paymentMethod, setPaymentMethod] = useState('app'); // 'app' | 'branch'
+      const [showTicketConfirmation, setShowTicketConfirmation] = useState(false);
+      const [confirmedTicket, setConfirmedTicket] = useState(null);
+      
+      // App commission configuration
+      const APP_COMMISSION_RATE = 0.05; // 5% commission
 
       // Voice Assistant state - Natural language AI with personality, context memory, and varied responses
       const [isVoiceAssistantOpen, setIsVoiceAssistantOpen] = useState(false);
@@ -1925,10 +2044,10 @@
         return () => clearTimeout(timer);
       }, [user]);
 
-      // Persist registered card (only non-sensitive display info)
+      // Persist registered cards (only non-sensitive display info)
       useEffect(() => {
-        localStorage.setItem("ll_registered_card", JSON.stringify(registeredCard));
-      }, [registeredCard]);
+        localStorage.setItem("ll_registered_cards", JSON.stringify(registeredCards));
+      }, [registeredCards]);
 
       const registerCard = () => {
         // Basic validation
@@ -1938,13 +2057,25 @@
         
         // Only store non-sensitive display information (no CVV, no full card number)
         const maskedCard = {
+          id: 'CARD-' + Date.now().toString(36).toUpperCase(),
           lastFour: cardForm.number.slice(-4),
           brand: cardForm.number.startsWith('4') ? 'Visa' : cardForm.number.startsWith('5') ? 'Mastercard' : 'Tarjeta',
+          name: cardForm.name,
           registeredAt: new Date().toISOString()
         };
-        setRegisteredCard(maskedCard);
+        setRegisteredCards(prev => [...prev, maskedCard]);
+        setSelectedCardIndex(registeredCards.length); // Select the new card
         setShowCardRegistration(false);
+        setShowCardManagement(false);
         setCardForm({ number: '', expiry: '', cvv: '', name: '' });
+      };
+      
+      const deleteCard = (cardId) => {
+        const updatedCards = registeredCards.filter(c => c.id !== cardId);
+        setRegisteredCards(updatedCards);
+        if (selectedCardIndex >= updatedCards.length) {
+          setSelectedCardIndex(Math.max(0, updatedCards.length - 1));
+        }
       };
 
       // Voice Assistant Functions - Enhanced TTS with configurable voice options
@@ -2586,31 +2717,60 @@
         }
       };
       const removeCartIndex = (i) => setCart(c => c.filter((_, idx) => idx !== i));
-      const checkout = () => { 
+      
+      // Show payment options before checkout
+      const initiateCheckout = () => { 
         if (!cart.length) {
-          // Visual feedback instead of alert - button is already disabled, so this is just a fallback
           return;
         }
-        // Require card registration to play in app
-        if (!registeredCard) {
-          setShowCardRegistration(true);
-          return;
-        }
+        setShowPaymentOptions(true);
+      };
+      
+      // Draw time configuration
+      const DRAW_TIME_HOURS = 4; // Hours until draw (for simulation)
+      
+      // Process checkout with selected payment method
+      const processCheckout = () => { 
+        const subtotal = cart.reduce((s, p) => s + Number(p.amount||0), 0);
+        const commission = Math.round(subtotal * APP_COMMISSION_RATE * 100) / 100; // Proper rounding for financial calculations
+        const total = subtotal + commission;
+        
         const t = { 
           id: uid("TK"), 
           plays: cart, 
           bank: cartBanca || selectedBank?.name, 
-          total: cart.reduce((s, p) => s + Number(p.amount||0), 0), 
-          createdAt: new Date().toISOString() 
+          subtotal: subtotal,
+          commission: commission,
+          total: total,
+          paymentMethod: paymentMethod,
+          paymentStatus: paymentMethod === 'app' ? 'paid' : 'pending',
+          paymentCard: paymentMethod === 'app' && registeredCard ? registeredCard.lastFour : null,
+          createdAt: new Date().toISOString(),
+          drawTime: new Date(Date.now() + DRAW_TIME_HOURS * 60 * 60 * 1000).toISOString()
         }; 
-        setTicket(t); 
+        
+        // If paying in app, require card
+        if (paymentMethod === 'app' && !registeredCard) {
+          setShowPaymentOptions(false);
+          setShowCardRegistration(true);
+          return;
+        }
+        
+        setTicket(t); // Set main ticket state for consistency
+        setConfirmedTicket(t);
         const h = JSON.parse(localStorage.getItem("ll_history") || "[]"); 
         h.unshift(t); 
         localStorage.setItem("ll_history", JSON.stringify(h.slice(0,50))); 
         setCart([]); 
-        setCartBanca(null); // Reset banca lock
-        setIsCartOpen(false); 
-        setView("ticket"); 
+        setCartBanca(null);
+        setIsCartOpen(false);
+        setShowPaymentOptions(false);
+        setShowTicketConfirmation(true);
+      };
+      
+      // Legacy checkout function for compatibility
+      const checkout = () => {
+        initiateCheckout();
       };
 
       useEffect(() => { window.addGlobalCartItem = (item) => addPlayToCart({ type: `${item.lottery} - ${item.modality}`, numbers: item.numbers, amount: item.stake, banca: item.banca || selectedBank?.name || 'Sin banca' }); return () => delete window.addGlobalCartItem; }, [selectedBank]);
@@ -2734,7 +2894,7 @@
             </div>
           )}
 
-          {view !== 'portal' && (<Header theme={theme} setTheme={setTheme} user={user} onLogin={()=>setShowAuthModal(true)} onLogout={()=>{setUser(null);localStorage.removeItem("ll_user")}} onNav={setView} onOpenPlay={()=>openPlayModal(DEFAULT_BANKS[0])} cartCount={cart.length} onToggleCart={()=>setIsCartOpen(true)} winningTicketsCount={winningTickets.length} onShowWinningTickets={() => setShowWinningTicketsModal(true)} registeredCard={registeredCard} onManageCard={() => setShowCardRegistration(true)} />)}
+          {view !== 'portal' && (<Header theme={theme} setTheme={setTheme} user={user} onLogin={()=>setShowAuthModal(true)} onLogout={()=>{setUser(null);localStorage.removeItem("ll_user")}} onNav={setView} onOpenPlay={()=>openPlayModal(DEFAULT_BANKS[0])} cartCount={cart.length} onToggleCart={()=>setIsCartOpen(true)} winningTicketsCount={winningTickets.length} onShowWinningTickets={() => setShowWinningTicketsModal(true)} registeredCard={registeredCard} onManageCard={() => setShowCardManagement(true)} />)}
 
           <main className="max-w-7xl mx-auto p-4 pb-32">
             {view === "home" && (
@@ -2817,7 +2977,7 @@
 
             {view === "bancas" && <Bancas banks={DEFAULT_BANKS} onPlay={(b) => openPlayModal(b)} onJoin={() => setView("portal")} />}
             {view === "portal" && <BancaPortal onBack={() => setView("home")} />}
-            {view === "profile" && <Profile user={user} ticket={ticket} />}
+            {view === "profile" && <Profile user={user} ticket={ticket} registeredCards={registeredCards} onManageCards={() => setShowCardManagement(true)} />}
             {view === "rankings" && <Rankings />}
             {view === "masjugados" && <MostPlayedSection most={MOST_PLAYED} />}
             {view === "join" && <JoinUs />}
@@ -3335,6 +3495,392 @@
                 <p className="text-xs text-center text-gray-400 mt-4">
                   🔒 Solo guardamos los últimos 4 dígitos de tu tarjeta para tu seguridad
                 </p>
+              </div>
+            </div>
+          )}
+
+          {/* Card Management Modal - View/Add/Delete Cards */}
+          {showCardManagement && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+              <div className="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="text-xl font-bold">Mis Tarjetas</h3>
+                      <p className="text-blue-100 text-sm mt-1">Gestiona tus métodos de pago</p>
+                    </div>
+                    <button 
+                      onClick={() => setShowCardManagement(false)}
+                      className="p-2 hover:bg-white/20 rounded-full transition"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="p-6">
+                  {/* Cards List */}
+                  {registeredCards.length > 0 ? (
+                    <div className="space-y-3 mb-6">
+                      {registeredCards.map((card, index) => {
+                        const brandStyles = {
+                          'Visa': { bg: 'bg-blue-600', icon: '𝗩' },
+                          'Mastercard': { bg: 'bg-red-500', icon: '◉◉' },
+                          'Tarjeta': { bg: 'bg-gray-500', icon: '💳' }
+                        };
+                        const style = brandStyles[card.brand] || brandStyles['Tarjeta'];
+                        
+                        return (
+                          <div 
+                            key={card.id} 
+                            className={`p-4 rounded-xl border-2 transition cursor-pointer ${
+                              selectedCardIndex === index 
+                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+                                : 'border-gray-200 dark:border-slate-600 hover:border-blue-300'
+                            }`}
+                            onClick={() => setSelectedCardIndex(index)}
+                          >
+                            <div className="flex justify-between items-start">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-10 h-10 ${style.bg} rounded-lg flex items-center justify-center text-white font-bold text-lg`}>
+                                  {style.icon}
+                                </div>
+                                <div>
+                                  <div className="font-bold dark:text-white">{card.brand}</div>
+                                  <div className="text-sm text-gray-500 dark:text-gray-400">•••• •••• •••• {card.lastFour}</div>
+                                  {card.name && <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">{card.name}</div>}
+                                </div>
+                              </div>
+                              <div className="flex flex-col items-end gap-2">
+                                {selectedCardIndex === index && (
+                                  <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded-full">Principal</span>
+                                )}
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); deleteCard(card.id); }}
+                                  className="text-xs text-red-500 hover:text-red-700 hover:underline"
+                                >
+                                  Eliminar
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 mb-6">
+                      <div className="text-5xl mb-4">💳</div>
+                      <h4 className="font-bold text-lg mb-2 dark:text-white">No tienes tarjetas registradas</h4>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Agrega una tarjeta para pagar en la app</p>
+                    </div>
+                  )}
+                  
+                  {/* Add New Card Button */}
+                  <button 
+                    onClick={() => { setShowCardManagement(false); setShowCardRegistration(true); }}
+                    className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2"
+                  >
+                    <span>➕</span> Agregar Nueva Tarjeta
+                  </button>
+                  
+                  {/* Info */}
+                  <p className="text-xs text-center text-gray-400 mt-4">
+                    🔒 Tus tarjetas están protegidas. Solo guardamos los últimos 4 dígitos.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Payment Options Modal */}
+          {showPaymentOptions && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+              <div className="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-6 text-white text-center">
+                  <div className="text-4xl mb-2">💰</div>
+                  <h3 className="text-xl font-bold">Método de Pago</h3>
+                  <p className="text-green-100 text-sm mt-1">¿Cómo deseas pagar tu ticket?</p>
+                </div>
+                
+                <div className="p-6">
+                  {/* Order Summary */}
+                  <div className="bg-gray-50 dark:bg-slate-700 rounded-xl p-4 mb-6">
+                    <h4 className="font-bold text-sm text-gray-600 dark:text-gray-300 mb-3">Resumen del Pedido</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">Subtotal ({cart.length} jugada{cart.length > 1 ? 's' : ''}):</span>
+                        <span className="font-medium dark:text-white">RD$ {cart.reduce((s, p) => s + Number(p.amount||0), 0).toLocaleString('es-DO')}</span>
+                      </div>
+                      <div className="flex justify-between text-orange-600 dark:text-orange-400">
+                        <span>Comisión App (5%):</span>
+                        <span className="font-medium">RD$ {Math.ceil(cart.reduce((s, p) => s + Number(p.amount||0), 0) * APP_COMMISSION_RATE).toLocaleString('es-DO')}</span>
+                      </div>
+                      <div className="border-t dark:border-slate-600 pt-2 mt-2">
+                        <div className="flex justify-between text-lg font-bold">
+                          <span className="dark:text-white">Total a Pagar:</span>
+                          <span className="text-green-600">RD$ {(cart.reduce((s, p) => s + Number(p.amount||0), 0) + Math.ceil(cart.reduce((s, p) => s + Number(p.amount||0), 0) * APP_COMMISSION_RATE)).toLocaleString('es-DO')}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Payment Method Selection */}
+                  <div className="space-y-3 mb-6">
+                    {/* Pay in App */}
+                    <button 
+                      onClick={() => setPaymentMethod('app')}
+                      className={`w-full p-4 rounded-xl border-2 text-left transition ${
+                        paymentMethod === 'app' 
+                          ? 'border-green-500 bg-green-50 dark:bg-green-900/20' 
+                          : 'border-gray-200 dark:border-slate-600 hover:border-green-300'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-2xl">
+                          💳
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-bold dark:text-white">Pagar Aquí en la App</div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                            {registeredCard 
+                              ? `Usar ${registeredCard.brand} •••${registeredCard.lastFour}` 
+                              : 'Agrega una tarjeta para continuar'}
+                          </div>
+                        </div>
+                        {paymentMethod === 'app' && <span className="text-green-600 text-xl">✓</span>}
+                      </div>
+                    </button>
+                    
+                    {/* Pay at Branch */}
+                    <button 
+                      onClick={() => setPaymentMethod('branch')}
+                      className={`w-full p-4 rounded-xl border-2 text-left transition ${
+                        paymentMethod === 'branch' 
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+                          : 'border-gray-200 dark:border-slate-600 hover:border-blue-300'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-2xl">
+                          🏪
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-bold dark:text-white">Pagar en la Sucursal</div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                            Lleva el ticket y paga antes del sorteo
+                          </div>
+                        </div>
+                        {paymentMethod === 'branch' && <span className="text-blue-600 text-xl">✓</span>}
+                      </div>
+                    </button>
+                  </div>
+                  
+                  {/* Branch Payment Warning */}
+                  {paymentMethod === 'branch' && (
+                    <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-3 mb-4">
+                      <div className="flex items-start gap-2">
+                        <span className="text-yellow-600">⚠️</span>
+                        <div className="text-sm text-yellow-700 dark:text-yellow-300">
+                          <strong>Importante:</strong> Debes pagar en la sucursal <strong>antes del sorteo</strong>. 
+                          El ticket no será válido si no se paga a tiempo.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Action Buttons */}
+                  <div className="space-y-3">
+                    <button 
+                      onClick={processCheckout}
+                      disabled={paymentMethod === 'app' && !registeredCard}
+                      className="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {paymentMethod === 'app' ? (
+                        <>
+                          <span>💳</span> Pagar RD$ {(cart.reduce((s, p) => s + Number(p.amount||0), 0) + Math.ceil(cart.reduce((s, p) => s + Number(p.amount||0), 0) * APP_COMMISSION_RATE)).toLocaleString('es-DO')}
+                        </>
+                      ) : (
+                        <>
+                          <span>🎟️</span> Generar Ticket para Pagar en Sucursal
+                        </>
+                      )}
+                    </button>
+                    
+                    {paymentMethod === 'app' && !registeredCard && (
+                      <button 
+                        onClick={() => { setShowPaymentOptions(false); setShowCardRegistration(true); }}
+                        className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition"
+                      >
+                        Agregar Tarjeta
+                      </button>
+                    )}
+                    
+                    <button 
+                      onClick={() => setShowPaymentOptions(false)}
+                      className="w-full text-gray-500 dark:text-gray-400 text-sm hover:underline"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Ticket Confirmation Modal - After Payment */}
+          {showTicketConfirmation && confirmedTicket && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+              <div className="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+                {/* Header */}
+                <div className={`p-6 text-white text-center ${
+                  confirmedTicket.paymentMethod === 'app' 
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-600' 
+                    : 'bg-gradient-to-r from-blue-500 to-indigo-600'
+                }`}>
+                  <div className="text-5xl mb-2">{confirmedTicket.paymentMethod === 'app' ? '✅' : '🎟️'}</div>
+                  <h3 className="text-2xl font-bold">
+                    {confirmedTicket.paymentMethod === 'app' ? '¡Ticket Pagado!' : '¡Ticket Generado!'}
+                  </h3>
+                  <p className="text-white/80 text-sm mt-1">
+                    {confirmedTicket.paymentMethod === 'app' 
+                      ? 'Tu jugada está confirmada' 
+                      : 'Recuerda pagar en la sucursal antes del sorteo'}
+                  </p>
+                </div>
+                
+                <div className="p-6" id="ticket-print-area">
+                  {/* Ticket Details */}
+                  <div className="bg-gray-50 dark:bg-slate-700 rounded-xl p-4 mb-4">
+                    <div className="text-center mb-4">
+                      <div className="font-mono text-lg font-bold text-blue-600">#{confirmedTicket.id}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">{confirmedTicket.bank}</div>
+                    </div>
+                    
+                    {/* Plays */}
+                    <div className="space-y-2 mb-4">
+                      {confirmedTicket.plays.map((play, i) => (
+                        <div key={i} className="flex justify-between text-sm">
+                          <span className="text-gray-600 dark:text-gray-400">{play.type}</span>
+                          <span className="font-mono font-bold dark:text-white">{Array.isArray(play.numbers) ? play.numbers.join(' - ') : play.numbers}</span>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Payment Breakdown */}
+                    <div className="border-t dark:border-slate-600 pt-3 space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">Subtotal:</span>
+                        <span className="dark:text-white">RD$ {confirmedTicket.subtotal.toLocaleString('es-DO')}</span>
+                      </div>
+                      <div className="flex justify-between text-sm text-orange-600 dark:text-orange-400">
+                        <span>Comisión App:</span>
+                        <span>RD$ {confirmedTicket.commission.toLocaleString('es-DO')}</span>
+                      </div>
+                      <div className="flex justify-between text-lg font-bold">
+                        <span className="dark:text-white">Total:</span>
+                        <span className="text-green-600">RD$ {confirmedTicket.total.toLocaleString('es-DO')}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Payment Status */}
+                    <div className="mt-4 pt-3 border-t dark:border-slate-600">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">Estado:</span>
+                        <span className={`font-bold ${confirmedTicket.paymentStatus === 'paid' ? 'text-green-600' : 'text-yellow-600'}`}>
+                          {confirmedTicket.paymentStatus === 'paid' ? '✓ PAGADO' : '⏳ PENDIENTE DE PAGO'}
+                        </span>
+                      </div>
+                      {confirmedTicket.paymentCard && (
+                        <div className="flex justify-between text-sm mt-1">
+                          <span className="text-gray-600 dark:text-gray-400">Pagado con:</span>
+                          <span className="dark:text-white">•••• {confirmedTicket.paymentCard}</span>
+                        </div>
+                      )}
+                      {confirmedTicket.paymentMethod === 'branch' && (
+                        <div className="flex justify-between text-sm mt-1">
+                          <span className="text-gray-600 dark:text-gray-400">Pagar antes de:</span>
+                          <span className="text-red-600 font-bold">{new Date(confirmedTicket.drawTime).toLocaleString('es-DO', { 
+                            weekday: 'short',
+                            month: 'short', 
+                            day: 'numeric',
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                          })}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* QR Code for Branch Payment */}
+                  {confirmedTicket.paymentMethod === 'branch' && (
+                    <div className="flex justify-center mb-4">
+                      <div className="bg-white p-3 rounded-lg">
+                        <QRImage 
+                          value={JSON.stringify({
+                            id: confirmedTicket.id, 
+                            total: confirmedTicket.total, 
+                            status: confirmedTicket.paymentStatus,
+                            bank: confirmedTicket.bank
+                          })} 
+                          size={120} 
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Wallet Save Options */}
+                <div className="px-6 pb-6 space-y-3">
+                  <p className="text-xs text-center text-gray-500 dark:text-gray-400 mb-3">
+                    💼 Guarda tu ticket para tenerlo siempre a mano
+                  </p>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <button 
+                      onClick={() => downloadTicketForWallet(confirmedTicket, 1, 'pkpass')}
+                      className="bg-black text-white py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-center gap-1 hover:bg-gray-800 transition"
+                    >
+                      🍎 Apple Wallet
+                    </button>
+                    <button 
+                      onClick={() => downloadTicketForWallet(confirmedTicket, 1, 'json')}
+                      className="bg-blue-700 text-white py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-center gap-1 hover:bg-blue-800 transition"
+                    >
+                      📱 Google Wallet
+                    </button>
+                  </div>
+                  
+                  <button 
+                    onClick={() => { 
+                      // Store ticket in app's local storage for later access
+                      const savedTickets = JSON.parse(localStorage.getItem('ll_saved_tickets') || '[]');
+                      if (!savedTickets.find(t => t.id === confirmedTicket.id)) {
+                        savedTickets.push(confirmedTicket);
+                        localStorage.setItem('ll_saved_tickets', JSON.stringify(savedTickets));
+                      }
+                      alert('✅ Ticket guardado en la app');
+                    }}
+                    className="w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
+                  >
+                    📲 Guardar en la App
+                  </button>
+                  
+                  <button 
+                    onClick={() => window.print()}
+                    className="w-full bg-gray-200 dark:bg-slate-600 text-gray-700 dark:text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-300 dark:hover:bg-slate-500 transition"
+                  >
+                    🖨️ Imprimir Ticket
+                  </button>
+                  
+                  <button 
+                    onClick={() => { setShowTicketConfirmation(false); setConfirmedTicket(null); setView('home'); }}
+                    className="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition"
+                  >
+                    Listo ✓
+                  </button>
+                </div>
               </div>
             </div>
           )}
