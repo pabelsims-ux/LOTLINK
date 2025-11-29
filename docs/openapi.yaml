@@ -1,0 +1,511 @@
+openapi: 3.0.3
+info:
+  title: Lotolink Public API
+  description: |
+    API REST para el marketplace/intermediario de loterías Lotolink.
+    
+    ## Autenticación
+    La mayoría de los endpoints requieren autenticación mediante JWT Bearer token.
+    
+    ## Idempotencia
+    Para garantizar idempotencia en operaciones de escritura, use el header `Idempotency-Key` 
+    con un UUID v4 único por solicitud.
+    
+    ## Seguridad
+    - HMAC-SHA256 para comunicación con bancas
+    - Replay protection con ventana de 120 segundos
+    - Rate limiting aplicado por IP y usuario
+  version: '1.0.0'
+  contact:
+    name: Lotolink API Support
+    email: api@lotolink.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.lotolink.com/api/v1
+    description: Production server
+  - url: https://staging-api.lotolink.com/api/v1
+    description: Staging server
+  - url: http://localhost:3000/api/v1
+    description: Local development
+
+tags:
+  - name: Plays
+    description: Gestión de jugadas/apuestas
+  - name: Wallet
+    description: Operaciones de wallet de usuario
+  - name: Webhooks
+    description: Endpoints para recibir notificaciones de bancas
+  - name: Health
+    description: Health checks del servicio
+
+paths:
+  /plays:
+    post:
+      tags:
+        - Plays
+      summary: Crear una nueva jugada
+      description: |
+        Registra una nueva jugada que será enrutada a la banca correspondiente.
+        La respuesta incluye el estado inicial (pending) y un tiempo estimado de confirmación.
+      operationId: createPlay
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          description: UUID v4 único para garantizar idempotencia
+          required: false
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePlayRequest'
+            example:
+              request_id: "550e8400-e29b-41d4-a716-446655440000"
+              user_id: "user_123"
+              lottery_id: "lottoRD_01"
+              numbers: ["03", "07", "12"]
+              bet_type: "quiniela"
+              amount: 50.00
+              currency: "DOP"
+              payment:
+                method: "wallet"
+                wallet_transaction_id: "wl_123"
+      responses:
+        '201':
+          description: Jugada creada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayResponse'
+              example:
+                play_id: "internal-123"
+                status: "pending"
+                estimated_confirmation: "2025-01-15T10:30:00Z"
+                created_at: "2025-01-15T10:29:30Z"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Conflicto de idempotencia (solicitud duplicada)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /plays/{play_id}:
+    get:
+      tags:
+        - Plays
+      summary: Obtener estado de una jugada
+      description: Retorna el estado actual y detalles de una jugada específica
+      operationId: getPlayById
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: play_id
+          in: path
+          required: true
+          description: ID único de la jugada
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detalles de la jugada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayDetails'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /users/{user_id}/wallet/charge:
+    post:
+      tags:
+        - Wallet
+      summary: Cargar saldo a wallet
+      description: Agrega saldo al wallet del usuario
+      operationId: chargeWallet
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeWalletRequest'
+      responses:
+        '200':
+          description: Wallet cargado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /webhooks/plays/confirmation:
+    post:
+      tags:
+        - Webhooks
+      summary: Recibir confirmación de jugada desde banca
+      description: |
+        Endpoint para que las bancas envíen confirmaciones de jugadas.
+        Requiere firma HMAC y validación de timestamp.
+      operationId: playConfirmationWebhook
+      parameters:
+        - name: X-Signature
+          in: header
+          required: true
+          description: Firma HMAC-SHA256 en base64
+          schema:
+            type: string
+        - name: X-Timestamp
+          in: header
+          required: true
+          description: Timestamp ISO-8601 de la solicitud
+          schema:
+            type: string
+            format: date-time
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayConfirmationWebhook'
+      responses:
+        '200':
+          description: Confirmación procesada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+        '400':
+          description: Timestamp fuera de rango
+        '401':
+          description: Firma inválida
+
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Health check básico
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Servicio saludable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+
+  /health/ready:
+    get:
+      tags:
+        - Health
+      summary: Readiness check
+      description: Verifica que todas las dependencias estén disponibles
+      operationId: readinessCheck
+      responses:
+        '200':
+          description: Servicio listo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadinessStatus'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token del usuario
+
+  schemas:
+    CreatePlayRequest:
+      type: object
+      required:
+        - request_id
+        - user_id
+        - lottery_id
+        - numbers
+        - bet_type
+        - amount
+        - currency
+        - payment
+      properties:
+        request_id:
+          type: string
+          format: uuid
+          description: ID único de la solicitud (para idempotencia)
+        user_id:
+          type: string
+          description: ID del usuario
+        lottery_id:
+          type: string
+          description: ID de la lotería (ej. lottoRD_01, leidsa, loteka)
+        numbers:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          maxItems: 10
+          description: Números seleccionados
+        bet_type:
+          type: string
+          enum: [quiniela, pale, tripleta, pega3, toca3, straight, box]
+          description: Tipo de apuesta
+        amount:
+          type: number
+          format: float
+          minimum: 1
+          description: Monto apostado
+        currency:
+          type: string
+          enum: [DOP, USD]
+          description: Moneda
+        payment:
+          $ref: '#/components/schemas/Payment'
+        banca_id:
+          type: string
+          description: ID de la banca preferida (opcional)
+
+    Payment:
+      type: object
+      required:
+        - method
+      properties:
+        method:
+          type: string
+          enum: [wallet, card, bank]
+        wallet_transaction_id:
+          type: string
+          description: ID de transacción si method es wallet
+        card_last_4:
+          type: string
+          description: Últimos 4 dígitos si method es card
+
+    PlayResponse:
+      type: object
+      properties:
+        play_id:
+          type: string
+          description: ID interno de la jugada
+        status:
+          type: string
+          enum: [pending, processing, confirmed, rejected, failed]
+        estimated_confirmation:
+          type: string
+          format: date-time
+          description: Tiempo estimado de confirmación
+        ticket_code:
+          type: string
+          description: Código de ticket (si está confirmado)
+        created_at:
+          type: string
+          format: date-time
+
+    PlayDetails:
+      type: object
+      properties:
+        play_id:
+          type: string
+        request_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+        lottery_id:
+          type: string
+        numbers:
+          type: array
+          items:
+            type: string
+        bet_type:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+        status:
+          type: string
+          enum: [pending, processing, confirmed, rejected, failed]
+        play_id_banca:
+          type: string
+          description: ID de la jugada en el sistema de la banca
+        ticket_code:
+          type: string
+        banca_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    ChargeWalletRequest:
+      type: object
+      required:
+        - amount
+        - method
+      properties:
+        amount:
+          type: number
+          format: float
+          minimum: 1
+        method:
+          type: string
+          enum: [card, bank, cash]
+        transaction_ref:
+          type: string
+          description: Referencia de transacción externa
+
+    WalletResponse:
+      type: object
+      properties:
+        user_id:
+          type: string
+        balance:
+          type: number
+        transaction_id:
+          type: string
+        transaction_type:
+          type: string
+          enum: [charge, debit, refund]
+        amount:
+          type: number
+        timestamp:
+          type: string
+          format: date-time
+
+    PlayConfirmationWebhook:
+      type: object
+      required:
+        - request_id
+        - play_id_banca
+        - ticket_code
+        - status
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        play_id_banca:
+          type: string
+        ticket_code:
+          type: string
+        status:
+          type: string
+          enum: [confirmed, rejected]
+        reason:
+          type: string
+          description: Razón del rechazo (si aplica)
+
+    WebhookResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        processed_at:
+          type: string
+          format: date-time
+
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [ok, degraded, down]
+        timestamp:
+          type: string
+          format: date-time
+        service:
+          type: string
+        version:
+          type: string
+
+    ReadinessStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [ready, not_ready]
+        timestamp:
+          type: string
+          format: date-time
+        checks:
+          type: object
+          properties:
+            database:
+              type: string
+              enum: [ok, error]
+            redis:
+              type: string
+              enum: [ok, error]
+            queue:
+              type: string
+              enum: [ok, error]
+
+    Error:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        error:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+  responses:
+    BadRequest:
+      description: Solicitud inválida
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: No autorizado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Entidad no procesable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

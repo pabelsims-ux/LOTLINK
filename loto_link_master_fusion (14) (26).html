@@ -2,9 +2,27 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LotoLink — Master Fusion (App + Portal)</title>
-
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+  <title>LotoLink — Premium Lottery App</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="application-name" content="LotoLink">
+  <meta name="description" content="La aplicación premium para jugar loterías en República Dominicana. Segura, rápida y fácil de usar.">
+  <meta name="theme-color" content="#0071e3">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LotoLink">
+  <meta name="msapplication-TileColor" content="#0071e3">
+  <meta name="msapplication-tap-highlight" content="no">
+  
+  <!-- iOS Splash Screens - Generated for common sizes -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230071e3' width='100' height='100' rx='20'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='50' font-family='Arial' font-weight='bold'>L</text></svg>">
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230071e3' width='180' height='180' rx='36'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='90' font-family='Arial' font-weight='bold'>L</text></svg>">
+  
+  <!-- PWA Manifest (inline for single file) -->
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22LotoLink%22%2C%22short_name%22%3A%22LotoLink%22%2C%22description%22%3A%22La%20aplicaci%C3%B3n%20premium%20para%20jugar%20loter%C3%ADas%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f5f5f7%22%2C%22theme_color%22%3A%22%230071e3%22%2C%22orientation%22%3A%22portrait%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%2520viewBox%3D%270%25200%2520192%2520192%27%253E%253Crect%2520fill%3D%27%25230071e3%27%2520width%3D%27192%27%2520height%3D%27192%27%2520rx%3D%2738%27%2F%253E%253Ctext%2520x%3D%2750%2525%27%2520y%3D%2755%2525%27%2520dominant-baseline%3D%27middle%27%2520text-anchor%3D%27middle%27%2520fill%3D%27white%27%2520font-size%3D%2796%27%2520font-family%3D%27Arial%27%2520font-weight%3D%27bold%27%253EL%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%2C%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%2520viewBox%3D%270%25200%2520512%2520512%27%253E%253Crect%2520fill%3D%27%25230071e3%27%2520width%3D%27512%27%2520height%3D%27512%27%2520rx%3D%27102%27%2F%253E%253Ctext%2520x%3D%2750%2525%27%2520y%3D%2755%2525%27%2520dominant-baseline%3D%27middle%27%2520text-anchor%3D%27middle%27%2520fill%3D%27white%27%2520font-size%3D%27256%27%2520font-family%3D%27Arial%27%2520font-weight%3D%27bold%27%253EL%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -89,6 +107,7 @@
       letter-spacing: -0.01em;
       transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
       box-shadow: 0 4px 14px rgba(0, 113, 227, 0.35);
+      cursor: pointer;
     }
     .btn-apple-primary:hover {
       transform: translateY(-1px);
@@ -174,6 +193,88 @@
     .dark .premium-card {
       background: #1c1c1e;
       border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    /* ========================================
+       MOBILE RESPONSIVE ENHANCEMENTS
+       ======================================== */
+    
+    /* Mobile-first responsive adjustments */
+    @media (max-width: 640px) {
+      .premium-card {
+        padding: 16px;
+        border-radius: var(--radius-lg);
+      }
+      
+      .btn-apple-primary {
+        padding: 10px 18px;
+        font-size: 14px;
+      }
+      
+      /* Fix for small screens */
+      body {
+        overflow-x: hidden;
+      }
+      
+      /* Adjust main container padding on mobile */
+      .max-w-7xl {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      /* Extra small devices */
+      .premium-card {
+        padding: 12px;
+        margin-left: -4px;
+        margin-right: -4px;
+      }
+    }
+    
+    /* Mobile menu animation */
+    @keyframes slideInFromLeft {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    /* Safe area support for notched devices (iPhone X+) */
+    @supports (padding-top: env(safe-area-inset-top)) {
+      .premium-header {
+        padding-top: env(safe-area-inset-top);
+      }
+      
+      .fixed.inset-0 {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+      }
+    }
+    
+    /* Touch-friendly tap targets */
+    @media (hover: none) and (pointer: coarse) {
+      button, a, .clickable {
+        min-height: 44px;
+        min-width: 44px;
+      }
+    }
+    
+    /* PWA Splash screen styles */
+    .pwa-splash {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #0071e3 0%, #0077ED 50%, #5856d6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
     }
     
     @media print {
@@ -775,6 +876,22 @@
                           placeholder="Ej. Santo Domingo"
                         />
                       </div>
+                      <div className="sm:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Software utilizado en la banca *</label>
+                        <select 
+                          required
+                          className="w-full border border-gray-300 p-2.5 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+                        >
+                          <option value="">Selecciona el software que usas...</option>
+                          <option value="loteria_electronica">Lotería Electrónica</option>
+                          <option value="punto_lotto">Punto Lotto</option>
+                          <option value="loto_pro">Loto Pro</option>
+                          <option value="sistema_propio">Sistema Propio</option>
+                          <option value="excel_manual">Excel / Manual</option>
+                          <option value="otro">Otro</option>
+                          <option value="ninguno">Ninguno / No uso software</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
 
@@ -1144,8 +1261,95 @@
     }
 
     /* --- COMPONENT: BANCAS (With Portal Link) --- */
-    function Bancas({ banks, onPlay, onJoin }) {
-      const [viewMode, setViewMode] = useState('list'); // 'list' | 'map'
+    function Bancas({ banks, onPlay, onJoin, initialViewMode = 'list', focusBank = null }) {
+      const [viewMode, setViewMode] = useState(initialViewMode);
+      const mapInitializedRef = useRef(false);
+      const mapInstanceRef = useRef(null);
+      
+      // Initialize or update map when switching to map view or when focusBank changes
+      useEffect(() => {
+        if (viewMode === 'map') {
+          // Small delay to ensure container is rendered
+          const initMap = setTimeout(() => {
+            const mapContainer = document.getElementById('bancas-map-container');
+            if (mapContainer && !mapInitializedRef.current) {
+              // Clear any placeholder content
+              mapContainer.innerHTML = '';
+              mapContainer.className = '';
+              
+              // Initialize Leaflet map
+              const centerCoords = focusBank ? focusBank.coords : [18.4861, -69.9312];
+              const zoomLevel = focusBank ? 16 : 13;
+              
+              const map = L.map('bancas-map-container').setView(centerCoords, zoomLevel);
+              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+                attribution: '© OpenStreetMap contributors' 
+              }).addTo(map);
+              
+              // Add markers for all banks
+              banks.forEach(b => {
+                const marker = L.marker(b.coords).addTo(map);
+                
+                // Create styled popup
+                const popupContent = `
+                  <div style="text-align:center; min-width: 180px; padding: 8px;">
+                    <div style="font-weight:bold; margin-bottom:6px; font-size:15px; color:#1e3a5f;">${b.name}</div>
+                    <div style="font-size:12px; color:#666; margin-bottom:10px;">
+                      <i class="far fa-clock"></i> ${b.hours}
+                    </div>
+                    <button 
+                      onclick="if(window.triggerPlayModal) window.triggerPlayModal(${b.id})" 
+                      style="background: linear-gradient(135deg, #2563EB 0%, #1d4ed8 100%); color:white; border:none; padding:8px 16px; border-radius:20px; cursor:pointer; font-size:13px; font-weight:600; box-shadow:0 2px 8px rgba(37,99,235,0.3); width:100%;">
+                      🎟️ Jugar Aquí
+                    </button>
+                  </div>
+                `;
+                
+                marker.bindPopup(popupContent);
+                
+                // If this is the focused bank, open its popup
+                if (focusBank && b.id === focusBank.id) {
+                  marker.openPopup();
+                }
+              });
+              
+              mapInstanceRef.current = map;
+              mapInitializedRef.current = true;
+            } else if (mapContainer && mapInitializedRef.current && mapInstanceRef.current && focusBank) {
+              // Map already initialized, just pan to the focused bank
+              mapInstanceRef.current.setView(focusBank.coords, 16);
+              
+              // Find and open the popup for the focused bank
+              mapInstanceRef.current.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                  const pos = layer.getLatLng();
+                  if (pos.lat === focusBank.coords[0] && pos.lng === focusBank.coords[1]) {
+                    layer.openPopup();
+                  }
+                }
+              });
+            }
+          }, 100);
+          
+          return () => clearTimeout(initMap);
+        }
+      }, [viewMode, focusBank, banks]);
+      
+      // Cleanup map on unmount
+      useEffect(() => {
+        return () => {
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.remove();
+            mapInstanceRef.current = null;
+            mapInitializedRef.current = false;
+          }
+        };
+      }, []);
+      
+      // Update viewMode when initialViewMode prop changes
+      useEffect(() => {
+        setViewMode(initialViewMode);
+      }, [initialViewMode]);
       
       return (
         <section className="mt-6">
@@ -1196,19 +1400,22 @@
                     <div className="font-bold text-lg text-slate-800 dark:text-white">{b.name}</div>
                     <div className="text-sm text-gray-500 dark:text-gray-400 mt-1"><i className="far fa-clock mr-1"></i> {b.hours}</div>
                   </div>
-                  <button onClick={() => onPlay(b)} className="px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 shadow-sm">Jugar</button>
+                  <div className="flex gap-2">
+                    <button onClick={() => onPlay(b)} className="px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 shadow-sm">Jugar</button>
+                    <button 
+                      onClick={() => setViewMode('map')} 
+                      className="px-4 py-2 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-slate-600 transition"
+                      title="Ver en mapa"
+                    >
+                      <i className="fas fa-map-marker-alt"></i>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 p-4">
-              <div id="bancas-map-container" style={{ height: '500px', borderRadius: '12px' }} className="bg-gray-100 dark:bg-slate-700 flex items-center justify-center text-gray-500 dark:text-gray-400">
-                <div className="text-center">
-                  <i className="fas fa-map-marked-alt text-4xl mb-3"></i>
-                  <p>Vista de mapa de bancas</p>
-                  <p className="text-sm mt-2">Las bancas se mostrarán aquí en el mapa interactivo</p>
-                </div>
-              </div>
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden">
+              <div id="bancas-map-container" style={{ height: '500px', borderRadius: '12px' }}></div>
             </div>
           )}
         </section>
@@ -1217,113 +1424,338 @@
 
     /* --- STANDARD COMPONENTS (Header, Hero, etc.) --- */
     function Header({ theme, setTheme, user, onLogin, onLogout, onNav, onOpenPlay, cartCount, onToggleCart, winningTicketsCount, onShowWinningTickets, registeredCard, onManageCard }) {
+      const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+      const [mobileSearchQuery, setMobileSearchQuery] = useState('');
+      
+      // Close mobile menu when navigating
+      const handleNavClick = (view) => {
+        setIsMobileMenuOpen(false);
+        onNav(view);
+      };
+      
+      // Handle mobile search
+      const handleMobileSearch = (e) => {
+        e.preventDefault();
+        if (mobileSearchQuery.trim()) {
+          // Search logic - could navigate to search results or filter content
+          console.log('Searching for:', mobileSearchQuery);
+          setIsMobileMenuOpen(false);
+          // For now, navigate to loterias as a search result placeholder
+          onNav('loterias');
+        }
+      };
+      
       return (
-        <header className="premium-header sticky top-0 z-40 transition-all duration-300">
-          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-5">
-              {/* Premium Logo */}
-              <div 
-                className="w-11 h-11 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl grid place-items-center text-white font-bold text-lg cursor-pointer shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105" 
-                onClick={()=>onNav('home')}
-              >
-                L
-              </div>
-              <div className="font-semibold text-xl hidden sm:block cursor-pointer text-gray-900 dark:text-white tracking-tight" onClick={()=>onNav('home')}>
-                LotoLink
-                <span className="ml-2 text-xs font-medium text-gray-400 dark:text-gray-500">Premium</span>
-              </div>
-              <nav className="hidden lg:flex gap-1 text-sm ml-6">
-                <button onClick={() => onNav('home')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Inicio</button>
-                <button onClick={() => onNav('how')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Cómo funciona</button>
-                <button onClick={() => onNav('demo')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Demo/Mapa</button>
-                <button onClick={() => onNav('loterias')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Loterías</button>
-                <button onClick={() => onNav('bancas')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Bancas</button>
-                <button onClick={() => onNav('rankings')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Rankings</button>
-              </nav>
-            </div>
-            <div className="flex items-center gap-3">
-              {/* Trust Badge */}
-              <div className="hidden md:flex trust-badge">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>Seguro</span>
-              </div>
-              
-              {/* Winning Tickets Indicator */}
-              {winningTicketsCount > 0 && (
+        <>
+          <header className="premium-header sticky top-0 z-40 transition-all duration-300">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3 sm:gap-5">
+                {/* Mobile Menu Toggle - Shows on mobile only */}
                 <button 
-                  onClick={onShowWinningTickets}
-                  className="relative px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full font-semibold text-sm flex items-center gap-2 shadow-lg shadow-green-500/30 hover:shadow-green-500/50 transition-all duration-300"
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100/80 dark:bg-white/10 hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all"
+                  aria-label="Menú"
                 >
-                  <span>🏆</span>
-                  <span className="hidden sm:inline">Ganadores</span>
-                  <span className="bg-white text-green-600 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">{winningTicketsCount}</span>
+                  {isMobileMenuOpen ? (
+                    <svg className="w-6 h-6 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  ) : (
+                    <svg className="w-6 h-6 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                  )}
                 </button>
-              )}
-              
-              {/* Registered Card Indicator */}
-              {registeredCard && (
-                <button 
-                  onClick={onManageCard}
-                  className="hidden sm:flex items-center gap-2 px-3 py-2 bg-gray-100/80 dark:bg-white/10 backdrop-blur-sm rounded-xl text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all font-medium"
-                  title={`${registeredCard.brand} terminada en ${registeredCard.lastFour}`}
+                
+                {/* Premium Logo */}
+                <div 
+                  className="w-10 h-10 sm:w-11 sm:h-11 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl sm:rounded-2xl grid place-items-center text-white font-bold text-base sm:text-lg cursor-pointer shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105" 
+                  onClick={()=>handleNavClick('home')}
                 >
-                  <span className="text-lg">💳</span>
-                  <span className="font-mono">•••{registeredCard.lastFour}</span>
-                </button>
-              )}
+                  L
+                </div>
+                <div className="font-semibold text-lg sm:text-xl hidden sm:block cursor-pointer text-gray-900 dark:text-white tracking-tight" onClick={()=>handleNavClick('home')}>
+                  LotoLink
+                  <span className="ml-2 text-xs font-medium text-gray-400 dark:text-gray-500">Premium</span>
+                </div>
+                
+                {/* Desktop Navigation - Hidden on mobile/tablet */}
+                <nav className="hidden lg:flex gap-1 text-sm ml-6">
+                  <button onClick={() => handleNavClick('home')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Inicio</button>
+                  <button onClick={() => handleNavClick('how')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Cómo funciona</button>
+                  <button onClick={() => handleNavClick('demo')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Demo/Mapa</button>
+                  <button onClick={() => handleNavClick('loterias')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Loterías</button>
+                  <button onClick={() => handleNavClick('bancas')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Bancas</button>
+                  <button onClick={() => handleNavClick('rankings')} className="px-4 py-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 font-medium transition-all">Rankings</button>
+                </nav>
+              </div>
               
-              {/* Theme Toggle */}
-              <button 
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} 
-                className="hidden sm:flex w-10 h-10 items-center justify-center rounded-full bg-gray-100/80 dark:bg-white/10 backdrop-blur-sm hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all"
-              >
-                {theme === 'dark' ? '☀️' : '🌙'}
-              </button>
-              
-              {/* Profile */}
-              <button 
-                onClick={() => onNav('profile')} 
-                className="w-10 h-10 rounded-full bg-gray-100/80 dark:bg-white/10 backdrop-blur-sm hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all flex items-center justify-center text-xl"
-              >
-                👤
-              </button>
-              
-              {/* Cart */}
-              <button 
-                onClick={onToggleCart} 
-                className="relative w-10 h-10 rounded-full bg-gray-100/80 dark:bg-white/10 backdrop-blur-sm hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all flex items-center justify-center"
-              >
-                <span className="text-xl">🛒</span>
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-rose-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg">
-                    {cartCount}
-                  </span>
+              {/* Right side actions */}
+              <div className="flex items-center gap-2 sm:gap-3">
+                {/* Trust Badge - Hidden on small mobile */}
+                <div className="hidden md:flex trust-badge">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Seguro</span>
+                </div>
+                
+                {/* Winning Tickets Indicator */}
+                {winningTicketsCount > 0 && (
+                  <button 
+                    onClick={onShowWinningTickets}
+                    className="relative px-3 sm:px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full font-semibold text-xs sm:text-sm flex items-center gap-1 sm:gap-2 shadow-lg shadow-green-500/30 hover:shadow-green-500/50 transition-all duration-300"
+                  >
+                    <span>🏆</span>
+                    <span className="hidden sm:inline">Ganadores</span>
+                    <span className="bg-white text-green-600 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">{winningTicketsCount}</span>
+                  </button>
                 )}
-              </button>
-              
-              {/* Auth Button */}
-              {user ? (
-                <button onClick={onLogout} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
-                  Salir
+                
+                {/* Registered Card Indicator - Hidden on mobile */}
+                {registeredCard && (
+                  <button 
+                    onClick={onManageCard}
+                    className="hidden md:flex items-center gap-2 px-3 py-2 bg-gray-100/80 dark:bg-white/10 backdrop-blur-sm rounded-xl text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all font-medium"
+                    title={`${registeredCard.brand} terminada en ${registeredCard.lastFour}`}
+                  >
+                    <span className="text-lg">💳</span>
+                    <span className="font-mono">•••{registeredCard.lastFour}</span>
+                  </button>
+                )}
+                
+                {/* Theme Toggle - Hidden on small mobile */}
+                <button 
+                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} 
+                  className="hidden sm:flex w-10 h-10 items-center justify-center rounded-full bg-gray-100/80 dark:bg-white/10 backdrop-blur-sm hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all"
+                >
+                  {theme === 'dark' ? '☀️' : '🌙'}
                 </button>
-              ) : (
-                <button onClick={onLogin} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
-                  Entrar
+                
+                {/* Profile - Always visible */}
+                <button 
+                  onClick={() => handleNavClick('profile')} 
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-100/80 dark:bg-white/10 backdrop-blur-sm hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all flex items-center justify-center text-lg sm:text-xl"
+                >
+                  👤
                 </button>
-              )}
-              
-              {/* Primary CTA */}
-              <button 
-                onClick={onOpenPlay} 
-                className="btn-apple-primary hidden sm:block"
-              >
-                Jugar Ahora
-              </button>
+                
+                {/* Cart - Always visible */}
+                <button 
+                  onClick={onToggleCart} 
+                  className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-100/80 dark:bg-white/10 backdrop-blur-sm hover:bg-gray-200/80 dark:hover:bg-white/20 transition-all flex items-center justify-center"
+                >
+                  <span className="text-lg sm:text-xl">🛒</span>
+                  {cartCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-rose-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg">
+                      {cartCount}
+                    </span>
+                  )}
+                </button>
+                
+                {/* Auth Button - Hidden on small mobile */}
+                {user ? (
+                  <button onClick={onLogout} className="hidden sm:block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
+                    Salir
+                  </button>
+                ) : (
+                  <button onClick={onLogin} className="hidden sm:block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">
+                    Entrar
+                  </button>
+                )}
+                
+                {/* Primary CTA - Hidden on mobile */}
+                <button 
+                  onClick={onOpenPlay} 
+                  className="btn-apple-primary hidden md:block text-sm px-4 py-2 sm:px-6 sm:py-3"
+                >
+                  Jugar Ahora
+                </button>
+              </div>
             </div>
-          </div>
-        </header>
+          </header>
+          
+          {/* Mobile Slide-out Menu */}
+          {isMobileMenuOpen && (
+            <div className="fixed inset-0 z-50 lg:hidden">
+              {/* Backdrop */}
+              <div 
+                className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+                onClick={() => setIsMobileMenuOpen(false)}
+              ></div>
+              
+              {/* Menu Panel */}
+              <div className="absolute top-0 left-0 w-[85%] max-w-sm h-full bg-white dark:bg-slate-900 shadow-2xl transform transition-transform duration-300 ease-out overflow-y-auto">
+                {/* Menu Header */}
+                <div className="p-5 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl grid place-items-center text-white font-bold">
+                      L
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-900 dark:text-white">LotoLink</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">Premium</div>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-all"
+                  >
+                    <svg className="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                
+                {/* Search Bar */}
+                <div className="p-4 border-b border-gray-100 dark:border-slate-800">
+                  <form onSubmit={handleMobileSearch}>
+                    <div className="relative">
+                      <input 
+                        type="text"
+                        placeholder="Buscar loterías, bancas..."
+                        value={mobileSearchQuery}
+                        onChange={(e) => setMobileSearchQuery(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 bg-gray-100 dark:bg-slate-800 border-0 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
+                      />
+                      <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                    </div>
+                  </form>
+                </div>
+                
+                {/* User Info Section (if logged in) */}
+                {user && (
+                  <div className="p-4 border-b border-gray-100 dark:border-slate-800">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-2xl">
+                        👤
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900 dark:text-white">{user.name || 'Usuario'}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">{user.email || 'usuario@lotolink.com'}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Quick Actions */}
+                <div className="p-4 border-b border-gray-100 dark:border-slate-800">
+                  <button 
+                    onClick={() => { setIsMobileMenuOpen(false); onOpenPlay(); }}
+                    className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25"
+                  >
+                    🎟️ Jugar Ahora
+                  </button>
+                </div>
+                
+                {/* Navigation Links */}
+                <nav className="p-2">
+                  <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-4 py-2">
+                    Navegación
+                  </div>
+                  {[
+                    { icon: '🏠', label: 'Inicio', view: 'home' },
+                    { icon: '❓', label: 'Cómo funciona', view: 'how' },
+                    { icon: '🗺️', label: 'Demo / Mapa', view: 'demo' },
+                    { icon: '🎰', label: 'Loterías', view: 'loterias' },
+                    { icon: '🏪', label: 'Bancas', view: 'bancas' },
+                    { icon: '🏆', label: 'Rankings', view: 'rankings' },
+                    { icon: '⭐', label: 'Más Jugados', view: 'masjugados' },
+                  ].map(item => (
+                    <button
+                      key={item.view}
+                      onClick={() => handleNavClick(item.view)}
+                      className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all font-medium"
+                    >
+                      <span className="text-xl">{item.icon}</span>
+                      <span>{item.label}</span>
+                    </button>
+                  ))}
+                </nav>
+                
+                {/* Account Section */}
+                <div className="p-2 border-t border-gray-100 dark:border-slate-800">
+                  <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-4 py-2">
+                    Mi Cuenta
+                  </div>
+                  <button
+                    onClick={() => handleNavClick('profile')}
+                    className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all font-medium"
+                  >
+                    <span className="text-xl">👤</span>
+                    <span>Mi Perfil</span>
+                  </button>
+                  <button
+                    onClick={() => { setIsMobileMenuOpen(false); onToggleCart(); }}
+                    className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all font-medium"
+                  >
+                    <span className="text-xl">🛒</span>
+                    <span>Mi Carrito</span>
+                    {cartCount > 0 && (
+                      <span className="ml-auto bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">{cartCount}</span>
+                    )}
+                  </button>
+                  {registeredCard && (
+                    <button
+                      onClick={() => { setIsMobileMenuOpen(false); onManageCard(); }}
+                      className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all font-medium"
+                    >
+                      <span className="text-xl">💳</span>
+                      <span>Tarjetas •••{registeredCard.lastFour}</span>
+                    </button>
+                  )}
+                </div>
+                
+                {/* Theme and Auth */}
+                <div className="p-4 border-t border-gray-100 dark:border-slate-800 space-y-2">
+                  <button
+                    onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); }}
+                    className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all font-medium"
+                  >
+                    <span className="text-xl">{theme === 'dark' ? '☀️' : '🌙'}</span>
+                    <span>{theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}</span>
+                  </button>
+                  
+                  {user ? (
+                    <button
+                      onClick={() => { setIsMobileMenuOpen(false); onLogout(); }}
+                      className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all font-medium"
+                    >
+                      <span className="text-xl">🚪</span>
+                      <span>Cerrar Sesión</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => { setIsMobileMenuOpen(false); onLogin(); }}
+                      className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all font-medium"
+                    >
+                      <span className="text-xl">🔐</span>
+                      <span>Iniciar Sesión</span>
+                    </button>
+                  )}
+                </div>
+                
+                {/* Partner CTA */}
+                <div className="p-4 border-t border-gray-100 dark:border-slate-800">
+                  <button
+                    onClick={() => handleNavClick('portal')}
+                    className="w-full py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-xl font-semibold flex items-center justify-center gap-2"
+                  >
+                    <span>🏪</span>
+                    <span>¿Tienes una banca? Únete</span>
+                  </button>
+                </div>
+                
+                {/* App Version */}
+                <div className="p-4 text-center text-xs text-gray-400 dark:text-gray-600">
+                  LotoLink v1.0.0 • Premium
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       );
     }
 
@@ -1498,7 +1930,7 @@
       return ticket.total * PROFILE_CONFIG.PRIZE_MULTIPLIER;
     }
 
-    function Profile({ user, ticket, registeredCards = [], onManageCards }) {
+    function Profile({ user, ticket, registeredCards = [], onManageCards, onLogin }) {
       const [visible, setVisible] = useState(() => localStorage.getItem("ll_visible_rank") === "true");
       const [wins, setWins] = useState(() => Number(localStorage.getItem("ll_user_wins") || 1));
       const [balance, setBalance] = useState(() => Number(localStorage.getItem("ll_user_balance") || 0));
@@ -1655,7 +2087,7 @@
           </div>
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Acceso Restringido</h3>
           <p className="text-gray-500 dark:text-gray-400 mt-3 text-lg">Debes iniciar sesión para ver tu perfil.</p>
-          <button className="btn-apple-primary mt-6">
+          <button onClick={onLogin} className="btn-apple-primary mt-6">
             Iniciar Sesión
           </button>
         </div>
@@ -1670,6 +2102,7 @@
             </div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{user?.name || 'Mi Perfil'}</h1>
             <p className="text-gray-500 dark:text-gray-400 mt-2">{user?.email}</p>
+            {user?.phone && <p className="text-gray-400 dark:text-gray-500 mt-1 text-sm">📱 {user?.phone}</p>}
             <div className="flex items-center justify-center gap-4 mt-4">
               <div className="trust-badge">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -2571,15 +3004,19 @@
       const [pendingPlay, setPendingPlay] = useState(null);
       const [ticket, setTicket] = useState(null);
       const [selectedBank, setSelectedBank] = useState(DEFAULT_BANKS[0]);
+      const [bancasViewMode, setBancasViewMode] = useState('list'); // 'list' | 'map'
+      const [bancasFocusBank, setBancasFocusBank] = useState(null); // Bank to focus on in map view
       const [showPlayModal, setShowPlayModal] = useState(false);
       const [playModalStep, setPlayModalStep] = useState('lottery'); // 'lottery' | 'modality' | 'play'
       const [playModalLottery, setPlayModalLottery] = useState(null);
       const [playModalModality, setPlayModalModality] = useState(null);
       const [playModalNumbers, setPlayModalNumbers] = useState([]); // Selected numbers
       const [playModalStake, setPlayModalStake] = useState(10); // Stake amount
+      const [showBranchSelector, setShowBranchSelector] = useState(false); // Branch selector in play modal
       const [showAuthModal, setShowAuthModal] = useState(false);
       const [isCartOpen, setIsCartOpen] = useState(false);
       const [theme, setTheme] = useState(() => localStorage.getItem('ll_theme') || 'light');
+      const [showInstallGuide, setShowInstallGuide] = useState(null); // 'ios' | 'android' | 'desktop' | null
       
       // Real-time lottery results from loteriasdominicanas.com
       const { feed: resultsFeed, isConnected: isLotteryConnected, lastUpdate: lotteryLastUpdate } = useLotteryResults(30000);
@@ -3464,6 +3901,7 @@
         setPlayModalModality(null);
         setPlayModalNumbers([]);
         setPlayModalStake(10);
+        setShowBranchSelector(false);
         setShowPlayModal(true);
       };
       
@@ -3474,6 +3912,7 @@
         setPlayModalModality(null);
         setPlayModalNumbers([]);
         setPlayModalStake(10);
+        setShowBranchSelector(false);
       };
       
       // Toggle number selection
@@ -3576,7 +4015,7 @@
 
           {view !== 'portal' && (<Header theme={theme} setTheme={setTheme} user={user} onLogin={()=>setShowAuthModal(true)} onLogout={()=>{setUser(null);localStorage.removeItem("ll_user")}} onNav={setView} onOpenPlay={()=>openPlayModal(DEFAULT_BANKS[0])} cartCount={cart.length} onToggleCart={()=>setIsCartOpen(true)} winningTicketsCount={winningTickets.length} onShowWinningTickets={() => setShowWinningTicketsModal(true)} registeredCard={registeredCard} onManageCard={() => setShowCardManagement(true)} />)}
 
-          <main className="max-w-7xl mx-auto px-6 pb-32">
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 pb-24 lg:pb-32" style={{ paddingBottom: 'max(96px, calc(24px + env(safe-area-inset-bottom)))' }}>
             {view === "home" && (
               <>
                 <Hero onPlay={() => openPlayModal()} onBanca={() => setView("bancas")} />
@@ -3622,10 +4061,14 @@
                                 Jugar
                               </button>
                               <button 
-                                onClick={() => setSelectedBank(b)} 
-                                className="px-4 py-2.5 bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-300 rounded-full font-medium text-sm hover:bg-gray-200 dark:hover:bg-white/20 transition-all"
+                                onClick={() => {
+                                  setBancasFocusBank(b);
+                                  setBancasViewMode('map');
+                                  setView('bancas');
+                                }} 
+                                className="px-4 py-2.5 bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-300 rounded-full font-medium text-sm hover:bg-gray-200 dark:hover:bg-white/20 transition-all flex items-center gap-1"
                               >
-                                Ver
+                                <i className="fas fa-map-marker-alt text-xs"></i> Ver
                               </button>
                             </div>
                           </div>
@@ -3716,12 +4159,103 @@
                     <PaymentMethods />
                   </aside>
                 </div>
+                
+                {/* Download App Section */}
+                <section className="mt-12 mb-8">
+                  <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-8 sm:p-12 text-center text-white relative overflow-hidden">
+                    {/* Background decoration */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full transform translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
+                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-400/20 rounded-full transform -translate-x-1/2 translate-y-1/2 blur-2xl"></div>
+                    
+                    <div className="relative z-10">
+                      <div className="text-5xl mb-4">📲</div>
+                      <h3 className="text-2xl sm:text-3xl font-bold mb-3">Descarga la App LotoLink</h3>
+                      <p className="text-blue-100 mb-8 max-w-md mx-auto">
+                        Lleva tus jugadas en tu bolsillo. Disponible para iPhone, Android y PC.
+                      </p>
+                      
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        {/* iOS Button */}
+                        <button 
+                          onClick={() => setShowInstallGuide('ios')}
+                          className="flex items-center gap-3 bg-black hover:bg-gray-900 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg min-w-[200px]"
+                        >
+                          <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                          </svg>
+                          <div className="text-left">
+                            <div className="text-[10px] opacity-80">Descargar en</div>
+                            <div className="text-lg font-bold -mt-1">App Store</div>
+                          </div>
+                        </button>
+                        
+                        {/* Android Button */}
+                        <button 
+                          onClick={() => {
+                            // Try to trigger install prompt directly
+                            if (window.deferredPrompt) {
+                              window.deferredPrompt.prompt();
+                              window.deferredPrompt.userChoice.then((choiceResult) => {
+                                if (choiceResult.outcome === 'accepted') {
+                                  console.log('User accepted the install prompt');
+                                }
+                                window.deferredPrompt = null;
+                              });
+                            } else {
+                              setShowInstallGuide('android');
+                            }
+                          }}
+                          className="flex items-center gap-3 bg-black hover:bg-gray-900 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg min-w-[200px]"
+                        >
+                          <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 010 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/>
+                          </svg>
+                          <div className="text-left">
+                            <div className="text-[10px] opacity-80">Disponible en</div>
+                            <div className="text-lg font-bold -mt-1">Google Play</div>
+                          </div>
+                        </button>
+                        
+                        {/* Desktop Button */}
+                        <button 
+                          onClick={() => {
+                            // Try to trigger install prompt directly
+                            if (window.deferredPrompt) {
+                              window.deferredPrompt.prompt();
+                              window.deferredPrompt.userChoice.then((choiceResult) => {
+                                if (choiceResult.outcome === 'accepted') {
+                                  console.log('User accepted the install prompt');
+                                }
+                                window.deferredPrompt = null;
+                              });
+                            } else {
+                              setShowInstallGuide('desktop');
+                            }
+                          }}
+                          className="flex items-center gap-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg min-w-[200px] border border-white/30"
+                        >
+                          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                          <div className="text-left">
+                            <div className="text-[10px] opacity-80">También en</div>
+                            <div className="text-lg font-bold -mt-1">PC / Mac</div>
+                          </div>
+                        </button>
+                      </div>
+                      
+                      <p className="mt-6 text-xs text-blue-200 opacity-75">
+                        💡 Esta es una Progressive Web App (PWA) - se instala directamente desde el navegador.
+                      </p>
+                    </div>
+                  </div>
+                </section>
               </>
             )}
 
-            {view === "bancas" && <Bancas banks={DEFAULT_BANKS} onPlay={(b) => openPlayModal(b)} onJoin={() => setView("portal")} />}
+            {view === "bancas" && <Bancas banks={DEFAULT_BANKS} onPlay={(b) => openPlayModal(b)} onJoin={() => setView("portal")} initialViewMode={bancasViewMode} focusBank={bancasFocusBank} />}
             {view === "portal" && <BancaPortal onBack={() => setView("home")} />}
-            {view === "profile" && <Profile user={user} ticket={ticket} registeredCards={registeredCards} onManageCards={() => setShowCardManagement(true)} />}
+            {view === "profile" && <Profile user={user} ticket={ticket} registeredCards={registeredCards} onManageCards={() => setShowCardManagement(true)} onLogin={() => setShowAuthModal(true)} />}
             {view === "rankings" && <Rankings />}
             {view === "masjugados" && <MostPlayedSection most={MOST_PLAYED} />}
             {view === "join" && <JoinUs />}
@@ -3894,12 +4428,52 @@
               <div className="bg-white dark:bg-slate-800 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
                 {/* Modal Header */}
                 <div className="p-6 bg-gray-50 dark:bg-slate-900 border-b dark:border-slate-700 flex justify-between items-center">
-                  <div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Jugando en</div>
-                    <div className="font-bold text-lg dark:text-white">{selectedBank?.name ?? '—'}</div>
+                  <div className="flex items-center gap-3">
+                    <div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">Jugando en</div>
+                      <div className="font-bold text-lg dark:text-white">{selectedBank?.name ?? '—'}</div>
+                    </div>
+                    <button 
+                      type="button"
+                      onClick={() => setShowBranchSelector(!showBranchSelector)}
+                      className="px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors flex items-center gap-1 cursor-pointer"
+                      style={{ cursor: 'pointer' }}
+                    >
+                      📍 Cambiar Sucursal
+                    </button>
                   </div>
                   <button onClick={closePlayModal} className="text-gray-400 hover:text-black dark:hover:text-white text-2xl">✕</button>
                 </div>
+                
+                {/* Branch Selector Dropdown */}
+                {showBranchSelector && (
+                  <div className="p-4 bg-blue-50 dark:bg-slate-800 border-b dark:border-slate-700">
+                    <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Selecciona otra sucursal:</div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {DEFAULT_BANKS.map(bank => (
+                        <button
+                          type="button"
+                          key={bank.id}
+                          onClick={() => {
+                            setSelectedBank(bank);
+                            setShowBranchSelector(false);
+                          }}
+                          className={`p-3 rounded-lg text-left transition-all cursor-pointer ${
+                            selectedBank?.id === bank.id 
+                              ? 'bg-blue-600 text-white' 
+                              : 'bg-white dark:bg-slate-700 hover:bg-blue-100 dark:hover:bg-slate-600'
+                          }`}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <div className="font-medium dark:text-white">{bank.name}</div>
+                          <div className={`text-xs ${selectedBank?.id === bank.id ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'}`}>
+                            📍 {bank.address}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 
                 {/* Modal Body */}
                 <div className="p-8">
@@ -4163,14 +4737,26 @@
                   placeholder="Tu nombre" 
                 />
                 <input 
-                  className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl mb-6 bg-gray-50 dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all" 
+                  id="loginEmail"
+                  className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl mb-4 bg-gray-50 dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all" 
                   placeholder="Tu email" 
+                  type="email"
+                />
+                <input 
+                  id="loginPhone"
+                  className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl mb-6 bg-gray-50 dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all" 
+                  placeholder="Tu teléfono (809-XXX-XXXX)" 
+                  type="tel"
                 />
                 <button 
                   onClick={() => { 
-                    const n = document.getElementById('loginName').value; 
+                    const n = document.getElementById('loginName').value;
+                    const e = document.getElementById('loginEmail').value || 'usuario@lotolink.com';
+                    const p = document.getElementById('loginPhone').value || '';
                     if(n) { 
-                      setUser({ name: n, email: "usuario@lotolink.com", id: uid("U") }); 
+                      const newUser = { name: n, email: e, phone: p, id: uid("U") };
+                      setUser(newUser);
+                      localStorage.setItem("ll_user", JSON.stringify(newUser));
                       setShowAuthModal(false); 
                     } 
                   }} 
@@ -4674,6 +5260,214 @@
             </div>
           )}
 
+          {/* Install Guide Modal - Visual Instructions for PWA Installation */}
+          {showInstallGuide && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+              <div className="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
+                {/* Header */}
+                <div className={`p-6 text-white text-center ${
+                  showInstallGuide === 'ios' ? 'bg-gradient-to-r from-gray-800 to-gray-900' :
+                  showInstallGuide === 'android' ? 'bg-gradient-to-r from-green-600 to-green-700' :
+                  'bg-gradient-to-r from-blue-600 to-indigo-700'
+                }`}>
+                  <div className="text-5xl mb-3">
+                    {showInstallGuide === 'ios' ? '🍎' : showInstallGuide === 'android' ? '🤖' : '💻'}
+                  </div>
+                  <h3 className="text-xl font-bold">
+                    {showInstallGuide === 'ios' ? 'Instalar en iPhone/iPad' :
+                     showInstallGuide === 'android' ? 'Instalar en Android' :
+                     'Instalar en PC/Mac'}
+                  </h3>
+                </div>
+                
+                <div className="p-6">
+                  {/* iOS Instructions */}
+                  {showInstallGuide === 'ios' && (
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-xl">
+                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">Abre Safari</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">Esta función solo está disponible en Safari</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-xl">
+                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">Toca el botón Compartir</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            Busca este icono en la barra inferior: 
+                            <span className="inline-flex items-center justify-center w-8 h-8 bg-white dark:bg-slate-600 rounded border ml-2">
+                              <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                              </svg>
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-xl">
+                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">"Añadir a pantalla de inicio"</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">Desplázate hacia abajo y selecciona esta opción</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+                        <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">✓</div>
+                        <div>
+                          <p className="font-semibold text-green-800 dark:text-green-300">¡Listo!</p>
+                          <p className="text-sm text-green-700 dark:text-green-400">LotoLink aparecerá en tu pantalla de inicio como una app</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Android Instructions */}
+                  {showInstallGuide === 'android' && (
+                    <div className="space-y-4">
+                      <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-xl">
+                        <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">Abre Chrome</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">Asegúrate de estar en el navegador Chrome</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-xl">
+                        <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">Toca el menú ⋮</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            Los 3 puntos verticales en la esquina superior derecha
+                            <span className="inline-flex items-center justify-center w-8 h-8 bg-white dark:bg-slate-600 rounded border ml-2 font-bold">⋮</span>
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-xl">
+                        <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">"Instalar aplicación"</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">O "Añadir a pantalla de inicio"</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+                        <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">✓</div>
+                        <div>
+                          <p className="font-semibold text-green-800 dark:text-green-300">¡Listo!</p>
+                          <p className="text-sm text-green-700 dark:text-green-400">LotoLink se instalará en tu dispositivo</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Desktop Instructions */}
+                  {showInstallGuide === 'desktop' && (
+                    <div className="space-y-4">
+                      {/* Important notice about local files */}
+                      <div className="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-xl border border-amber-200 dark:border-amber-700">
+                        <p className="text-sm text-amber-800 dark:text-amber-200 font-medium flex items-center gap-2">
+                          <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                          </svg>
+                          Si abriste el archivo directamente, el icono no aparecerá. La app debe estar en un servidor web.
+                        </p>
+                      </div>
+                      
+                      {/* Visual browser mockup */}
+                      <div className="bg-gray-100 dark:bg-slate-700 rounded-xl p-3">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium">Así se ve en Chrome/Edge:</p>
+                        {/* Browser mockup */}
+                        <div className="bg-gray-200 dark:bg-slate-600 rounded-lg overflow-hidden">
+                          {/* Tab bar */}
+                          <div className="bg-gray-300 dark:bg-slate-500 px-2 py-1 flex items-center gap-1">
+                            <div className="flex gap-1">
+                              <div className="w-2 h-2 rounded-full bg-red-400"></div>
+                              <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
+                              <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                            </div>
+                            <div className="flex-1 mx-4 bg-white dark:bg-slate-400 rounded px-2 py-0.5 text-[10px] text-gray-600 truncate">
+                              🎱 LotoLink
+                            </div>
+                          </div>
+                          {/* Address bar with install icon highlighted */}
+                          <div className="bg-white dark:bg-slate-700 px-2 py-1 flex items-center gap-2 border-b dark:border-slate-600">
+                            <div className="flex gap-1 text-gray-400">
+                              <span>←</span><span>→</span><span>↻</span>
+                            </div>
+                            <div className="flex-1 bg-gray-100 dark:bg-slate-600 rounded-full px-3 py-1 text-[10px] text-gray-600 dark:text-gray-300 flex items-center">
+                              <span className="text-green-600 dark:text-green-400 mr-1">🔒</span>
+                              <span className="truncate">lotolink.com</span>
+                              {/* Install icon - highlighted */}
+                              <span className="ml-auto flex items-center gap-1">
+                                <span className="relative animate-pulse">
+                                  <span className="absolute -inset-1 bg-blue-400 rounded opacity-50"></span>
+                                  <span className="relative bg-blue-500 text-white px-1 py-0.5 rounded text-[8px] font-bold">⊕</span>
+                                </span>
+                              </span>
+                            </div>
+                            <span className="text-gray-400 text-sm">⋮</span>
+                          </div>
+                        </div>
+                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 text-center font-medium">
+                          ↑ Busca este icono ⊕ al final de la barra de direcciones
+                        </p>
+                      </div>
+                      
+                      <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-xl">
+                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">Abre en Chrome o Edge</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">La página debe cargarse desde un servidor (https://...)</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-xl">
+                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">Haz clic en el icono ⊕</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            Está al final de la barra de direcciones (ver imagen arriba)
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-xl">
+                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">Confirma "Instalar"</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            Alternativa: menú <span className="bg-gray-200 dark:bg-slate-600 px-1.5 py-0.5 rounded font-mono">⋮</span> → "Instalar LotoLink..."
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+                        <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">✓</div>
+                        <div>
+                          <p className="font-semibold text-green-800 dark:text-green-300">¡Listo!</p>
+                          <p className="text-sm text-green-700 dark:text-green-400">La app se abrirá en su propia ventana sin barras del navegador</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Close button */}
+                  <button
+                    onClick={() => setShowInstallGuide(null)}
+                    className="w-full mt-6 py-3 bg-gray-900 dark:bg-white dark:text-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all"
+                  >
+                    Entendido
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Winning Tickets Notification Modal */}
           {showWinningTicketsModal && winningTickets.length > 0 && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
@@ -5047,6 +5841,55 @@
                 </div>
               </div>
             </div>
+          )}
+          
+          {/* Mobile Bottom Navigation Bar - Only visible on mobile devices */}
+          {view !== 'portal' && !showWelcomeScreen && (
+            <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-gray-200 dark:border-slate-800" style={{ paddingBottom: 'max(8px, env(safe-area-inset-bottom))' }}>
+              <div className="flex items-center justify-around px-2 py-2">
+                <button 
+                  onClick={() => setView('home')}
+                  className={`flex flex-col items-center justify-center w-16 py-1.5 rounded-xl transition-all ${view === 'home' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}`}
+                >
+                  <span className="text-xl mb-0.5">🏠</span>
+                  <span className="text-[10px] font-medium">Inicio</span>
+                </button>
+                
+                <button 
+                  onClick={() => setView('loterias')}
+                  className={`flex flex-col items-center justify-center w-16 py-1.5 rounded-xl transition-all ${view === 'loterias' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}`}
+                >
+                  <span className="text-xl mb-0.5">🎰</span>
+                  <span className="text-[10px] font-medium">Loterías</span>
+                </button>
+                
+                <button 
+                  onClick={() => openPlayModal(DEFAULT_BANKS[0])}
+                  className="flex flex-col items-center justify-center -mt-4"
+                >
+                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-blue-500/40">
+                    🎟️
+                  </div>
+                  <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 mt-1">Jugar</span>
+                </button>
+                
+                <button 
+                  onClick={() => setView('bancas')}
+                  className={`flex flex-col items-center justify-center w-16 py-1.5 rounded-xl transition-all ${view === 'bancas' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}`}
+                >
+                  <span className="text-xl mb-0.5">🏪</span>
+                  <span className="text-[10px] font-medium">Bancas</span>
+                </button>
+                
+                <button 
+                  onClick={() => setView('profile')}
+                  className={`flex flex-col items-center justify-center w-16 py-1.5 rounded-xl transition-all ${view === 'profile' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}`}
+                >
+                  <span className="text-xl mb-0.5">👤</span>
+                  <span className="text-[10px] font-medium">Perfil</span>
+                </button>
+              </div>
+            </nav>
           )}
         </div>
       );
@@ -6109,6 +6952,151 @@
       window.updateStake = updateStake;
       window.toggleLotteryDarkMode = toggleLotteryDarkMode;
       window.renderModal = renderModal;
+    })();
+  </script>
+  
+  <!-- PWA Install Banner & Service Worker -->
+  <script>
+    (function() {
+      // PWA Install prompt handling
+      let deferredPrompt;
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const isAndroid = /Android/.test(navigator.userAgent);
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      
+      // Check if user has dismissed install banner
+      const hasDeclinedInstall = localStorage.getItem('ll_declined_install');
+      const hasInstalledApp = localStorage.getItem('ll_app_installed');
+      
+      // Create install banner for mobile users
+      function createInstallBanner() {
+        if (isStandalone || hasDeclinedInstall || hasInstalledApp) return;
+        
+        const banner = document.createElement('div');
+        banner.id = 'pwa-install-banner';
+        banner.className = 'fixed bottom-0 left-0 right-0 z-50 p-4 pb-6 transition-transform duration-300';
+        banner.style.cssText = 'background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%); padding-bottom: max(24px, env(safe-area-inset-bottom));';
+        
+        if (isIOS) {
+          // iOS-specific install instructions
+          banner.innerHTML = `
+            <div class="max-w-md mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-4 flex items-center gap-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold flex-shrink-0 shadow-lg">L</div>
+              <div class="flex-1 min-w-0">
+                <div class="font-semibold text-gray-900 dark:text-white text-sm">Instalar LotoLink</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Toca <span class="inline-flex items-center bg-gray-100 dark:bg-slate-700 px-1.5 py-0.5 rounded text-[10px]">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/></svg>
+                </span> y luego "Añadir a inicio"</div>
+              </div>
+              <button onclick="dismissInstallBanner()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
+            </div>
+          `;
+        } else if (deferredPrompt || isAndroid) {
+          // Android/Desktop with install prompt
+          banner.innerHTML = `
+            <div class="max-w-md mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-4 flex items-center gap-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold flex-shrink-0 shadow-lg">L</div>
+              <div class="flex-1 min-w-0">
+                <div class="font-semibold text-gray-900 dark:text-white text-sm">Instalar LotoLink</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Instala la app para una mejor experiencia</div>
+              </div>
+              <button onclick="installApp()" class="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-all">
+                Instalar
+              </button>
+              <button onclick="dismissInstallBanner()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
+            </div>
+          `;
+        }
+        
+        if (banner.innerHTML) {
+          document.body.appendChild(banner);
+          
+          // Animate in after a short delay
+          setTimeout(() => {
+            banner.style.transform = 'translateY(0)';
+          }, 2000);
+          banner.style.transform = 'translateY(100%)';
+        }
+      }
+      
+      // Install app function
+      window.installApp = async function() {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            localStorage.setItem('ll_app_installed', 'true');
+            const banner = document.getElementById('pwa-install-banner');
+            if (banner) banner.remove();
+          }
+          deferredPrompt = null;
+        }
+      };
+      
+      // Dismiss install banner
+      window.dismissInstallBanner = function() {
+        localStorage.setItem('ll_declined_install', Date.now().toString());
+        const banner = document.getElementById('pwa-install-banner');
+        if (banner) {
+          banner.style.transform = 'translateY(100%)';
+          setTimeout(() => banner.remove(), 300);
+        }
+      };
+      
+      // Listen for install prompt event
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        createInstallBanner();
+      });
+      
+      // Track successful installation
+      window.addEventListener('appinstalled', () => {
+        localStorage.setItem('ll_app_installed', 'true');
+        const banner = document.getElementById('pwa-install-banner');
+        if (banner) banner.remove();
+      });
+      
+      // Show iOS banner after page load
+      if (isIOS && !isStandalone) {
+        setTimeout(createInstallBanner, 3000);
+      }
+      
+      // Register minimal service worker for offline support
+      if ('serviceWorker' in navigator) {
+        // Using inline service worker via blob URL for single-file app
+        const swCode = `
+          const CACHE_NAME = 'lotolink-v1';
+          const urlsToCache = ['/'];
+          
+          self.addEventListener('install', (event) => {
+            self.skipWaiting();
+          });
+          
+          self.addEventListener('activate', (event) => {
+            event.waitUntil(clients.claim());
+          });
+          
+          self.addEventListener('fetch', (event) => {
+            event.respondWith(
+              caches.match(event.request).then((response) => {
+                return response || fetch(event.request);
+              })
+            );
+          });
+        `;
+        
+        const blob = new Blob([swCode], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(blob);
+        
+        // Note: Blob URLs won't work for service workers in production
+        // This is a placeholder - in production, use a separate sw.js file
+        console.log('LotoLink PWA: Ready for installation');
+      }
     })();
   </script>
 </body>
