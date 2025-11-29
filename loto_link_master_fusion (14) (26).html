@@ -3012,6 +3012,7 @@
       const [playModalModality, setPlayModalModality] = useState(null);
       const [playModalNumbers, setPlayModalNumbers] = useState([]); // Selected numbers
       const [playModalStake, setPlayModalStake] = useState(10); // Stake amount
+      const [showBranchSelector, setShowBranchSelector] = useState(false); // Branch selector in play modal
       const [showAuthModal, setShowAuthModal] = useState(false);
       const [isCartOpen, setIsCartOpen] = useState(false);
       const [theme, setTheme] = useState(() => localStorage.getItem('ll_theme') || 'light');
@@ -3910,6 +3911,7 @@
         setPlayModalModality(null);
         setPlayModalNumbers([]);
         setPlayModalStake(10);
+        setShowBranchSelector(false);
       };
       
       // Toggle number selection
@@ -4425,12 +4427,48 @@
               <div className="bg-white dark:bg-slate-800 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
                 {/* Modal Header */}
                 <div className="p-6 bg-gray-50 dark:bg-slate-900 border-b dark:border-slate-700 flex justify-between items-center">
-                  <div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Jugando en</div>
-                    <div className="font-bold text-lg dark:text-white">{selectedBank?.name ?? '—'}</div>
+                  <div className="flex items-center gap-3">
+                    <div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">Jugando en</div>
+                      <div className="font-bold text-lg dark:text-white">{selectedBank?.name ?? '—'}</div>
+                    </div>
+                    <button 
+                      onClick={() => setShowBranchSelector(!showBranchSelector)}
+                      className="px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors flex items-center gap-1"
+                    >
+                      📍 Cambiar Sucursal
+                    </button>
                   </div>
                   <button onClick={closePlayModal} className="text-gray-400 hover:text-black dark:hover:text-white text-2xl">✕</button>
                 </div>
+                
+                {/* Branch Selector Dropdown */}
+                {showBranchSelector && (
+                  <div className="p-4 bg-blue-50 dark:bg-slate-800 border-b dark:border-slate-700">
+                    <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Selecciona otra sucursal:</div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {DEFAULT_BANKS.map(bank => (
+                        <button
+                          key={bank.id}
+                          onClick={() => {
+                            setSelectedBank(bank);
+                            setShowBranchSelector(false);
+                          }}
+                          className={`p-3 rounded-lg text-left transition-all ${
+                            selectedBank?.id === bank.id 
+                              ? 'bg-blue-600 text-white' 
+                              : 'bg-white dark:bg-slate-700 hover:bg-blue-100 dark:hover:bg-slate-600'
+                          }`}
+                        >
+                          <div className="font-medium dark:text-white">{bank.name}</div>
+                          <div className={`text-xs ${selectedBank?.id === bank.id ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'}`}>
+                            📍 {bank.address}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 
                 {/* Modal Body */}
                 <div className="p-8">
