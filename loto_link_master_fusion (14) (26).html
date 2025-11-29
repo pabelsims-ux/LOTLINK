@@ -1160,8 +1160,95 @@
     }
 
     /* --- COMPONENT: BANCAS (With Portal Link) --- */
-    function Bancas({ banks, onPlay, onJoin }) {
-      const [viewMode, setViewMode] = useState('list'); // 'list' | 'map'
+    function Bancas({ banks, onPlay, onJoin, initialViewMode = 'list', focusBank = null }) {
+      const [viewMode, setViewMode] = useState(initialViewMode);
+      const mapInitializedRef = useRef(false);
+      const mapInstanceRef = useRef(null);
+      
+      // Initialize or update map when switching to map view or when focusBank changes
+      useEffect(() => {
+        if (viewMode === 'map') {
+          // Small delay to ensure container is rendered
+          const initMap = setTimeout(() => {
+            const mapContainer = document.getElementById('bancas-map-container');
+            if (mapContainer && !mapInitializedRef.current) {
+              // Clear any placeholder content
+              mapContainer.innerHTML = '';
+              mapContainer.className = '';
+              
+              // Initialize Leaflet map
+              const centerCoords = focusBank ? focusBank.coords : [18.4861, -69.9312];
+              const zoomLevel = focusBank ? 16 : 13;
+              
+              const map = L.map('bancas-map-container').setView(centerCoords, zoomLevel);
+              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+                attribution: '© OpenStreetMap contributors' 
+              }).addTo(map);
+              
+              // Add markers for all banks
+              banks.forEach(b => {
+                const marker = L.marker(b.coords).addTo(map);
+                
+                // Create styled popup
+                const popupContent = `
+                  <div style="text-align:center; min-width: 180px; padding: 8px;">
+                    <div style="font-weight:bold; margin-bottom:6px; font-size:15px; color:#1e3a5f;">${b.name}</div>
+                    <div style="font-size:12px; color:#666; margin-bottom:10px;">
+                      <i class="far fa-clock"></i> ${b.hours}
+                    </div>
+                    <button 
+                      onclick="if(window.triggerPlayModal) window.triggerPlayModal(${b.id})" 
+                      style="background: linear-gradient(135deg, #2563EB 0%, #1d4ed8 100%); color:white; border:none; padding:8px 16px; border-radius:20px; cursor:pointer; font-size:13px; font-weight:600; box-shadow:0 2px 8px rgba(37,99,235,0.3); width:100%;">
+                      🎟️ Jugar Aquí
+                    </button>
+                  </div>
+                `;
+                
+                marker.bindPopup(popupContent);
+                
+                // If this is the focused bank, open its popup
+                if (focusBank && b.id === focusBank.id) {
+                  marker.openPopup();
+                }
+              });
+              
+              mapInstanceRef.current = map;
+              mapInitializedRef.current = true;
+            } else if (mapContainer && mapInitializedRef.current && mapInstanceRef.current && focusBank) {
+              // Map already initialized, just pan to the focused bank
+              mapInstanceRef.current.setView(focusBank.coords, 16);
+              
+              // Find and open the popup for the focused bank
+              mapInstanceRef.current.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                  const pos = layer.getLatLng();
+                  if (pos.lat === focusBank.coords[0] && pos.lng === focusBank.coords[1]) {
+                    layer.openPopup();
+                  }
+                }
+              });
+            }
+          }, 100);
+          
+          return () => clearTimeout(initMap);
+        }
+      }, [viewMode, focusBank, banks]);
+      
+      // Cleanup map on unmount
+      useEffect(() => {
+        return () => {
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.remove();
+            mapInstanceRef.current = null;
+            mapInitializedRef.current = false;
+          }
+        };
+      }, []);
+      
+      // Update viewMode when initialViewMode prop changes
+      useEffect(() => {
+        setViewMode(initialViewMode);
+      }, [initialViewMode]);
       
       return (
         <section className="mt-6">
@@ -1212,19 +1299,22 @@
                     <div className="font-bold text-lg text-slate-800 dark:text-white">{b.name}</div>
                     <div className="text-sm text-gray-500 dark:text-gray-400 mt-1"><i className="far fa-clock mr-1"></i> {b.hours}</div>
                   </div>
-                  <button onClick={() => onPlay(b)} className="px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 shadow-sm">Jugar</button>
+                  <div className="flex gap-2">
+                    <button onClick={() => onPlay(b)} className="px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 shadow-sm">Jugar</button>
+                    <button 
+                      onClick={() => setViewMode('map')} 
+                      className="px-4 py-2 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-slate-600 transition"
+                      title="Ver en mapa"
+                    >
+                      <i className="fas fa-map-marker-alt"></i>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 p-4">
-              <div id="bancas-map-container" style={{ height: '500px', borderRadius: '12px' }} className="bg-gray-100 dark:bg-slate-700 flex items-center justify-center text-gray-500 dark:text-gray-400">
-                <div className="text-center">
-                  <i className="fas fa-map-marked-alt text-4xl mb-3"></i>
-                  <p>Vista de mapa de bancas</p>
-                  <p className="text-sm mt-2">Las bancas se mostrarán aquí en el mapa interactivo</p>
-                </div>
-              </div>
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden">
+              <div id="bancas-map-container" style={{ height: '500px', borderRadius: '12px' }}></div>
             </div>
           )}
         </section>
@@ -2587,6 +2677,8 @@
       const [pendingPlay, setPendingPlay] = useState(null);
       const [ticket, setTicket] = useState(null);
       const [selectedBank, setSelectedBank] = useState(DEFAULT_BANKS[0]);
+      const [bancasViewMode, setBancasViewMode] = useState('list'); // 'list' | 'map'
+      const [bancasFocusBank, setBancasFocusBank] = useState(null); // Bank to focus on in map view
       const [showPlayModal, setShowPlayModal] = useState(false);
       const [playModalStep, setPlayModalStep] = useState('lottery'); // 'lottery' | 'modality' | 'play'
       const [playModalLottery, setPlayModalLottery] = useState(null);
@@ -3638,10 +3730,14 @@
                                 Jugar
                               </button>
                               <button 
-                                onClick={() => setSelectedBank(b)} 
-                                className="px-4 py-2.5 bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-300 rounded-full font-medium text-sm hover:bg-gray-200 dark:hover:bg-white/20 transition-all"
+                                onClick={() => {
+                                  setBancasFocusBank(b);
+                                  setBancasViewMode('map');
+                                  setView('bancas');
+                                }} 
+                                className="px-4 py-2.5 bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-300 rounded-full font-medium text-sm hover:bg-gray-200 dark:hover:bg-white/20 transition-all flex items-center gap-1"
                               >
-                                Ver
+                                <i className="fas fa-map-marker-alt text-xs"></i> Ver
                               </button>
                             </div>
                           </div>
@@ -3735,7 +3831,7 @@
               </>
             )}
 
-            {view === "bancas" && <Bancas banks={DEFAULT_BANKS} onPlay={(b) => openPlayModal(b)} onJoin={() => setView("portal")} />}
+            {view === "bancas" && <Bancas banks={DEFAULT_BANKS} onPlay={(b) => openPlayModal(b)} onJoin={() => setView("portal")} initialViewMode={bancasViewMode} focusBank={bancasFocusBank} />}
             {view === "portal" && <BancaPortal onBack={() => setView("home")} />}
             {view === "profile" && <Profile user={user} ticket={ticket} registeredCards={registeredCards} onManageCards={() => setShowCardManagement(true)} />}
             {view === "rankings" && <Rankings />}
