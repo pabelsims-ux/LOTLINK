@@ -4153,6 +4153,94 @@
                     <PaymentMethods />
                   </aside>
                 </div>
+                
+                {/* Download App Section */}
+                <section className="mt-12 mb-8">
+                  <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-8 sm:p-12 text-center text-white relative overflow-hidden">
+                    {/* Background decoration */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full transform translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
+                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-400/20 rounded-full transform -translate-x-1/2 translate-y-1/2 blur-2xl"></div>
+                    
+                    <div className="relative z-10">
+                      <div className="text-5xl mb-4">📲</div>
+                      <h3 className="text-2xl sm:text-3xl font-bold mb-3">Descarga la App LotoLink</h3>
+                      <p className="text-blue-100 mb-8 max-w-md mx-auto">
+                        Lleva tus jugadas en tu bolsillo. Disponible para iPhone, Android y PC.
+                      </p>
+                      
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        {/* iOS Button */}
+                        <button 
+                          onClick={() => {
+                            if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                              alert('📱 Para instalar en iPhone/iPad:\n\n1. Toca el botón de Compartir (cuadrado con flecha)\n2. Desplázate y selecciona "Añadir a pantalla de inicio"\n3. Toca "Añadir"\n\n¡La app aparecerá como icono en tu pantalla!');
+                            } else {
+                              alert('📱 Para instalar en iPhone/iPad:\n\nAbre esta página en Safari en tu dispositivo iOS y sigue estos pasos:\n\n1. Toca el botón de Compartir\n2. Selecciona "Añadir a pantalla de inicio"\n3. Toca "Añadir"');
+                            }
+                          }}
+                          className="flex items-center gap-3 bg-black hover:bg-gray-900 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg min-w-[200px]"
+                        >
+                          <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                          </svg>
+                          <div className="text-left">
+                            <div className="text-[10px] opacity-80">Descargar en</div>
+                            <div className="text-lg font-bold -mt-1">App Store</div>
+                          </div>
+                        </button>
+                        
+                        {/* Android Button */}
+                        <button 
+                          onClick={() => {
+                            if (/Android/.test(navigator.userAgent)) {
+                              // Trigger the install prompt if available
+                              if (window.deferredPrompt) {
+                                window.deferredPrompt.prompt();
+                              } else {
+                                alert('📱 Para instalar en Android:\n\n1. Toca el menú (⋮) en Chrome\n2. Selecciona "Instalar aplicación" o "Añadir a pantalla de inicio"\n3. Confirma la instalación\n\n¡La app aparecerá como icono en tu pantalla!');
+                              }
+                            } else {
+                              alert('📱 Para instalar en Android:\n\nAbre esta página en Chrome en tu dispositivo Android:\n\n1. Toca el menú (⋮)\n2. Selecciona "Instalar aplicación"\n3. Confirma la instalación');
+                            }
+                          }}
+                          className="flex items-center gap-3 bg-black hover:bg-gray-900 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg min-w-[200px]"
+                        >
+                          <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 010 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/>
+                          </svg>
+                          <div className="text-left">
+                            <div className="text-[10px] opacity-80">Disponible en</div>
+                            <div className="text-lg font-bold -mt-1">Google Play</div>
+                          </div>
+                        </button>
+                        
+                        {/* Desktop Button */}
+                        <button 
+                          onClick={() => {
+                            if (window.deferredPrompt) {
+                              window.deferredPrompt.prompt();
+                            } else {
+                              alert('💻 Para instalar en PC/Mac:\n\nEn Chrome o Edge:\n1. Busca el icono de instalación (⊕) en la barra de direcciones\n2. Haz clic y selecciona "Instalar"\n\nO en el menú (⋮):\n1. Selecciona "Instalar LotoLink..."\n2. Confirma la instalación\n\n¡La app se abrirá en su propia ventana!');
+                            }
+                          }}
+                          className="flex items-center gap-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg min-w-[200px] border border-white/30"
+                        >
+                          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                          <div className="text-left">
+                            <div className="text-[10px] opacity-80">También en</div>
+                            <div className="text-lg font-bold -mt-1">PC / Mac</div>
+                          </div>
+                        </button>
+                      </div>
+                      
+                      <p className="mt-6 text-xs text-blue-200 opacity-75">
+                        💡 Esta es una Progressive Web App (PWA) - se instala directamente desde el navegador sin necesidad de tiendas de aplicaciones.
+                      </p>
+                    </div>
+                  </div>
+                </section>
               </>
             )}
 
