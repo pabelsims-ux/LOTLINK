@@ -3901,6 +3901,7 @@
         setPlayModalModality(null);
         setPlayModalNumbers([]);
         setPlayModalStake(10);
+        setShowBranchSelector(false);
         setShowPlayModal(true);
       };
       
@@ -4433,8 +4434,10 @@
                       <div className="font-bold text-lg dark:text-white">{selectedBank?.name ?? '—'}</div>
                     </div>
                     <button 
+                      type="button"
                       onClick={() => setShowBranchSelector(!showBranchSelector)}
-                      className="px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors flex items-center gap-1"
+                      className="px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors flex items-center gap-1 cursor-pointer"
+                      style={{ cursor: 'pointer' }}
                     >
                       📍 Cambiar Sucursal
                     </button>
@@ -4449,16 +4452,18 @@
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {DEFAULT_BANKS.map(bank => (
                         <button
+                          type="button"
                           key={bank.id}
                           onClick={() => {
                             setSelectedBank(bank);
                             setShowBranchSelector(false);
                           }}
-                          className={`p-3 rounded-lg text-left transition-all ${
+                          className={`p-3 rounded-lg text-left transition-all cursor-pointer ${
                             selectedBank?.id === bank.id 
                               ? 'bg-blue-600 text-white' 
                               : 'bg-white dark:bg-slate-700 hover:bg-blue-100 dark:hover:bg-slate-600'
                           }`}
+                          style={{ cursor: 'pointer' }}
                         >
                           <div className="font-medium dark:text-white">{bank.name}</div>
                           <div className={`text-xs ${selectedBank?.id === bank.id ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'}`}>
