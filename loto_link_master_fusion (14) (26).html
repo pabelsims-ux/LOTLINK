@@ -1929,7 +1929,7 @@
       return ticket.total * PROFILE_CONFIG.PRIZE_MULTIPLIER;
     }
 
-    function Profile({ user, ticket, registeredCards = [], onManageCards }) {
+    function Profile({ user, ticket, registeredCards = [], onManageCards, onLogin }) {
       const [visible, setVisible] = useState(() => localStorage.getItem("ll_visible_rank") === "true");
       const [wins, setWins] = useState(() => Number(localStorage.getItem("ll_user_wins") || 1));
       const [balance, setBalance] = useState(() => Number(localStorage.getItem("ll_user_balance") || 0));
@@ -2086,7 +2086,7 @@
           </div>
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Acceso Restringido</h3>
           <p className="text-gray-500 dark:text-gray-400 mt-3 text-lg">Debes iniciar sesión para ver tu perfil.</p>
-          <button className="btn-apple-primary mt-6">
+          <button onClick={onLogin} className="btn-apple-primary mt-6">
             Iniciar Sesión
           </button>
         </div>
@@ -4250,7 +4250,7 @@
 
             {view === "bancas" && <Bancas banks={DEFAULT_BANKS} onPlay={(b) => openPlayModal(b)} onJoin={() => setView("portal")} initialViewMode={bancasViewMode} focusBank={bancasFocusBank} />}
             {view === "portal" && <BancaPortal onBack={() => setView("home")} />}
-            {view === "profile" && <Profile user={user} ticket={ticket} registeredCards={registeredCards} onManageCards={() => setShowCardManagement(true)} />}
+            {view === "profile" && <Profile user={user} ticket={ticket} registeredCards={registeredCards} onManageCards={() => setShowCardManagement(true)} onLogin={() => setShowAuthModal(true)} />}
             {view === "rankings" && <Rankings />}
             {view === "masjugados" && <MostPlayedSection most={MOST_PLAYED} />}
             {view === "join" && <JoinUs />}
