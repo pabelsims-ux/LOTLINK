@@ -5311,25 +5311,70 @@
                   {/* Desktop Instructions */}
                   {showInstallGuide === 'desktop' && (
                     <div className="space-y-4">
+                      {/* Important notice about local files */}
+                      <div className="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-xl border border-amber-200 dark:border-amber-700">
+                        <p className="text-sm text-amber-800 dark:text-amber-200 font-medium flex items-center gap-2">
+                          <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                          </svg>
+                          Si abriste el archivo directamente, el icono no aparecerá. La app debe estar en un servidor web.
+                        </p>
+                      </div>
+                      
+                      {/* Visual browser mockup */}
+                      <div className="bg-gray-100 dark:bg-slate-700 rounded-xl p-3">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium">Así se ve en Chrome/Edge:</p>
+                        {/* Browser mockup */}
+                        <div className="bg-gray-200 dark:bg-slate-600 rounded-lg overflow-hidden">
+                          {/* Tab bar */}
+                          <div className="bg-gray-300 dark:bg-slate-500 px-2 py-1 flex items-center gap-1">
+                            <div className="flex gap-1">
+                              <div className="w-2 h-2 rounded-full bg-red-400"></div>
+                              <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
+                              <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                            </div>
+                            <div className="flex-1 mx-4 bg-white dark:bg-slate-400 rounded px-2 py-0.5 text-[10px] text-gray-600 truncate">
+                              🎱 LotoLink
+                            </div>
+                          </div>
+                          {/* Address bar with install icon highlighted */}
+                          <div className="bg-white dark:bg-slate-700 px-2 py-1 flex items-center gap-2 border-b dark:border-slate-600">
+                            <div className="flex gap-1 text-gray-400">
+                              <span>←</span><span>→</span><span>↻</span>
+                            </div>
+                            <div className="flex-1 bg-gray-100 dark:bg-slate-600 rounded-full px-3 py-1 text-[10px] text-gray-600 dark:text-gray-300 flex items-center">
+                              <span className="text-green-600 dark:text-green-400 mr-1">🔒</span>
+                              <span className="truncate">lotolink.com</span>
+                              {/* Install icon - highlighted */}
+                              <span className="ml-auto flex items-center gap-1">
+                                <span className="relative animate-pulse">
+                                  <span className="absolute -inset-1 bg-blue-400 rounded opacity-50"></span>
+                                  <span className="relative bg-blue-500 text-white px-1 py-0.5 rounded text-[8px] font-bold">⊕</span>
+                                </span>
+                              </span>
+                            </div>
+                            <span className="text-gray-400 text-sm">⋮</span>
+                          </div>
+                        </div>
+                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 text-center font-medium">
+                          ↑ Busca este icono ⊕ al final de la barra de direcciones
+                        </p>
+                      </div>
+                      
                       <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-xl">
                         <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
                         <div>
-                          <p className="font-semibold text-gray-900 dark:text-white">Usa Chrome o Edge</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-300">La instalación funciona en estos navegadores</p>
+                          <p className="font-semibold text-gray-900 dark:text-white">Abre en Chrome o Edge</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">La página debe cargarse desde un servidor (https://...)</p>
                         </div>
                       </div>
                       
                       <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-xl">
                         <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
                         <div>
-                          <p className="font-semibold text-gray-900 dark:text-white">Busca el icono de instalación</p>
+                          <p className="font-semibold text-gray-900 dark:text-white">Haz clic en el icono ⊕</p>
                           <p className="text-sm text-gray-600 dark:text-gray-300">
-                            En la barra de direcciones, al final:
-                            <span className="inline-flex items-center justify-center w-8 h-8 bg-white dark:bg-slate-600 rounded border ml-2">
-                              <svg className="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                              </svg>
-                            </span>
+                            Está al final de la barra de direcciones (ver imagen arriba)
                           </p>
                         </div>
                       </div>
@@ -5337,8 +5382,10 @@
                       <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-xl">
                         <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
                         <div>
-                          <p className="font-semibold text-gray-900 dark:text-white">Haz clic en "Instalar"</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-300">O en el menú ⋮ → "Instalar LotoLink..."</p>
+                          <p className="font-semibold text-gray-900 dark:text-white">Confirma "Instalar"</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            Alternativa: menú <span className="bg-gray-200 dark:bg-slate-600 px-1.5 py-0.5 rounded font-mono">⋮</span> → "Instalar LotoLink..."
+                          </p>
                         </div>
                       </div>
                       
@@ -5346,7 +5393,7 @@
                         <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">✓</div>
                         <div>
                           <p className="font-semibold text-green-800 dark:text-green-300">¡Listo!</p>
-                          <p className="text-sm text-green-700 dark:text-green-400">La app se abrirá en su propia ventana</p>
+                          <p className="text-sm text-green-700 dark:text-green-400">La app se abrirá en su propia ventana sin barras del navegador</p>
                         </div>
                       </div>
                     </div>
