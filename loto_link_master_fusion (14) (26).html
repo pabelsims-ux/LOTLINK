@@ -107,6 +107,7 @@
       letter-spacing: -0.01em;
       transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
       box-shadow: 0 4px 14px rgba(0, 113, 227, 0.35);
+      cursor: pointer;
     }
     .btn-apple-primary:hover {
       transform: translateY(-1px);
@@ -2101,6 +2102,7 @@
             </div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{user?.name || 'Mi Perfil'}</h1>
             <p className="text-gray-500 dark:text-gray-400 mt-2">{user?.email}</p>
+            {user?.phone && <p className="text-gray-400 dark:text-gray-500 mt-1 text-sm">📱 {user?.phone}</p>}
             <div className="flex items-center justify-center gap-4 mt-4">
               <div className="trust-badge">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -4692,14 +4694,26 @@
                   placeholder="Tu nombre" 
                 />
                 <input 
-                  className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl mb-6 bg-gray-50 dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all" 
+                  id="loginEmail"
+                  className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl mb-4 bg-gray-50 dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all" 
                   placeholder="Tu email" 
+                  type="email"
+                />
+                <input 
+                  id="loginPhone"
+                  className="w-full border border-gray-200 dark:border-white/10 p-4 rounded-xl mb-6 bg-gray-50 dark:bg-white/5 dark:text-white focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all" 
+                  placeholder="Tu teléfono (809-XXX-XXXX)" 
+                  type="tel"
                 />
                 <button 
                   onClick={() => { 
-                    const n = document.getElementById('loginName').value; 
+                    const n = document.getElementById('loginName').value;
+                    const e = document.getElementById('loginEmail').value || 'usuario@lotolink.com';
+                    const p = document.getElementById('loginPhone').value || '';
                     if(n) { 
-                      setUser({ name: n, email: "usuario@lotolink.com", id: uid("U") }); 
+                      const newUser = { name: n, email: e, phone: p, id: uid("U") };
+                      setUser(newUser);
+                      localStorage.setItem("ll_user", JSON.stringify(newUser));
                       setShowAuthModal(false); 
                     } 
                   }} 
