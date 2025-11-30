@@ -7,6 +7,23 @@ dist/
 build/
 *.js.map
 
+# Mobile app builds
+mobile/ios/build/
+mobile/android/app/build/
+mobile/android/.gradle/
+*.apk
+*.ipa
+*.aab
+
+# Desktop app builds
+desktop/dist/
+desktop/out/
+*.exe
+*.dmg
+*.AppImage
+*.deb
+*.rpm
+
 # Environment files
 .env
 .env.local
