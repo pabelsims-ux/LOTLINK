@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.lotolink.com;">
+  <title>LotoLink Desktop</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    }
+    
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background: linear-gradient(180deg, #f5f5f7 0%, #ffffff 100%);
+    }
+    
+    /* macOS title bar drag region */
+    .titlebar-drag {
+      -webkit-app-region: drag;
+    }
+    
+    .titlebar-no-drag {
+      -webkit-app-region: no-drag;
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Dark mode */
+    .dark body {
+      background: linear-gradient(180deg, #000000 0%, #1c1c1e 100%);
+    }
+    
+    .dark ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Premium card effect */
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Glow effect */
+    .glow {
+      box-shadow: 0 0 20px rgba(0, 113, 227, 0.3);
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <!-- macOS Title Bar Space -->
+  <div class="titlebar-drag h-8 bg-transparent fixed top-0 left-0 right-0 z-50"></div>
+  
+  <div id="app" class="pt-8">
+    <!-- Loading State -->
+    <div id="loading" class="flex items-center justify-center min-h-screen">
+      <div class="text-center">
+        <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center text-5xl shadow-2xl animate-pulse">
+          🎰
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">LotoLink</h1>
+        <p class="text-gray-500">Cargando aplicación...</p>
+      </div>
+    </div>
+    
+    <!-- Main App Content -->
+    <div id="main-content" class="hidden">
+      <!-- Sidebar -->
+      <aside class="fixed left-0 top-8 bottom-0 w-64 bg-white/80 backdrop-blur-xl border-r border-gray-200 p-4 overflow-y-auto">
+        <div class="mb-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-2xl shadow-lg">
+              🎰
+            </div>
+            <div>
+              <h1 class="text-xl font-bold text-gray-900">LotoLink</h1>
+              <p class="text-xs text-gray-500">Desktop v1.0.0</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="space-y-1">
+          <a href="#" onclick="navigate('home')" class="nav-item active flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+            <span class="text-xl">🏠</span>
+            <span class="font-medium">Inicio</span>
+          </a>
+          <a href="#" onclick="navigate('play')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+            <span class="text-xl">🎲</span>
+            <span class="font-medium">Jugar</span>
+          </a>
+          <a href="#" onclick="navigate('bancas')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+            <span class="text-xl">📍</span>
+            <span class="font-medium">Bancas</span>
+          </a>
+          <a href="#" onclick="navigate('loterias')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+            <span class="text-xl">🎫</span>
+            <span class="font-medium">Loterías</span>
+          </a>
+          <a href="#" onclick="navigate('results')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+            <span class="text-xl">📊</span>
+            <span class="font-medium">Resultados</span>
+          </a>
+          <a href="#" onclick="navigate('profile')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+            <span class="text-xl">👤</span>
+            <span class="font-medium">Mi Perfil</span>
+          </a>
+        </nav>
+        
+        <!-- Balance Card -->
+        <div class="mt-8 p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl text-white">
+          <p class="text-sm opacity-80">Balance disponible</p>
+          <p class="text-2xl font-bold">RD$ 2,500</p>
+          <button onclick="navigate('wallet')" class="mt-3 w-full bg-white/20 hover:bg-white/30 py-2 rounded-xl text-sm font-medium transition titlebar-no-drag">
+            💳 Recargar
+          </button>
+        </div>
+      </aside>
+      
+      <!-- Main Content Area -->
+      <main class="ml-64 p-8 min-h-screen">
+        <!-- Home View -->
+        <div id="view-home" class="view">
+          <header class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-900">¡Bienvenido a LotoLink!</h2>
+            <p class="text-gray-500 mt-1">Tu suerte empieza aquí</p>
+          </header>
+          
+          <!-- Quick Actions -->
+          <div class="grid grid-cols-4 gap-4 mb-8">
+            <button onclick="navigate('play')" class="card-hover bg-white p-6 rounded-2xl shadow-md text-center">
+              <span class="text-4xl block mb-3">🎲</span>
+              <span class="font-semibold text-gray-900">Jugar Ahora</span>
+            </button>
+            <button onclick="navigate('bancas')" class="card-hover bg-white p-6 rounded-2xl shadow-md text-center">
+              <span class="text-4xl block mb-3">📍</span>
+              <span class="font-semibold text-gray-900">Bancas</span>
+            </button>
+            <button onclick="navigate('results')" class="card-hover bg-white p-6 rounded-2xl shadow-md text-center">
+              <span class="text-4xl block mb-3">📊</span>
+              <span class="font-semibold text-gray-900">Resultados</span>
+            </button>
+            <button onclick="navigate('profile')" class="card-hover bg-white p-6 rounded-2xl shadow-md text-center">
+              <span class="text-4xl block mb-3">🏆</span>
+              <span class="font-semibold text-gray-900">Mis Premios</span>
+            </button>
+          </div>
+          
+          <!-- Lottery Results -->
+          <section>
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-xl font-bold text-gray-900">Resultados en Vivo</h3>
+              <a href="#" onclick="navigate('results')" class="text-blue-600 hover:text-blue-700 font-medium">Ver todos →</a>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <!-- Nacional -->
+              <div class="card-hover bg-white p-6 rounded-2xl shadow-md">
+                <div class="flex items-center justify-between mb-4">
+                  <span class="px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-full">Nacional</span>
+                  <span class="text-gray-500 text-sm">12:30 PM</span>
+                </div>
+                <div class="flex justify-center gap-3">
+                  <div class="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white text-xl font-bold">23</div>
+                  <div class="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white text-xl font-bold">45</div>
+                  <div class="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white text-xl font-bold">67</div>
+                </div>
+              </div>
+              
+              <!-- Leidsa -->
+              <div class="card-hover bg-white p-6 rounded-2xl shadow-md">
+                <div class="flex items-center justify-between mb-4">
+                  <span class="px-3 py-1 bg-green-500 text-white text-sm font-semibold rounded-full">Leidsa</span>
+                  <span class="text-gray-500 text-sm">8:55 PM</span>
+                </div>
+                <div class="flex justify-center gap-3">
+                  <div class="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center text-white text-xl font-bold">12</div>
+                  <div class="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center text-white text-xl font-bold">34</div>
+                  <div class="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center text-white text-xl font-bold">56</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        
+        <!-- Play View -->
+        <div id="view-play" class="view hidden">
+          <header class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-900">🎲 Nueva Jugada</h2>
+            <p class="text-gray-500 mt-1">Selecciona lotería, modalidad y números</p>
+          </header>
+          
+          <div class="max-w-2xl">
+            <!-- Step 1: Lottery Selection -->
+            <div class="mb-8">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">1. Selecciona una Lotería</h3>
+              <div class="grid grid-cols-4 gap-3">
+                <button class="card-hover bg-white p-4 rounded-xl shadow-md text-center border-2 border-transparent hover:border-blue-500 focus:border-blue-500">
+                  <span class="text-3xl block mb-2">🎰</span>
+                  <span class="text-sm font-medium">Nacional</span>
+                </button>
+                <button class="card-hover bg-white p-4 rounded-xl shadow-md text-center border-2 border-transparent hover:border-blue-500 focus:border-blue-500">
+                  <span class="text-3xl block mb-2">🍀</span>
+                  <span class="text-sm font-medium">Leidsa</span>
+                </button>
+                <button class="card-hover bg-white p-4 rounded-xl shadow-md text-center border-2 border-transparent hover:border-blue-500 focus:border-blue-500">
+                  <span class="text-3xl block mb-2">👑</span>
+                  <span class="text-sm font-medium">Real</span>
+                </button>
+                <button class="card-hover bg-white p-4 rounded-xl shadow-md text-center border-2 border-transparent hover:border-blue-500 focus:border-blue-500">
+                  <span class="text-3xl block mb-2">💎</span>
+                  <span class="text-sm font-medium">Loteka</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Step 2: Numbers -->
+            <div class="mb-8">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">2. Ingresa tus Números</h3>
+              <div class="flex gap-4 items-center">
+                <input type="text" maxlength="2" placeholder="00" class="w-20 h-20 text-center text-3xl font-bold bg-white rounded-2xl shadow-md border-2 border-gray-200 focus:border-blue-500 focus:outline-none">
+                <input type="text" maxlength="2" placeholder="00" class="w-20 h-20 text-center text-3xl font-bold bg-white rounded-2xl shadow-md border-2 border-gray-200 focus:border-blue-500 focus:outline-none">
+                <button class="px-6 py-3 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-600 transition">
+                  🎲 Aleatorio
+                </button>
+              </div>
+            </div>
+            
+            <!-- Step 3: Stake -->
+            <div class="mb-8">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">3. Monto de Apuesta</h3>
+              <div class="flex gap-3">
+                <button class="px-6 py-3 bg-white rounded-xl font-semibold shadow-md hover:bg-blue-50 border-2 border-transparent hover:border-blue-500">RD$ 10</button>
+                <button class="px-6 py-3 bg-blue-500 text-white rounded-xl font-semibold shadow-md">RD$ 25</button>
+                <button class="px-6 py-3 bg-white rounded-xl font-semibold shadow-md hover:bg-blue-50 border-2 border-transparent hover:border-blue-500">RD$ 50</button>
+                <button class="px-6 py-3 bg-white rounded-xl font-semibold shadow-md hover:bg-blue-50 border-2 border-transparent hover:border-blue-500">RD$ 100</button>
+              </div>
+            </div>
+            
+            <!-- Confirm -->
+            <button class="w-full py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xl font-bold rounded-2xl shadow-lg hover:shadow-xl transition glow">
+              🎰 Confirmar Jugada
+            </button>
+          </div>
+        </div>
+        
+        <!-- Other views would be added similarly -->
+        <div id="view-bancas" class="view hidden">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">📍 Bancas Cercanas</h2>
+          <p class="text-gray-500">Encuentra bancas cerca de ti</p>
+        </div>
+        
+        <div id="view-loterias" class="view hidden">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">🎫 Loterías Disponibles</h2>
+          <p class="text-gray-500">Todas las loterías y sus horarios</p>
+        </div>
+        
+        <div id="view-results" class="view hidden">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">📊 Resultados</h2>
+          <p class="text-gray-500">Resultados de sorteos anteriores</p>
+        </div>
+        
+        <div id="view-profile" class="view hidden">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">👤 Mi Perfil</h2>
+          <p class="text-gray-500">Gestiona tu cuenta y preferencias</p>
+        </div>
+      </main>
+    </div>
+  </div>
+  
+  <script>
+    // Navigation
+    function navigate(view) {
+      document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+      document.getElementById('view-' + view)?.classList.remove('hidden');
+      
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active', 'bg-blue-50', 'text-blue-600'));
+      event?.target?.closest('.nav-item')?.classList.add('active', 'bg-blue-50', 'text-blue-600');
+    }
+    
+    // Initialize app
+    window.addEventListener('DOMContentLoaded', () => {
+      // Simulate loading
+      setTimeout(() => {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('main-content').classList.remove('hidden');
+      }, 1500);
+      
+      // Listen for Electron events if available
+      if (window.electronAPI) {
+        window.electronAPI.onNavigate(navigate);
+        window.electronAPI.onNewPlay(() => navigate('play'));
+      }
+    });
+  </script>
+</body>
+</html>

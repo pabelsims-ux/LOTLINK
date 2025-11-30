@@ -194,6 +194,27 @@ LOTLINK/
 │   ├── test/                   # Tests unitarios e integración
 │   ├── Dockerfile
 │   └── package.json
+├── mobile/                     # 📱 App Móvil (React Native - iOS/Android)
+│   ├── src/
+│   │   ├── App.tsx             # Componente principal
+│   │   ├── screens/            # Pantallas (Home, Play, Bancas, etc.)
+│   │   ├── components/         # Componentes reutilizables
+│   │   ├── services/           # AuthContext, API services
+│   │   └── navigation/         # Configuración de navegación
+│   ├── ios/                    # Proyecto nativo iOS (Xcode)
+│   ├── android/                # Proyecto nativo Android (Gradle)
+│   ├── package.json
+│   └── README.md
+├── desktop/                    # 💻 App Escritorio (Electron - Win/Mac/Linux)
+│   ├── src/
+│   │   ├── main/               # Proceso principal Electron
+│   │   │   ├── main.js         # Ventana, menús, tray
+│   │   │   └── preload.js      # Bridge seguro renderer
+│   │   └── renderer/           # Interfaz de usuario
+│   │       └── index.html
+│   ├── assets/                 # Iconos (.ico, .icns, .png)
+│   ├── package.json
+│   └── README.md
 ├── mock-banca/                 # Servicio mock para testing
 │   ├── index.js
 │   ├── Dockerfile
@@ -203,8 +224,20 @@ LOTLINK/
 ├── .github/
 │   └── workflows/
 │       └── ci-cd.yml           # GitHub Actions pipeline
+├── index.html                  # 🌐 Web App (Single Page Application)
 └── README.md                   # Este documento
 ```
+
+### Apps Nativas
+
+| Plataforma | Tecnología | Directorio | Comando Build |
+|------------|------------|------------|---------------|
+| **iOS** | React Native | `mobile/` | `npm run ios` |
+| **Android** | React Native | `mobile/` | `npm run android` |
+| **Windows** | Electron | `desktop/` | `npm run build:win` |
+| **macOS** | Electron | `desktop/` | `npm run build:mac` |
+| **Linux** | Electron | `desktop/` | `npm run build:linux` |
+| **Web** | HTML/React | `index.html` | Servir directamente |
 
 ---
 
@@ -311,10 +344,11 @@ services:
 - [x] CI/CD con GitHub Actions
 - [x] Dockerfiles para backend y mock-banca
 - [x] Tests unitarios básicos
+- [x] **App Móvil (React Native)** - iOS y Android en `mobile/`
+- [x] **App Desktop (Electron)** - Windows, macOS, Linux en `desktop/`
 - [ ] Postgres connection string (secrets) - configurar en deployment
 - [ ] Shared secrets para bancas de prueba (mock) - configurar en .env
 - [ ] Certificados TLS (dev self-signed ok) - configurar en deployment
-- [ ] App móvil cliente - desarrollo separado
 - [ ] App white-label - desarrollo separado
 
 ---
