@@ -199,7 +199,7 @@ export class StripePaymentGateway implements PaymentGateway {
   /**
    * Verify Stripe webhook signature
    */
-  verifyWebhookSignature(payload: string, signature: string): boolean {
+  verifyWebhookSignature(_payload: string, _signature: string): boolean {
     if (!this.webhookSecret) {
       this.logger.warn('Webhook secret not configured');
       return false;

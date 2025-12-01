@@ -1,7 +1,7 @@
-import { Injectable, Inject, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { Play, PlayPayment } from '../../domain/entities/play.entity';
 import { PlayRepository, PLAY_REPOSITORY } from '../../domain/repositories/play.repository';
-import { PlayStatus, BetType, Currency } from '../../domain/value-objects';
+import { PlayStatus } from '../../domain/value-objects';
 import { CreatePlayDto, PlayResponseDto, GetPlayDto } from '../dtos/play.dto';
 import { EventPublisher, EVENT_PUBLISHER } from '../../ports/outgoing/event-publisher.port';
 import { PlayCreatedEvent, PlayConfirmedEvent, PlayRejectedEvent } from '../../domain/events';

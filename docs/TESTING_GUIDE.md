@@ -43,7 +43,14 @@ npm test
 npm run test:cov
 ```
 
-**Resultado esperado:** 23 tests pasando ✅
+**Resultado esperado:** 76 tests pasando ✅
+
+Los tests incluyen:
+- Tests unitarios de entidades (Play, User)
+- Tests de integración de servicios (PlayService, UserService, WebhookService)
+- Tests del controlador de autenticación (AuthController)
+- Tests del adaptador de banca mock (MockBancaAdapter)
+- Tests del logger estructurado (StructuredLogger)
 
 ### 1.2 Verificar que el código compila
 
@@ -273,12 +280,18 @@ node banca-integration-nodejs.js
 ## Checklist de Pruebas
 
 ### ✅ Backend
-- [ ] Tests unitarios pasan (23/23)
+- [ ] Tests pasan (76/76)
+  - Tests unitarios de entidades
+  - Tests de integración de servicios
+  - Tests del controlador de autenticación
+  - Tests del adaptador de banca
+  - Tests del logger estructurado
 - [ ] Código compila sin errores
-- [ ] Linter pasa sin warnings
+- [ ] Linter pasa sin errores
 - [ ] Docker Compose levanta todos los servicios
 - [ ] API responde en puerto 3000
 - [ ] Base de datos accesible vía Adminer
+- [ ] Autenticación funciona (register/login/refresh)
 
 ### ✅ Frontend
 - [ ] index.html carga correctamente
