@@ -8,6 +8,28 @@ Documento listo para enviar a una IA de programación o a tu equipo de desarroll
 
 > 💻 **Ejemplos de Código:** Ejemplos de integración en Node.js, PHP y Java disponibles en [docs/integration-examples/](docs/integration-examples/)
 
+> 🧪 **Guía de Pruebas:** Para probar que el sistema funciona correctamente, consulte [docs/TESTING_GUIDE.md](docs/TESTING_GUIDE.md)
+
+## Quick Start - Probar el Sistema
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/pabelsims-ux/LOTLINK.git
+cd LOTLINK
+
+# 2. Ejecutar script de pruebas
+chmod +x scripts/test-all.sh
+./scripts/test-all.sh
+
+# 3. (Opcional) Levantar servicios con Docker
+docker-compose up -d
+
+# 4. Abrir en el navegador:
+#    - Frontend: abrir index.html
+#    - API: http://localhost:3000
+#    - Base de datos: http://localhost:8080
+```
+
 ---
 
 ## 1. Resumen ejecutivo
