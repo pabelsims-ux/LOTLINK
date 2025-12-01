@@ -2,6 +2,34 @@
 
 Documento listo para enviar a una IA de programación o a tu equipo de desarrollo. Contiene: visión general, componentes, endpoints (spec concretas), esquemas JSON, seguridad, DB mínima (Postgres), secuencias, despliegue, CI/CD, tests, y entregables esperados.
 
+> 📋 **Evaluación Técnica:** Para un análisis detallado de por qué este stack tecnológico es óptimo y profesional, consulte [docs/TECH_EVALUATION.md](docs/TECH_EVALUATION.md)
+
+> 🏦 **Guía de Integración para Bancas:** Para integrar bancas con Lotolink (API directa o App White-Label), consulte [docs/BANCA_INTEGRATION_GUIDE.md](docs/BANCA_INTEGRATION_GUIDE.md)
+
+> 💻 **Ejemplos de Código:** Ejemplos de integración en Node.js, PHP y Java disponibles en [docs/integration-examples/](docs/integration-examples/)
+
+> 🧪 **Guía de Pruebas:** Para probar que el sistema funciona correctamente, consulte [docs/TESTING_GUIDE.md](docs/TESTING_GUIDE.md)
+
+## Quick Start - Probar el Sistema
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/pabelsims-ux/LOTLINK.git
+cd LOTLINK
+
+# 2. Ejecutar script de pruebas
+chmod +x scripts/test-all.sh
+./scripts/test-all.sh
+
+# 3. (Opcional) Levantar servicios con Docker
+docker-compose up -d
+
+# 4. Abrir en el navegador:
+#    - Frontend: abrir index.html
+#    - API: http://localhost:3000
+#    - Base de datos: http://localhost:8080
+```
+
 ---
 
 ## 1. Resumen ejecutivo

@@ -66,3 +66,5 @@ temp/
 k8s/secrets/
 *.pem
 *.key
+node_modules
+dist

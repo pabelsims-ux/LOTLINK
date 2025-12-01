@@ -98,6 +98,14 @@ export class Play {
     this._updatedAt = new Date();
   }
 
+  fail(reason?: string): void {
+    if (this._status !== PlayStatus.PENDING && this._status !== PlayStatus.PROCESSING) {
+      throw new Error(`Cannot fail play with status ${this._status}`);
+    }
+    this._status = PlayStatus.FAILED;
+    this._updatedAt = new Date();
+  }
+
   markAsProcessing(): void {
     if (this._status !== PlayStatus.PENDING) {
       throw new Error(`Cannot mark as processing play with status ${this._status}`);
