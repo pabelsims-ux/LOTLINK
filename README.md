@@ -70,6 +70,10 @@ Lotolink es un marketplace/intermediario que recibe jugadas (apuestas) de usuari
 
 ### 4.1 Endpoints públicos (consumidos por app cliente)
 
+* `POST /api/v1/auth/register` — Registrar nuevo usuario (retorna JWT)
+* `POST /api/v1/auth/login` — Login con teléfono (retorna JWT)
+* `POST /api/v1/auth/refresh` — Renovar token de acceso
+
 * `POST /api/v1/plays` — Crear jugada (Auth: JWT user)
 
   * Headers: `Authorization: Bearer <user_jwt>`, `Content-Type: application/json`
@@ -301,8 +305,28 @@ paths:
 
 ## 14. Tests recomendados
 
-* Unit tests para adapters (mock banca)
-* Integration tests para endpoint `/api/v1/plays`
+### Tests Implementados (76 tests)
+
+El proyecto incluye una suite completa de tests:
+
+| Categoría | Tests | Descripción |
+|-----------|-------|-------------|
+| **Unit Tests - Entidades** | 23 | Tests para Play y User entities |
+| **PlayService** | 8 | Idempotencia, confirmación, rechazo |
+| **WebhookService** | 8 | Validación HMAC, timestamps, replay protection |
+| **UserService** | 8 | Wallet operations, user creation |
+| **AuthController** | 6 | Register, login, token refresh |
+| **MockBancaAdapter** | 5 | Integración con bancas |
+| **StructuredLogger** | 14 | Logging y observabilidad |
+
+```bash
+cd backend
+npm test              # Ejecutar todos los tests (76)
+npm run test:cov      # Tests con cobertura
+npm run test:watch    # Tests en modo watch
+```
+
+### Tests E2E y Seguridad (Pendientes)
 * E2E tests con mock banca y con white-label flow
 * Security tests (signature, replay)
 
