@@ -412,10 +412,10 @@ EOF
         print_fail "HTTP $HTTP_CODE - Expected 200 (idempotent response)"
     fi
 else
-    print_skip "Mock Banca not running"
-    print_skip "Mock Banca not running"
-    print_skip "Mock Banca not running"
-    print_skip "Mock Banca not running"
+    print_skip "Reset Mock Banca - Mock Banca not running"
+    print_skip "Configure Sync Mode - Mock Banca not running"
+    print_skip "Register Play with Mock Banca - Mock Banca not running"
+    print_skip "Mock Banca Idempotency - Mock Banca not running"
 fi
 
 # =============================================================================

@@ -184,6 +184,12 @@ get_lotolink_plays() {
     "
     
     if [ -n "$BANCA_ID" ]; then
+        # Validate BANCA_ID format (alphanumeric, underscore, hyphen only, max 50 chars)
+        if ! echo "$BANCA_ID" | grep -qE '^[a-zA-Z0-9_-]{1,50}$'; then
+            log_error "Invalid BANCA_ID format. Only alphanumeric, underscore, and hyphen allowed (max 50 chars)."
+            exit 1
+        fi
+        
         query="
             SELECT 
                 id,
@@ -206,7 +212,34 @@ get_lotolink_plays() {
     fi
     
     if [ -n "$REQUEST_IDS" ]; then
-        local ids_array=$(echo "$REQUEST_IDS" | sed "s/,/','/g")
+        # Validate that REQUEST_IDS only contains valid UUID characters and commas
+        if ! echo "$REQUEST_IDS" | grep -qE '^[a-f0-9,-]{1,500}$'; then
+            log_error "Invalid REQUEST_IDS format. Only UUID characters and commas are allowed."
+            exit 1
+        fi
+        
+        # Split by comma and validate each ID is a valid UUID format
+        local validated_ids=""
+        IFS=',' read -ra ID_ARRAY <<< "$REQUEST_IDS"
+        for id in "${ID_ARRAY[@]}"; do
+            # Trim whitespace and validate UUID format (8-4-4-4-12)
+            id=$(echo "$id" | tr -d ' ')
+            if echo "$id" | grep -qE '^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$'; then
+                if [ -n "$validated_ids" ]; then
+                    validated_ids="$validated_ids','$id"
+                else
+                    validated_ids="$id"
+                fi
+            else
+                log_warn "Skipping invalid UUID: $id"
+            fi
+        done
+        
+        if [ -z "$validated_ids" ]; then
+            log_error "No valid UUIDs provided in REQUEST_IDS"
+            exit 1
+        fi
+        
         query="
             SELECT 
                 id,
@@ -222,7 +255,7 @@ get_lotolink_plays() {
                 created_at,
                 updated_at
             FROM plays
-            WHERE request_id IN ('$ids_array')
+            WHERE request_id IN ('$validated_ids')
             ORDER BY created_at
         "
     fi

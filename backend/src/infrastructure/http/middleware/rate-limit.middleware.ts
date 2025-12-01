@@ -30,6 +30,7 @@ export class RateLimitMiddleware implements NestMiddleware {
   private readonly store = new Map<string, RateLimitEntry>();
   private readonly defaultConfig: RateLimitConfig;
   private readonly webhookConfig: RateLimitConfig;
+  private readonly cleanupIntervalMs: number;
 
   constructor(private readonly configService: ConfigService) {
     this.logger = new StructuredLogger(configService);
@@ -47,8 +48,11 @@ export class RateLimitMiddleware implements NestMiddleware {
       maxRequests: this.configService.get<number>('RATE_LIMIT_WEBHOOK_MAX', 1000),
     };
 
+    // Configurable cleanup interval (default: 60 seconds)
+    this.cleanupIntervalMs = this.configService.get<number>('RATE_LIMIT_CLEANUP_INTERVAL_MS', 60000);
+
     // Cleanup expired entries periodically
-    setInterval(() => this.cleanup(), 60000);
+    setInterval(() => this.cleanup(), this.cleanupIntervalMs);
   }
 
   use(req: Request, res: Response, next: NextFunction): void {
