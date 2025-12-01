@@ -140,6 +140,32 @@ describe('WebhookService', () => {
 
       expect(mockPlayService.confirmPlayByRequestId).not.toHaveBeenCalled();
     });
+
+    it('should reject request with signature of different length (timing-safe)', async () => {
+      const dto = createValidDto('confirmed');
+      const body = JSON.stringify(dto);
+      const timestamp = new Date().toISOString();
+      // Signature with different length
+      const shortSignature = 'short';
+
+      await expect(
+        service.processPlayConfirmation(dto, shortSignature, timestamp, body),
+      ).rejects.toThrow(UnauthorizedException);
+
+      expect(mockPlayService.confirmPlayByRequestId).not.toHaveBeenCalled();
+    });
+
+    it('should reject request with empty signature', async () => {
+      const dto = createValidDto('confirmed');
+      const body = JSON.stringify(dto);
+      const timestamp = new Date().toISOString();
+
+      await expect(
+        service.processPlayConfirmation(dto, '', timestamp, body),
+      ).rejects.toThrow(UnauthorizedException);
+
+      expect(mockPlayService.confirmPlayByRequestId).not.toHaveBeenCalled();
+    });
   });
 
   describe('calculateSignature', () => {
