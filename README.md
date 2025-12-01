@@ -2,6 +2,8 @@
 
 Documento listo para enviar a una IA de programación o a tu equipo de desarrollo. Contiene: visión general, componentes, endpoints (spec concretas), esquemas JSON, seguridad, DB mínima (Postgres), secuencias, despliegue, CI/CD, tests, y entregables esperados.
 
+> 📋 **Evaluación Técnica:** Para un análisis detallado de por qué este stack tecnológico es óptimo y profesional, consulte [docs/TECH_EVALUATION.md](docs/TECH_EVALUATION.md)
+
 ---
 
 ## 1. Resumen ejecutivo
