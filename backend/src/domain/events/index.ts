@@ -1,10 +1,12 @@
 export interface DomainEvent {
+  type: string;
   eventType: string;
   timestamp: Date;
   payload: Record<string, unknown>;
 }
 
 export class PlayCreatedEvent implements DomainEvent {
+  readonly type = 'PlayCreatedEvent';
   readonly eventType = 'play.created';
   readonly timestamp: Date;
   readonly payload: {
@@ -14,14 +16,17 @@ export class PlayCreatedEvent implements DomainEvent {
     lotteryId: string;
     amount: number;
   };
+  readonly playId: string;
 
   constructor(playId: string, requestId: string, userId: string, lotteryId: string, amount: number) {
     this.timestamp = new Date();
+    this.playId = playId;
     this.payload = { playId, requestId, userId, lotteryId, amount };
   }
 }
 
 export class PlayConfirmedEvent implements DomainEvent {
+  readonly type = 'PlayConfirmedEvent';
   readonly eventType = 'play.confirmed';
   readonly timestamp: Date;
   readonly payload: {
@@ -37,6 +42,7 @@ export class PlayConfirmedEvent implements DomainEvent {
 }
 
 export class PlayRejectedEvent implements DomainEvent {
+  readonly type = 'PlayRejectedEvent';
   readonly eventType = 'play.rejected';
   readonly timestamp: Date;
   readonly payload: {
@@ -51,6 +57,7 @@ export class PlayRejectedEvent implements DomainEvent {
 }
 
 export class PlayFailedEvent implements DomainEvent {
+  readonly type = 'PlayFailedEvent';
   readonly eventType = 'play.failed';
   readonly timestamp: Date;
   readonly payload: {

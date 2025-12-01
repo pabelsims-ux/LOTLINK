@@ -33,7 +33,7 @@ import {
 import { PLAY_REPOSITORY, USER_REPOSITORY } from './domain/repositories';
 
 // Port tokens
-import { EVENT_PUBLISHER, CACHE_PORT } from './ports/outgoing';
+import { EVENT_PUBLISHER, CACHE_PORT, BANCA_ADAPTER } from './ports/outgoing';
 
 // Guards
 import { JwtAuthGuard, IdempotencyGuard } from './infrastructure/http/guards';
@@ -41,16 +41,11 @@ import { JwtAuthGuard, IdempotencyGuard } from './infrastructure/http/guards';
 // Middleware
 import { RequestLoggingMiddleware } from './infrastructure/http/middleware';
 
-// Mock implementations for development
-class MockEventPublisher {
-  async publish(event: unknown): Promise<void> {
-    console.log('[EventPublisher] Event published:', JSON.stringify(event));
-  }
-  async publishToQueue(queueName: string, event: unknown): Promise<void> {
-    console.log(`[EventPublisher] Event published to ${queueName}:`, JSON.stringify(event));
-  }
-}
+// Adapters and Workers
+import { MockBancaAdapter, ApiBancaAdapter } from './infrastructure/adapters';
+import { InMemoryEventPublisher, PlayWorker } from './infrastructure/messaging';
 
+// Mock Cache implementation for development
 class MockCachePort {
   private cache = new Map<string, unknown>();
   private locks = new Set<string>();
@@ -123,6 +118,9 @@ class MockCachePort {
     UserService,
     WebhookService,
     
+    // Workers
+    PlayWorker,
+    
     // Guards
     JwtAuthGuard,
     IdempotencyGuard,
@@ -137,11 +135,26 @@ class MockCachePort {
       useClass: TypeOrmUserRepository,
     },
     
-    // Port bindings (mock implementations for development)
+    // Banca Adapter - uses mock by default, switch to ApiBancaAdapter for production
+    {
+      provide: BANCA_ADAPTER,
+      useFactory: (configService: ConfigService) => {
+        const useMock = configService.get<string>('USE_MOCK_BANCA', 'true') === 'true';
+        if (useMock) {
+          return new MockBancaAdapter(configService);
+        }
+        return new ApiBancaAdapter(configService);
+      },
+      inject: [ConfigService],
+    },
+    
+    // Event Publisher
     {
       provide: EVENT_PUBLISHER,
-      useClass: MockEventPublisher,
+      useClass: InMemoryEventPublisher,
     },
+    
+    // Cache Port (mock implementation)
     {
       provide: CACHE_PORT,
       useClass: MockCachePort,
