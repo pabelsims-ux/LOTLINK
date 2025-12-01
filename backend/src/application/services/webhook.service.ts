@@ -1,4 +1,4 @@
-import { Injectable, Inject, BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { createHmac } from 'crypto';
 import { ConfigService } from '@nestjs/config';
 import { WebhookConfirmationDto, WebhookResponseDto } from '../dtos/webhook.dto';

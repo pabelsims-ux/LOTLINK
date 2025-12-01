@@ -9,6 +9,7 @@ import {
   UsersController,
   WebhooksController,
   HealthController,
+  AuthController,
 } from './infrastructure/http/controllers';
 
 // Services
@@ -111,7 +112,7 @@ class MockCachePort {
       inject: [ConfigService],
     }),
   ],
-  controllers: [PlaysController, UsersController, WebhooksController, HealthController],
+  controllers: [PlaysController, UsersController, WebhooksController, HealthController, AuthController],
   providers: [
     // Services
     PlayService,

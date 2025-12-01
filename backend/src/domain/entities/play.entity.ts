@@ -90,7 +90,7 @@ export class Play {
     this._updatedAt = new Date();
   }
 
-  reject(reason?: string): void {
+  reject(_reason?: string): void {
     if (this._status !== PlayStatus.PENDING && this._status !== PlayStatus.PROCESSING) {
       throw new Error(`Cannot reject play with status ${this._status}`);
     }
@@ -98,7 +98,7 @@ export class Play {
     this._updatedAt = new Date();
   }
 
-  fail(reason?: string): void {
+  fail(_reason?: string): void {
     if (this._status !== PlayStatus.PENDING && this._status !== PlayStatus.PROCESSING) {
       throw new Error(`Cannot fail play with status ${this._status}`);
     }
