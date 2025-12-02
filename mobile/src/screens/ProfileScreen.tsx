@@ -3,7 +3,7 @@
  * User profile, balance, history, and settings
  */
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,70 +11,70 @@ import {
   ScrollView,
   TouchableOpacity,
   useColorScheme,
-  Image,
+  Switch,
+  Alert,
+  RefreshControl,
 } from 'react-native';
+import { Colors, DEMO_USER, MENU_OPTIONS } from '../data/mockData';
+import { getTicketHistory, logout, Ticket } from '../services/api';
 
-// Theme colors
-const Colors = {
-  light: {
-    primary: '#0071e3',
-    background: '#f5f5f7',
-    card: '#ffffff',
-    text: '#1d1d1f',
-    textSecondary: '#86868b',
-    border: '#e8e8ed',
-    success: '#34c759',
-    warning: '#ff9f0a',
-    danger: '#ff3b30',
-  },
-  dark: {
-    primary: '#0077ED',
-    background: '#000000',
-    card: '#1c1c1e',
-    text: '#f5f5f7',
-    textSecondary: '#a1a1a6',
-    border: '#38383a',
-    success: '#30d158',
-    warning: '#ffd60a',
-    danger: '#ff453a',
-  },
-};
-
-// Sample user data
-const USER = {
-  name: 'Juan Pérez',
-  email: 'juan.perez@email.com',
-  phone: '+1 809-555-1234',
-  memberSince: 'Enero 2024',
-  avatar: null,
-};
-
-// Sample ticket history
-const TICKET_HISTORY = [
-  { id: 1, lottery: 'Nacional', numbers: ['23', '45'], amount: 50, status: 'won', prize: 500, date: '2024-01-15' },
-  { id: 2, lottery: 'Leidsa', numbers: ['12', '34', '56'], amount: 100, status: 'lost', prize: 0, date: '2024-01-14' },
-  { id: 3, lottery: 'Real', numbers: ['78', '90'], amount: 25, status: 'pending', prize: 0, date: '2024-01-16' },
-  { id: 4, lottery: 'Loteka', numbers: ['11', '22', '33'], amount: 75, status: 'won', prize: 1500, date: '2024-01-13' },
-];
-
-// Menu options
-const MENU_OPTIONS = [
-  { id: 1, icon: '💳', label: 'Métodos de Pago', screen: 'PaymentMethods' },
-  { id: 2, icon: '🔔', label: 'Notificaciones', screen: 'Notifications' },
-  { id: 3, icon: '🔒', label: 'Seguridad', screen: 'Security' },
-  { id: 4, icon: '❓', label: 'Ayuda', screen: 'Help' },
-  { id: 5, icon: '📜', label: 'Términos y Condiciones', screen: 'Terms' },
-  { id: 6, icon: '🚪', label: 'Cerrar Sesión', action: 'logout' },
-];
-
-export default function ProfileScreen({ navigation }) {
+export default function ProfileScreen({ navigation, route }: any) {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'history' | 'wallet'
-  const [balance] = useState(2500);
-  const [wins] = useState(5);
+  const [activeTab, setActiveTab] = useState(route?.params?.tab || 'overview');
+  const [balance] = useState(DEMO_USER.balance);
+  const [wins] = useState(DEMO_USER.wins);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+  
+  // Settings state
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [darkModeEnabled, setDarkModeEnabled] = useState(colorScheme === 'dark');
 
-  const getStatusColor = (status) => {
+  const loadTickets = useCallback(async () => {
+    try {
+      const response = await getTicketHistory();
+      if (response.success) {
+        setTickets(response.data);
+      }
+    } catch (error) {
+      console.error('Error loading tickets:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadTickets();
+  }, [loadTickets]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadTickets();
+    setRefreshing(false);
+  };
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Cerrar Sesión',
+      '¿Estás seguro que deseas cerrar sesión?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { 
+          text: 'Cerrar Sesión', 
+          style: 'destructive',
+          onPress: async () => {
+            await logout();
+            // Navigate to login screen
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Auth' }],
+            });
+          }
+        },
+      ]
+    );
+  };
+
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'won': return colors.success;
       case 'lost': return colors.danger;
@@ -83,7 +83,7 @@ export default function ProfileScreen({ navigation }) {
     }
   };
 
-  const getStatusLabel = (status) => {
+  const getStatusLabel = (status: string) => {
     switch (status) {
       case 'won': return 'Ganado';
       case 'lost': return 'Perdido';
@@ -93,19 +93,29 @@ export default function ProfileScreen({ navigation }) {
   };
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+    <ScrollView 
+      style={[styles.container, { backgroundColor: colors.background }]}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       {/* Profile Header */}
       <View style={[styles.header, { backgroundColor: colors.primary }]}>
         <View style={styles.avatarContainer}>
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>
-              {USER.name.split(' ').map(n => n[0]).join('')}
+              {DEMO_USER.name.split(' ').map(n => n[0]).join('')}
             </Text>
           </View>
+          {DEMO_USER.verified && (
+            <View style={styles.verifiedBadge}>
+              <Text style={styles.verifiedText}>✓</Text>
+            </View>
+          )}
         </View>
-        <Text style={styles.userName}>{USER.name}</Text>
-        <Text style={styles.userEmail}>{USER.email}</Text>
-        <Text style={styles.memberSince}>Miembro desde {USER.memberSince}</Text>
+        <Text style={styles.userName}>{DEMO_USER.name}</Text>
+        <Text style={styles.userEmail}>{DEMO_USER.email}</Text>
+        <Text style={styles.memberSince}>Miembro desde {DEMO_USER.memberSince}</Text>
       </View>
 
       {/* Stats Cards */}
@@ -129,7 +139,7 @@ export default function ProfileScreen({ navigation }) {
         <View style={[styles.statCard, { backgroundColor: colors.card }]}>
           <Text style={styles.statIcon}>🎫</Text>
           <Text style={[styles.statValue, { color: colors.text }]}>
-            {TICKET_HISTORY.length}
+            {tickets.length}
           </Text>
           <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
             Tickets
@@ -162,20 +172,52 @@ export default function ProfileScreen({ navigation }) {
       {/* Tab Content */}
       {activeTab === 'overview' && (
         <View style={styles.section}>
+          {/* Settings Section */}
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Configuración
+          </Text>
+          
+          {/* Notifications Toggle */}
+          <View style={[styles.settingItem, { backgroundColor: colors.card }]}>
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingIcon}>🔔</Text>
+              <Text style={[styles.settingLabel, { color: colors.text }]}>
+                Notificaciones
+              </Text>
+            </View>
+            <Switch
+              value={notificationsEnabled}
+              onValueChange={setNotificationsEnabled}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              thumbColor="#ffffff"
+            />
+          </View>
+          
+          {/* Dark Mode Toggle */}
+          <View style={[styles.settingItem, { backgroundColor: colors.card }]}>
+            <View style={styles.settingInfo}>
+              <Text style={styles.settingIcon}>🌙</Text>
+              <Text style={[styles.settingLabel, { color: colors.text }]}>
+                Modo Oscuro
+              </Text>
+            </View>
+            <Switch
+              value={darkModeEnabled}
+              onValueChange={setDarkModeEnabled}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              thumbColor="#ffffff"
+            />
+          </View>
+
+          {/* Menu Options */}
+          <Text style={[styles.sectionTitle, { color: colors.text, marginTop: 16 }]}>
             Opciones
           </Text>
           {MENU_OPTIONS.map((option) => (
             <TouchableOpacity
               key={option.id}
               style={[styles.menuItem, { backgroundColor: colors.card }]}
-              onPress={() => {
-                if (option.action === 'logout') {
-                  // Handle logout
-                } else {
-                  navigation.navigate(option.screen);
-                }
-              }}
+              onPress={() => navigation.navigate(option.screen)}
             >
               <Text style={styles.menuIcon}>{option.icon}</Text>
               <Text style={[styles.menuLabel, { color: colors.text }]}>
@@ -186,6 +228,16 @@ export default function ProfileScreen({ navigation }) {
               </Text>
             </TouchableOpacity>
           ))}
+          
+          {/* Logout Button */}
+          <TouchableOpacity
+            style={[styles.logoutButton, { backgroundColor: colors.danger + '20' }]}
+            onPress={handleLogout}
+          >
+            <Text style={[styles.logoutText, { color: colors.danger }]}>
+              🚪 Cerrar Sesión
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
 
@@ -194,38 +246,48 @@ export default function ProfileScreen({ navigation }) {
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
             Historial de Tickets
           </Text>
-          {TICKET_HISTORY.map((ticket) => (
-            <View
-              key={ticket.id}
-              style={[styles.ticketCard, { backgroundColor: colors.card }]}
-            >
-              <View style={styles.ticketHeader}>
-                <Text style={[styles.ticketLottery, { color: colors.text }]}>
-                  {ticket.lottery}
-                </Text>
-                <View style={[styles.statusBadge, { backgroundColor: getStatusColor(ticket.status) }]}>
-                  <Text style={styles.statusText}>
-                    {getStatusLabel(ticket.status)}
+          {tickets.length === 0 ? (
+            <View style={[styles.emptyState, { backgroundColor: colors.card }]}>
+              <Text style={styles.emptyIcon}>🎫</Text>
+              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+                No hay tickets aún
+              </Text>
+            </View>
+          ) : (
+            tickets.map((ticket) => (
+              <TouchableOpacity
+                key={ticket.id}
+                style={[styles.ticketCard, { backgroundColor: colors.card }]}
+                onPress={() => navigation.navigate('TicketDetail', { ticket })}
+              >
+                <View style={styles.ticketHeader}>
+                  <Text style={[styles.ticketLottery, { color: colors.text }]}>
+                    {ticket.lotteryName}
+                  </Text>
+                  <View style={[styles.statusBadge, { backgroundColor: getStatusColor(ticket.status) }]}>
+                    <Text style={styles.statusText}>
+                      {getStatusLabel(ticket.status)}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.ticketNumbers}>
+                  {ticket.numbers.map((num, idx) => (
+                    <View key={idx} style={[styles.numberBall, { backgroundColor: colors.primary }]}>
+                      <Text style={styles.numberText}>{num}</Text>
+                    </View>
+                  ))}
+                </View>
+                <View style={styles.ticketFooter}>
+                  <Text style={[styles.ticketDate, { color: colors.textSecondary }]}>
+                    {ticket.date} • {ticket.time}
+                  </Text>
+                  <Text style={[styles.ticketAmount, { color: ticket.status === 'won' ? colors.success : colors.text }]}>
+                    {ticket.status === 'won' ? `+RD$ ${ticket.prize.toLocaleString()}` : `RD$ ${ticket.amount}`}
                   </Text>
                 </View>
-              </View>
-              <View style={styles.ticketNumbers}>
-                {ticket.numbers.map((num, idx) => (
-                  <View key={idx} style={[styles.numberBall, { backgroundColor: colors.primary }]}>
-                    <Text style={styles.numberText}>{num}</Text>
-                  </View>
-                ))}
-              </View>
-              <View style={styles.ticketFooter}>
-                <Text style={[styles.ticketDate, { color: colors.textSecondary }]}>
-                  {ticket.date}
-                </Text>
-                <Text style={[styles.ticketAmount, { color: colors.text }]}>
-                  {ticket.status === 'won' ? `+RD$ ${ticket.prize}` : `RD$ ${ticket.amount}`}
-                </Text>
-              </View>
-            </View>
-          ))}
+              </TouchableOpacity>
+            ))
+          )}
         </View>
       )}
 
@@ -460,6 +522,66 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   bottomPadding: {
-    height: 40,
+    height: 100,
+  },
+  // Settings styles
+  settingItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 8,
+  },
+  settingInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  settingIcon: {
+    fontSize: 20,
+    marginRight: 12,
+  },
+  settingLabel: {
+    fontSize: 16,
+  },
+  logoutButton: {
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  logoutText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  emptyState: {
+    padding: 40,
+    borderRadius: 16,
+    alignItems: 'center',
+  },
+  emptyIcon: {
+    fontSize: 48,
+    marginBottom: 12,
+  },
+  emptyText: {
+    fontSize: 14,
+  },
+  verifiedBadge: {
+    position: 'absolute',
+    right: -4,
+    bottom: -4,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#34c759',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#ffffff',
+  },
+  verifiedText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 });

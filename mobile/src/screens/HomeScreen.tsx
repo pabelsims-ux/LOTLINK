@@ -1,71 +1,62 @@
 /**
  * LotoLink Mobile - Home Screen
- * Main landing page with lottery results and quick actions
+ * Main landing page with lottery results, wallet, and quick actions
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
   RefreshControl,
   useColorScheme,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
+import { Colors, DEMO_USER, LOTTERIES as LOTTERY_LIST, UPCOMING_DRAWS } from '../data/mockData';
+import { getLiveResults, getLotteries, LotteryResult } from '../services/api';
 
 const { width } = Dimensions.get('window');
-
-// Theme colors
-const Colors = {
-  light: {
-    primary: '#0071e3',
-    background: '#f5f5f7',
-    card: '#ffffff',
-    text: '#1d1d1f',
-    textSecondary: '#86868b',
-    border: '#e8e8ed',
-    success: '#34c759',
-  },
-  dark: {
-    primary: '#0077ED',
-    background: '#000000',
-    card: '#1c1c1e',
-    text: '#f5f5f7',
-    textSecondary: '#a1a1a6',
-    border: '#38383a',
-    success: '#30d158',
-  },
-};
-
-// Sample lottery data
-const LOTTERIES = [
-  { id: 1, name: 'Nacional', time: '12:30 PM', numbers: ['23', '45', '67'], color: '#ff6b6b' },
-  { id: 2, name: 'Leidsa', time: '8:55 PM', numbers: ['12', '34', '56'], color: '#4ecdc4' },
-  { id: 3, name: 'Real', time: '12:55 PM', numbers: ['78', '90', '11'], color: '#45b7d1' },
-  { id: 4, name: 'Loteka', time: '7:55 PM', numbers: ['22', '33', '44'], color: '#96ceb4' },
-];
 
 const QUICK_ACTIONS = [
   { id: 1, icon: '🎲', label: 'Jugar Ahora', screen: 'Play' },
   { id: 2, icon: '📍', label: 'Bancas', screen: 'Bancas' },
   { id: 3, icon: '📊', label: 'Resultados', screen: 'Results' },
-  { id: 4, icon: '🏆', label: 'Premios', screen: 'Prizes' },
+  { id: 4, icon: '💳', label: 'Cartera', screen: 'Wallet' },
 ];
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation }: any) {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const [refreshing, setRefreshing] = useState(false);
-  const [balance, setBalance] = useState(1500);
+  const [balance, setBalance] = useState(DEMO_USER.balance);
+  const [liveResults, setLiveResults] = useState<LotteryResult[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    // Simulate API call
-    setTimeout(() => setRefreshing(false), 2000);
+  const loadData = useCallback(async () => {
+    try {
+      const response = await getLiveResults();
+      if (response.success) {
+        setLiveResults(response.data);
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadData();
+    setRefreshing(false);
+  }, [loadData]);
 
   return (
     <ScrollView
@@ -78,10 +69,40 @@ export default function HomeScreen({ navigation }) {
       <View style={[styles.banner, { backgroundColor: colors.primary }]}>
         <Text style={styles.bannerTitle}>¡Bienvenido a LotoLink!</Text>
         <Text style={styles.bannerSubtitle}>Tu suerte empieza aquí</Text>
-        <View style={styles.balanceContainer}>
+        <TouchableOpacity 
+          style={styles.balanceContainer}
+          onPress={() => navigation.navigate('Wallet')}
+        >
           <Text style={styles.balanceLabel}>Balance disponible</Text>
           <Text style={styles.balanceAmount}>RD$ {balance.toLocaleString()}</Text>
-        </View>
+          <Text style={styles.balanceTap}>Toca para recargar →</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Upcoming Draws */}
+      <View style={styles.upcomingSection}>
+        <Text style={[styles.upcomingTitle, { color: colors.text }]}>
+          ⏰ Próximos Sorteos
+        </Text>
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.upcomingScroll}
+        >
+          {UPCOMING_DRAWS.map((draw, idx) => {
+            const lottery = LOTTERY_LIST.find(l => l.name === draw.lottery || l.name.includes(draw.lottery));
+            return (
+              <TouchableOpacity
+                key={idx}
+                style={[styles.upcomingCard, { backgroundColor: lottery?.color || colors.primary }]}
+                onPress={() => navigation.navigate('Play', { lottery })}
+              >
+                <Text style={styles.upcomingLottery}>{draw.lottery}</Text>
+                <Text style={styles.upcomingTime}>{draw.time}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
       </View>
 
       {/* Quick Actions */}
@@ -109,35 +130,56 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Resultados en Vivo
+            🔴 Resultados en Vivo
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Results')}>
             <Text style={[styles.seeAll, { color: colors.primary }]}>Ver todos</Text>
           </TouchableOpacity>
         </View>
         
-        {LOTTERIES.map((lottery) => (
-          <View
-            key={lottery.id}
-            style={[styles.lotteryCard, { backgroundColor: colors.card }]}
-          >
-            <View style={styles.lotteryHeader}>
-              <View style={[styles.lotteryBadge, { backgroundColor: lottery.color }]}>
-                <Text style={styles.lotteryName}>{lottery.name}</Text>
-              </View>
-              <Text style={[styles.lotteryTime, { color: colors.textSecondary }]}>
-                {lottery.time}
-              </Text>
-            </View>
-            <View style={styles.numbersContainer}>
-              {lottery.numbers.map((num, idx) => (
-                <View key={idx} style={[styles.numberBall, { backgroundColor: lottery.color }]}>
-                  <Text style={styles.numberText}>{num}</Text>
-                </View>
-              ))}
-            </View>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="small" color={colors.primary} />
           </View>
-        ))}
+        ) : liveResults.length === 0 ? (
+          <View style={[styles.emptyCard, { backgroundColor: colors.card }]}>
+            <Text style={styles.emptyIcon}>📭</Text>
+            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+              No hay resultados en vivo ahora
+            </Text>
+          </View>
+        ) : (
+          liveResults.slice(0, 4).map((result) => (
+            <View
+              key={result.id}
+              style={[styles.lotteryCard, { backgroundColor: colors.card }]}
+            >
+              <View style={styles.lotteryHeader}>
+                <View style={styles.lotteryInfo}>
+                  <View style={[styles.lotteryBadge, { backgroundColor: result.color }]}>
+                    <Text style={styles.lotteryName}>{result.lotteryName}</Text>
+                  </View>
+                  {result.isLive && (
+                    <View style={styles.liveBadge}>
+                      <View style={styles.liveIndicator} />
+                      <Text style={styles.liveText}>EN VIVO</Text>
+                    </View>
+                  )}
+                </View>
+                <Text style={[styles.lotteryTime, { color: colors.textSecondary }]}>
+                  {result.time}
+                </Text>
+              </View>
+              <View style={styles.numbersContainer}>
+                {result.numbers.map((num, idx) => (
+                  <View key={idx} style={[styles.numberBall, { backgroundColor: result.color }]}>
+                    <Text style={styles.numberText}>{num}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          ))
+        )}
       </View>
 
       {/* CTA Section */}
@@ -190,6 +232,42 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     color: '#ffffff',
+  },
+  balanceTap: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.7)',
+    marginTop: 4,
+  },
+  upcomingSection: {
+    marginTop: -10,
+    paddingVertical: 16,
+  },
+  upcomingTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    paddingHorizontal: 16,
+    marginBottom: 12,
+  },
+  upcomingScroll: {
+    paddingHorizontal: 16,
+    gap: 10,
+  },
+  upcomingCard: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 16,
+    marginRight: 10,
+    alignItems: 'center',
+  },
+  upcomingLottery: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  upcomingTime: {
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: 12,
+    marginTop: 2,
   },
   section: {
     padding: 16,
@@ -250,6 +328,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
+  lotteryInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   lotteryBadge: {
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -259,6 +342,26 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: '600',
     fontSize: 14,
+  },
+  liveBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#ff3b30',
+    borderRadius: 10,
+  },
+  liveIndicator: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#ffffff',
+  },
+  liveText: {
+    color: '#ffffff',
+    fontSize: 9,
+    fontWeight: '700',
   },
   lotteryTime: {
     fontSize: 14,
@@ -297,6 +400,22 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   bottomPadding: {
-    height: 40,
+    height: 100,
+  },
+  loadingContainer: {
+    paddingVertical: 40,
+    alignItems: 'center',
+  },
+  emptyCard: {
+    borderRadius: 16,
+    padding: 30,
+    alignItems: 'center',
+  },
+  emptyIcon: {
+    fontSize: 40,
+    marginBottom: 8,
+  },
+  emptyText: {
+    fontSize: 14,
   },
 });
