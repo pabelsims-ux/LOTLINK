@@ -10,6 +10,25 @@ Documento listo para enviar a una IA de programación o a tu equipo de desarroll
 
 > 🧪 **Guía de Pruebas:** Para probar que el sistema funciona correctamente, consulte [docs/TESTING_GUIDE.md](docs/TESTING_GUIDE.md)
 
+## 📦 Paquete de Integración para Bancas
+
+Para integrar una banca con Lotolink, descarga el paquete completo:
+
+```bash
+# Generar el paquete ZIP
+./scripts/generate-integration-package.sh
+```
+
+El paquete incluye:
+- Guía de integración completa (PDF-ready)
+- Especificación OpenAPI 3.0
+- Postman Collection lista para importar
+- Ejemplos de código en Node.js, PHP y Java
+
+Ver documentación completa en [`docs/BANCA_INTEGRATION_GUIDE_FULL.md`](docs/BANCA_INTEGRATION_GUIDE_FULL.md)
+
+---
+
 ## Quick Start - Probar el Sistema
 
 ```bash

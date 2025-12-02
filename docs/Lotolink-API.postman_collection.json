@@ -1,0 +1,893 @@
+{
+	"info": {
+		"_postman_id": "lotolink-api-collection-v1",
+		"name": "Lotolink API",
+		"description": "Colección completa de la API de Lotolink para integración de bancas.\n\n## Configuración Inicial\n\n1. Configurar las variables de colección según tu ambiente\n2. Para webhooks, los Pre-request Scripts calculan automáticamente la firma HMAC\n\n## Soporte\n\n- Email: integraciones@lotolink.com\n- Documentación: https://docs.lotolink.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string",
+			"description": "URL base del backend de Lotolink"
+		},
+		{
+			"key": "bancaUrl",
+			"value": "http://localhost:4000",
+			"type": "string",
+			"description": "URL base del sistema de la banca"
+		},
+		{
+			"key": "hmacSecret",
+			"value": "test_hmac_secret",
+			"type": "string",
+			"description": "Secreto HMAC compartido para firmar webhooks"
+		},
+		{
+			"key": "jwtToken",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0X3VzZXJfMTIzIiwiaWF0IjoxNjE2MjM5MDIyfQ.test",
+			"type": "string",
+			"description": "Token JWT para autenticación de usuario"
+		},
+		{
+			"key": "play_id",
+			"value": "",
+			"type": "string",
+			"description": "ID de jugada para consultas"
+		},
+		{
+			"key": "user_id",
+			"value": "user_123",
+			"type": "string",
+			"description": "ID de usuario para operaciones de wallet"
+		},
+		{
+			"key": "playIdBanca",
+			"value": "",
+			"type": "string",
+			"description": "ID de jugada en el sistema de la banca"
+		}
+	],
+	"item": [
+		{
+			"name": "Health",
+			"description": "Endpoints de verificación de salud del servicio",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["health"]
+						},
+						"description": "Verifica el estado básico del servicio"
+					},
+					"response": [
+						{
+							"name": "Health Check - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/health",
+									"host": ["{{baseUrl}}"],
+									"path": ["health"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"status\": \"ok\",\n  \"timestamp\": \"2025-12-01T20:00:00Z\",\n  \"service\": \"lotolink-backend\",\n  \"version\": \"1.0.0\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Readiness Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/health/ready",
+							"host": ["{{baseUrl}}"],
+							"path": ["health", "ready"]
+						},
+						"description": "Verifica que todas las dependencias del servicio estén disponibles (base de datos, Redis, cola de mensajes)"
+					},
+					"response": [
+						{
+							"name": "Readiness Check - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/health/ready",
+									"host": ["{{baseUrl}}"],
+									"path": ["health", "ready"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"status\": \"ready\",\n  \"timestamp\": \"2025-12-01T20:00:00Z\",\n  \"checks\": {\n    \"database\": \"ok\",\n    \"redis\": \"ok\",\n    \"queue\": \"ok\"\n  }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Plays (Usuario → Lotolink)",
+			"description": "Endpoints para crear y consultar jugadas desde la aplicación del usuario hacia Lotolink",
+			"item": [
+				{
+					"name": "Create Play",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generar UUID v4 para request_id",
+									"function generateUUID() {",
+									"    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {",
+									"        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);",
+									"        return v.toString(16);",
+									"    });",
+									"}",
+									"",
+									"// Establecer request_id si no existe",
+									"var requestId = pm.variables.get('request_id');",
+									"if (!requestId) {",
+									"    requestId = generateUUID();",
+									"    pm.variables.set('request_id', requestId);",
+									"}",
+									"",
+									"console.log('Request ID:', requestId);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function() {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Response has play_id', function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('play_id');",
+									"    pm.collectionVariables.set('play_id', jsonData.play_id);",
+									"});",
+									"",
+									"pm.test('Status is pending', function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.be.oneOf(['pending', 'processing', 'confirmed']);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Idempotency-Key",
+								"value": "{{$guid}}",
+								"description": "UUID único para garantizar idempotencia"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"request_id\": \"{{$guid}}\",\n  \"user_id\": \"{{user_id}}\",\n  \"lottery_id\": \"lottoRD_01\",\n  \"numbers\": [\"03\", \"07\", \"12\"],\n  \"bet_type\": \"quiniela\",\n  \"amount\": 50.00,\n  \"currency\": \"DOP\",\n  \"payment\": {\n    \"method\": \"wallet\",\n    \"wallet_transaction_id\": \"wl_{{$timestamp}}\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/plays",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "plays"]
+						},
+						"description": "Crea una nueva jugada que será enrutada a la banca correspondiente.\n\n### Campos requeridos:\n- `request_id`: UUID único para idempotencia\n- `user_id`: ID del usuario\n- `lottery_id`: ID de la lotería (lottoRD_01, leidsa, loteka, etc.)\n- `numbers`: Array de números seleccionados\n- `bet_type`: Tipo de apuesta (quiniela, pale, tripleta)\n- `amount`: Monto apostado\n- `currency`: Moneda (DOP, USD)\n- `payment`: Información del pago"
+					},
+					"response": [
+						{
+							"name": "Create Play - Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwtToken}}"
+									},
+									{
+										"key": "Idempotency-Key",
+										"value": "{{$guid}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"request_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"user_id\": \"user_123\",\n  \"lottery_id\": \"lottoRD_01\",\n  \"numbers\": [\"03\", \"07\", \"12\"],\n  \"bet_type\": \"quiniela\",\n  \"amount\": 50.00,\n  \"currency\": \"DOP\",\n  \"payment\": {\n    \"method\": \"wallet\",\n    \"wallet_transaction_id\": \"wl_123\"\n  }\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/plays",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "plays"]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"play_id\": \"internal-123\",\n  \"status\": \"pending\",\n  \"estimated_confirmation\": \"2025-12-01T20:30:00Z\",\n  \"created_at\": \"2025-12-01T20:29:30Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Play Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has play details', function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('play_id');",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/plays/{{play_id}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "plays", "{{play_id}}"]
+						},
+						"description": "Obtiene el estado actual y detalles de una jugada específica"
+					},
+					"response": [
+						{
+							"name": "Get Play Status - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwtToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/plays/internal-123",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "plays", "internal-123"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"play_id\": \"internal-123\",\n  \"request_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"user_id\": \"user_123\",\n  \"lottery_id\": \"lottoRD_01\",\n  \"numbers\": [\"03\", \"07\", \"12\"],\n  \"bet_type\": \"quiniela\",\n  \"amount\": 50.00,\n  \"currency\": \"DOP\",\n  \"status\": \"confirmed\",\n  \"play_id_banca\": \"BANCA_12345\",\n  \"ticket_code\": \"TKT-ABC12345\",\n  \"banca_id\": \"banca_001\",\n  \"created_at\": \"2025-12-01T20:29:30Z\",\n  \"updated_at\": \"2025-12-01T20:30:00Z\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Webhooks (Banca → Lotolink)",
+			"description": "Endpoints para que las bancas envíen confirmaciones de jugadas a Lotolink",
+			"item": [
+				{
+					"name": "Play Confirmation Webhook",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// ============================================================",
+									"// HMAC-SHA256 Signature Calculator for Lotolink Webhooks",
+									"// ============================================================",
+									"",
+									"// Obtener configuración",
+									"const hmacSecret = pm.collectionVariables.get('hmacSecret') || 'test_hmac_secret';",
+									"const method = 'POST';",
+									"const path = '/webhooks/plays/confirmation';",
+									"",
+									"// Generar timestamp ISO-8601",
+									"const timestamp = new Date().toISOString();",
+									"pm.variables.set('timestamp', timestamp);",
+									"",
+									"// Obtener body del request",
+									"const body = pm.request.body.raw;",
+									"",
+									"// Calcular firma HMAC-SHA256",
+									"const signatureBase = method + path + timestamp + body;",
+									"const signature = CryptoJS.HmacSHA256(signatureBase, hmacSecret).toString(CryptoJS.enc.Base64);",
+									"",
+									"// Establecer variables para headers",
+									"pm.variables.set('signature', signature);",
+									"",
+									"console.log('Signature Base:', signatureBase);",
+									"console.log('Calculated Signature:', signature);",
+									"console.log('Timestamp:', timestamp);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response indicates success', function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Signature",
+								"value": "{{signature}}",
+								"description": "Firma HMAC-SHA256 en Base64"
+							},
+							{
+								"key": "X-Timestamp",
+								"value": "{{timestamp}}",
+								"description": "Timestamp ISO-8601 del request"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"request_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"play_id_banca\": \"BANCA_12345\",\n  \"ticket_code\": \"TKT-ABC12345\",\n  \"status\": \"confirmed\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/plays/confirmation",
+							"host": ["{{baseUrl}}"],
+							"path": ["webhooks", "plays", "confirmation"]
+						},
+						"description": "Endpoint para que las bancas envíen confirmaciones de jugadas.\n\n### Headers requeridos:\n- `X-Signature`: Firma HMAC-SHA256 en Base64\n- `X-Timestamp`: Timestamp ISO-8601 de la solicitud\n\n### Cálculo de firma:\n```\nsignatureBase = method + path + timestamp + body\nsignature = Base64(HMAC-SHA256(signatureBase, hmacSecret))\n```\n\n### Replay Protection:\nEl timestamp debe estar dentro de ±120 segundos del tiempo actual del servidor."
+					},
+					"response": [
+						{
+							"name": "Play Confirmation - Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Signature",
+										"value": "calculated_signature_here"
+									},
+									{
+										"key": "X-Timestamp",
+										"value": "2025-12-01T20:00:00Z"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"request_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"play_id_banca\": \"BANCA_12345\",\n  \"ticket_code\": \"TKT-ABC12345\",\n  \"status\": \"confirmed\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/webhooks/plays/confirmation",
+									"host": ["{{baseUrl}}"],
+									"path": ["webhooks", "plays", "confirmation"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"success\": true,\n  \"message\": \"Confirmation processed\",\n  \"processed_at\": \"2025-12-01T20:00:01Z\"\n}"
+						},
+						{
+							"name": "Play Confirmation - Invalid Signature",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Signature",
+										"value": "invalid_signature"
+									},
+									{
+										"key": "X-Timestamp",
+										"value": "2025-12-01T20:00:00Z"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"request_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"play_id_banca\": \"BANCA_12345\",\n  \"ticket_code\": \"TKT-ABC12345\",\n  \"status\": \"confirmed\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/webhooks/plays/confirmation",
+									"host": ["{{baseUrl}}"],
+									"path": ["webhooks", "plays", "confirmation"]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"statusCode\": 401,\n  \"message\": \"Invalid signature\",\n  \"error\": \"Unauthorized\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Play Rejection Webhook",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Calcular firma HMAC para rechazo de jugada",
+									"const hmacSecret = pm.collectionVariables.get('hmacSecret') || 'test_hmac_secret';",
+									"const method = 'POST';",
+									"const path = '/webhooks/plays/confirmation';",
+									"",
+									"const timestamp = new Date().toISOString();",
+									"pm.variables.set('timestamp', timestamp);",
+									"",
+									"const body = pm.request.body.raw;",
+									"const signatureBase = method + path + timestamp + body;",
+									"const signature = CryptoJS.HmacSHA256(signatureBase, hmacSecret).toString(CryptoJS.enc.Base64);",
+									"",
+									"pm.variables.set('signature', signature);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Signature",
+								"value": "{{signature}}"
+							},
+							{
+								"key": "X-Timestamp",
+								"value": "{{timestamp}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"request_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"play_id_banca\": \"BANCA_12345\",\n  \"ticket_code\": null,\n  \"status\": \"rejected\",\n  \"reason\": \"Números no disponibles para esta lotería\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/webhooks/plays/confirmation",
+							"host": ["{{baseUrl}}"],
+							"path": ["webhooks", "plays", "confirmation"]
+						},
+						"description": "Ejemplo de webhook para rechazar una jugada"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wallet",
+			"description": "Operaciones de wallet de usuario",
+			"item": [
+				{
+					"name": "Charge Wallet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has balance', function() {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('balance');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 500.00,\n  \"method\": \"card\",\n  \"transaction_ref\": \"card_txn_{{$timestamp}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/{{user_id}}/wallet/charge",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "users", "{{user_id}}", "wallet", "charge"]
+						},
+						"description": "Agrega saldo al wallet del usuario\n\n### Métodos de pago soportados:\n- `card`: Tarjeta de crédito/débito\n- `bank`: Transferencia bancaria\n- `cash`: Efectivo (en agencia)"
+					},
+					"response": [
+						{
+							"name": "Charge Wallet - Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwtToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 500.00,\n  \"method\": \"card\",\n  \"transaction_ref\": \"card_txn_123456\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/users/user_123/wallet/charge",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "users", "user_123", "wallet", "charge"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"user_id\": \"user_123\",\n  \"balance\": 550.00,\n  \"transaction_id\": \"wl_txn_789\",\n  \"transaction_type\": \"charge\",\n  \"amount\": 500.00,\n  \"timestamp\": \"2025-12-01T20:00:00Z\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Banca Endpoints (Lotolink → Banca)",
+			"description": "Endpoints que Lotolink llama en el sistema de la banca para registrar y consultar jugadas",
+			"item": [
+				{
+					"name": "Register Play at Banca",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generar UUID para request_id",
+									"function generateUUID() {",
+									"    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {",
+									"        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);",
+									"        return v.toString(16);",
+									"    });",
+									"}",
+									"",
+									"const requestId = generateUUID();",
+									"pm.variables.set('request_id', requestId);",
+									"",
+									"// Generar timestamp y firma HMAC",
+									"const hmacSecret = pm.collectionVariables.get('hmacSecret') || 'test_hmac_secret';",
+									"const method = 'POST';",
+									"const path = '/v1/plays/register';",
+									"const timestamp = new Date().toISOString();",
+									"",
+									"pm.variables.set('timestamp', timestamp);",
+									"pm.variables.set('idempotency_key', requestId);",
+									"",
+									"// Nota: La firma se calcula sobre el body completo",
+									"// En este ejemplo usamos el body después de que Postman lo resuelva",
+									"console.log('Request ID:', requestId);",
+									"console.log('Timestamp:', timestamp);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200 or 201', function() {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+									"});",
+									"",
+									"pm.test('Response has play_id_banca', function() {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.play_id_banca) {",
+									"        pm.collectionVariables.set('playIdBanca', jsonData.play_id_banca);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}",
+								"description": "Token OAuth2 o API Key de Lotolink"
+							},
+							{
+								"key": "Idempotency-Key",
+								"value": "{{idempotency_key}}",
+								"description": "UUID único para garantizar idempotencia"
+							},
+							{
+								"key": "X-Timestamp",
+								"value": "{{timestamp}}",
+								"description": "Timestamp ISO-8601"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"request_id\": \"{{request_id}}\",\n  \"play\": {\n    \"lottery_id\": \"lottoRD_01\",\n    \"modality\": \"quiniela\",\n    \"numbers\": [\"03\", \"07\", \"12\"],\n    \"amount\": 50.00,\n    \"currency\": \"DOP\"\n  },\n  \"payment\": {\n    \"method\": \"wallet\",\n    \"transaction_id\": \"wl_{{$timestamp}}\"\n  },\n  \"user\": {\n    \"id\": \"{{user_id}}\",\n    \"phone\": \"+18091234567\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bancaUrl}}/v1/plays/register",
+							"host": ["{{bancaUrl}}"],
+							"path": ["v1", "plays", "register"]
+						},
+						"description": "Endpoint que Lotolink llama en el sistema de la banca para registrar una nueva jugada.\n\n### Flujo:\n1. Lotolink envía la jugada a este endpoint\n2. La banca valida y registra la jugada\n3. La banca responde con estado (pending/confirmed/rejected)\n4. Si es async, la banca envía confirmación via webhook"
+					},
+					"response": [
+						{
+							"name": "Register Play - Confirmed (Sync)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer token_here"
+									},
+									{
+										"key": "Idempotency-Key",
+										"value": "550e8400-e29b-41d4-a716-446655440000"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"request_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"play\": {\n    \"lottery_id\": \"lottoRD_01\",\n    \"modality\": \"quiniela\",\n    \"numbers\": [\"03\", \"07\", \"12\"],\n    \"amount\": 50.00,\n    \"currency\": \"DOP\"\n  },\n  \"payment\": {\n    \"method\": \"wallet\",\n    \"transaction_id\": \"wl_123456\"\n  },\n  \"user\": {\n    \"id\": \"user_123\",\n    \"phone\": \"+18091234567\"\n  }\n}"
+								},
+								"url": {
+									"raw": "{{bancaUrl}}/v1/plays/register",
+									"host": ["{{bancaUrl}}"],
+									"path": ["v1", "plays", "register"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"status\": \"confirmed\",\n  \"play_id_banca\": \"BANCA_12345\",\n  \"ticket_code\": \"TKT-ABC12345\",\n  \"message\": \"Jugada registrada exitosamente\"\n}"
+						},
+						{
+							"name": "Register Play - Pending (Async)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"request_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"play\": {\n    \"lottery_id\": \"lottoRD_01\",\n    \"modality\": \"quiniela\",\n    \"numbers\": [\"03\", \"07\", \"12\"],\n    \"amount\": 50.00\n  },\n  \"payment\": {\n    \"method\": \"wallet\",\n    \"transaction_id\": \"wl_123456\"\n  },\n  \"user\": {\n    \"id\": \"user_123\"\n  }\n}"
+								},
+								"url": {
+									"raw": "{{bancaUrl}}/v1/plays/register",
+									"host": ["{{bancaUrl}}"],
+									"path": ["v1", "plays", "register"]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"status\": \"pending\",\n  \"play_id_banca\": \"BANCA_12345\",\n  \"message\": \"Jugada recibida, procesando...\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Play Status at Banca",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{bancaUrl}}/v1/plays/{{playIdBanca}}/status",
+							"host": ["{{bancaUrl}}"],
+							"path": ["v1", "plays", "{{playIdBanca}}", "status"]
+						},
+						"description": "Consulta el estado de una jugada en el sistema de la banca"
+					},
+					"response": [
+						{
+							"name": "Get Play Status - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer token_here"
+									}
+								],
+								"url": {
+									"raw": "{{bancaUrl}}/v1/plays/BANCA_12345/status",
+									"host": ["{{bancaUrl}}"],
+									"path": ["v1", "plays", "BANCA_12345", "status"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n  \"play_id_banca\": \"BANCA_12345\",\n  \"status\": \"confirmed\",\n  \"ticket_code\": \"TKT-ABC12345\",\n  \"lottery_id\": \"lottoRD_01\",\n  \"numbers\": [\"03\", \"07\", \"12\"],\n  \"amount\": 50.00,\n  \"created_at\": \"2025-12-01T20:00:00Z\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

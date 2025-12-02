@@ -71,3 +71,6 @@ temp/
 k8s/secrets/
 *.pem
 *.key
+
+# Generated integration packages
+lotolink-integration-package-*.zip
