@@ -104,8 +104,8 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "lotolink",
-        "repo": "lotolink-desktop"
+        "owner": "pabelsims-ux",
+        "repo": "LOTLINK"
       }
     ]
   }
