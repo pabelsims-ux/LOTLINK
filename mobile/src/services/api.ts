@@ -157,7 +157,7 @@ export async function getLotteryById(id: string): Promise<ApiResponse<Lottery | 
     if (API_CONFIG.useMockData) {
       await delay(300);
       const lottery = LOTTERIES.find(l => l.id === id);
-      return { success: true, data: lottery as Lottery || null };
+      return { success: true, data: (lottery as Lottery) || null };
     }
 
     const response = await fetch(`${API_CONFIG.baseUrl}/lotteries/${id}`);
@@ -194,7 +194,7 @@ export async function getBancaById(id: number): Promise<ApiResponse<Banca | null
     if (API_CONFIG.useMockData) {
       await delay(300);
       const banca = BANCAS.find(b => b.id === id);
-      return { success: true, data: banca as Banca || null };
+      return { success: true, data: (banca as Banca) || null };
     }
 
     const response = await fetch(`${API_CONFIG.baseUrl}/bancas/${id}`);

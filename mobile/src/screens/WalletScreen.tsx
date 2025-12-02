@@ -70,7 +70,7 @@ export default function WalletScreen({ navigation }: any) {
 
   const handleDeposit = async () => {
     const amount = customAmount ? parseInt(customAmount, 10) : selectedAmount;
-    if (amount <= 0) {
+    if (isNaN(amount) || amount <= 0) {
       Alert.alert('Error', 'Por favor ingresa un monto válido');
       return;
     }
@@ -94,7 +94,7 @@ export default function WalletScreen({ navigation }: any) {
 
   const handleWithdraw = async () => {
     const amount = customAmount ? parseInt(customAmount, 10) : selectedAmount;
-    if (amount <= 0) {
+    if (isNaN(amount) || amount <= 0) {
       Alert.alert('Error', 'Por favor ingresa un monto válido');
       return;
     }
@@ -250,7 +250,7 @@ export default function WalletScreen({ navigation }: any) {
               <ActivityIndicator color="#fff" />
             ) : (
               <Text style={styles.confirmButtonText}>
-                {isDeposit ? '➕ Recargar' : '💸 Retirar'} RD$ {(customAmount ? parseInt(customAmount, 10) : selectedAmount).toLocaleString()}
+                {isDeposit ? '➕ Recargar' : '💸 Retirar'} RD$ {(customAmount && !isNaN(parseInt(customAmount, 10)) ? parseInt(customAmount, 10) : selectedAmount).toLocaleString()}
               </Text>
             )}
           </TouchableOpacity>

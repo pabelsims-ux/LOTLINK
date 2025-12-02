@@ -95,7 +95,7 @@ export default function NotificationsScreen({ navigation }: any) {
       case 'result':
         return { bg: colors.primary + '15', border: colors.primary };
       case 'promo':
-        return { bg: colors.purple + '15', border: colors.purple };
+        return { bg: (colors as any).purple ? (colors as any).purple + '15' : colors.primary + '15', border: (colors as any).purple || colors.primary };
       case 'reminder':
         return { bg: colors.warning + '15', border: colors.warning };
       default:
