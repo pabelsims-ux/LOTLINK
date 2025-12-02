@@ -730,7 +730,7 @@
       <div class="text-center">
         <div class="relative">
           <div class="w-28 h-28 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-[32px] flex items-center justify-center shadow-2xl animate-float">
-            <img src="../../assets/icon.png" alt="LotoLink" class="w-16 h-16 object-contain" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-ticket-alt text-white text-4xl\'></i>';">
+            <img id="loading-logo" src="../../assets/icon.png" alt="LotoLink" class="w-16 h-16 object-contain" onerror="this.style.display='none'; var icon = document.createElement('i'); icon.className = 'fas fa-ticket-alt text-white text-4xl'; this.parentElement.appendChild(icon);">
           </div>
           <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-20 h-2 bg-black/10 rounded-full blur-sm"></div>
         </div>
@@ -750,7 +750,7 @@
         <div class="p-6 border-b border-gray-100 dark:border-gray-800">
           <div class="flex items-center gap-4">
             <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <img src="../../assets/icon.png" alt="LotoLink" class="w-9 h-9 object-contain" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-ticket-alt text-white text-xl\\'></i>';">
+              <img id="sidebar-logo" src="../../assets/icon.png" alt="LotoLink" class="w-9 h-9 object-contain" onerror="this.style.display='none'; var icon = document.createElement('i'); icon.className = 'fas fa-ticket-alt text-white text-xl'; this.parentElement.appendChild(icon);">
             </div>
             <div>
               <h1 class="text-xl font-bold text-gray-900 dark:text-white">LotoLink</h1>
@@ -1654,7 +1654,10 @@
 
     // ===== UTILITY FUNCTIONS =====
     function pad(n) { return String(n).padStart(2, '0'); }
-    function formatMoney(amount) { return 'RD$ ' + Math.abs(amount).toLocaleString(); }
+    function formatMoney(amount) { 
+      var prefix = amount < 0 ? '-RD$ ' : 'RD$ ';
+      return prefix + Math.abs(amount).toLocaleString(); 
+    }
     function uid(prefix = 'T') { return prefix + '-' + Date.now().toString(36).slice(2, 9).toUpperCase(); }
 
     // ===== DARK MODE =====
