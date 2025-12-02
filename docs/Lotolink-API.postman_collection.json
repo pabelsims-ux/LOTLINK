@@ -26,9 +26,9 @@
 		},
 		{
 			"key": "jwtToken",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0X3VzZXJfMTIzIiwiaWF0IjoxNjE2MjM5MDIyfQ.test",
+			"value": "YOUR_JWT_TOKEN_HERE",
 			"type": "string",
-			"description": "Token JWT para autenticación de usuario"
+			"description": "Token JWT para autenticación de usuario. Reemplazar con token válido obtenido de /api/v1/auth/login"
 		},
 		{
 			"key": "play_id",

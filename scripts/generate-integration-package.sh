@@ -149,11 +149,15 @@ fi
 # 5. Create README.txt with Quick Start Instructions
 # =============================================================================
 
-cat > "$PACKAGE_DIR/README.txt" << 'EOF'
+# Get current date for dynamic versioning
+CURRENT_DATE=$(date +"%B %Y")
+CURRENT_YEAR=$(date +"%Y")
+
+cat > "$PACKAGE_DIR/README.txt" << EOF
 ================================================================================
                     LOTOLINK - PAQUETE DE INTEGRACIÓN PARA BANCAS
                                     Versión 1.0
-                                  Diciembre 2025
+                                  $CURRENT_DATE
 ================================================================================
 
 ¡Bienvenido al paquete de integración de Lotolink!
@@ -218,7 +222,7 @@ SOPORTE TÉCNICO
 ================================================================================
 
 Email:      integraciones@lotolink.com
-WhatsApp:   +1 (809) XXX-XXXX
+WhatsApp:   Contactar al equipo de integraciones para número de soporte
 Docs:       https://docs.lotolink.com
 Status:     https://status.lotolink.com
 
@@ -235,7 +239,7 @@ REQUISITOS TÉCNICOS
 
 ================================================================================
 
-Lotolink © 2025 - Todos los derechos reservados
+Lotolink © $CURRENT_YEAR - Todos los derechos reservados
 
 EOF
 
