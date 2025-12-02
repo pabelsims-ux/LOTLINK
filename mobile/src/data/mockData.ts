@@ -1,0 +1,540 @@
+/**
+ * LotoLink Mobile - Mock Data
+ * Shared mock data for demonstration and development
+ */
+
+// Theme colors matching Apple-inspired design
+export const Colors = {
+  light: {
+    primary: '#0071e3',
+    primaryDark: '#0077ED',
+    background: '#f5f5f7',
+    card: '#ffffff',
+    text: '#1d1d1f',
+    textSecondary: '#86868b',
+    border: '#e8e8ed',
+    success: '#34c759',
+    warning: '#ff9f0a',
+    danger: '#ff3b30',
+    purple: '#af52de',
+  },
+  dark: {
+    primary: '#0077ED',
+    primaryDark: '#0071e3',
+    background: '#000000',
+    card: '#1c1c1e',
+    text: '#f5f5f7',
+    textSecondary: '#a1a1a6',
+    border: '#38383a',
+    success: '#30d158',
+    warning: '#ffd60a',
+    danger: '#ff453a',
+    purple: '#bf5af2',
+  },
+};
+
+// User data for demonstration
+export const DEMO_USER = {
+  id: 'user-001',
+  name: 'Juan Pérez',
+  email: 'juan.perez@email.com',
+  phone: '+1 809-555-1234',
+  memberSince: 'Enero 2024',
+  avatar: null,
+  balance: 2500,
+  wins: 5,
+  totalPlays: 47,
+  verified: true,
+};
+
+// Available lotteries with full information
+export const LOTTERIES = [
+  {
+    id: 'nacional',
+    name: 'Lotería Nacional',
+    logo: '🎰',
+    logoText: 'LN',
+    color: '#e74c3c',
+    schedule: [
+      { day: 'Lunes - Sábado', times: ['12:30 PM', '6:00 PM'] },
+      { day: 'Domingo', times: ['3:00 PM'] },
+    ],
+    nextDraw: 'Hoy 6:00 PM',
+    modalities: ['Quiniela', 'Palé', 'Tripleta', 'Super Palé'],
+    description: 'La lotería más tradicional de República Dominicana',
+    isOpen: true,
+  },
+  {
+    id: 'leidsa',
+    name: 'Leidsa',
+    logo: '🍀',
+    logoText: 'LD',
+    color: '#27ae60',
+    schedule: [
+      { day: 'Todos los días', times: ['8:55 PM'] },
+      { day: 'Domingo', times: ['3:55 PM'] },
+    ],
+    nextDraw: 'Hoy 8:55 PM',
+    modalities: ['Quiniela', 'Palé', 'Tripleta', 'Pega 3 Más', 'Loto Pool'],
+    description: 'Con los mejores premios y más sorteos',
+    isOpen: true,
+  },
+  {
+    id: 'real',
+    name: 'Lotería Real',
+    logo: '👑',
+    logoText: 'LR',
+    color: '#f39c12',
+    schedule: [
+      { day: 'Lunes - Sábado', times: ['12:55 PM', '7:30 PM'] },
+    ],
+    nextDraw: 'Hoy 7:30 PM',
+    modalities: ['Quiniela', 'Palé', 'Tripleta'],
+    description: 'Premios reales para ganadores reales',
+    isOpen: true,
+  },
+  {
+    id: 'loteka',
+    name: 'Loteka',
+    logo: '💎',
+    logoText: 'LK',
+    color: '#9b59b6',
+    schedule: [
+      { day: 'Todos los días', times: ['7:55 PM'] },
+    ],
+    nextDraw: 'Hoy 7:55 PM',
+    modalities: ['Quiniela', 'Palé', 'Tripleta', 'Toca 3', 'Mega Chances'],
+    description: 'La lotería de los grandes premios',
+    isOpen: true,
+  },
+  {
+    id: 'laprimera',
+    name: 'La Primera',
+    logo: '🥇',
+    logoText: 'LP',
+    color: '#3498db',
+    schedule: [
+      { day: 'Lunes - Sábado', times: ['12:00 PM', '8:00 PM'] },
+    ],
+    nextDraw: 'Hoy 8:00 PM',
+    modalities: ['Quiniela', 'Palé', 'Tripleta'],
+    description: 'Siempre primero en premios',
+    isOpen: true,
+  },
+  {
+    id: 'lasuerte',
+    name: 'La Suerte Dominicana',
+    logo: '🌟',
+    logoText: 'LS',
+    color: '#1abc9c',
+    schedule: [
+      { day: 'Lunes - Sábado', times: ['12:30 PM', '6:00 PM'] },
+    ],
+    nextDraw: 'Mañana 12:30 PM',
+    modalities: ['Quiniela', 'Palé'],
+    description: 'Tu suerte está aquí',
+    isOpen: false,
+  },
+  {
+    id: 'americana',
+    name: 'Americana (NY)',
+    logo: '🗽',
+    logoText: 'NY',
+    color: '#2c3e50',
+    schedule: [
+      { day: 'Todos los días', times: ['2:30 PM', '10:30 PM'] },
+    ],
+    nextDraw: 'Hoy 10:30 PM',
+    modalities: ['Quiniela', 'Palé'],
+    description: 'Resultados de New York Lottery',
+    isOpen: true,
+  },
+];
+
+// Play modalities with payouts
+export const MODALITIES = [
+  {
+    id: 'quiniela',
+    name: 'Quiniela',
+    icon: '🎯',
+    numbers: 1,
+    numberRange: [0, 99],
+    minBet: 5,
+    description: 'Acierta 1 número (00-99)',
+    payouts: { first: 60, second: 8, third: 4 },
+    prizes: [
+      { position: '1er Premio', multiplier: '60x', example: 'RD$10 → RD$600' },
+      { position: '2do Premio', multiplier: '8x', example: 'RD$10 → RD$80' },
+      { position: '3er Premio', multiplier: '4x', example: 'RD$10 → RD$40' },
+    ],
+  },
+  {
+    id: 'pale',
+    name: 'Palé',
+    icon: '🎰',
+    numbers: 2,
+    numberRange: [0, 99],
+    minBet: 5,
+    description: 'Acierta 2 números en orden',
+    payouts: { firstSecond: 1000, firstThird: 1000, secondThird: 100 },
+    prizes: [
+      { position: '1er y 2do Premio', multiplier: '1,000x', example: 'RD$10 → RD$10,000' },
+      { position: '1er y 3er Premio', multiplier: '1,000x', example: 'RD$10 → RD$10,000' },
+      { position: '2do y 3er Premio', multiplier: '100x', example: 'RD$10 → RD$1,000' },
+    ],
+  },
+  {
+    id: 'tripleta',
+    name: 'Tripleta',
+    icon: '🎲',
+    numbers: 3,
+    numberRange: [0, 99],
+    minBet: 5,
+    description: 'Acierta 3 números',
+    payouts: { three: 20000, two: 100 },
+    prizes: [
+      { position: '3 números (cualquier orden)', multiplier: '20,000x', example: 'RD$10 → RD$200,000' },
+      { position: '2 de 3 números', multiplier: '100x', example: 'RD$10 → RD$1,000' },
+    ],
+  },
+  {
+    id: 'superpale',
+    name: 'Super Palé',
+    icon: '💫',
+    numbers: 4,
+    numberRange: [0, 99],
+    minBet: 10,
+    description: 'Acierta 4 números',
+    payouts: { four: 50000 },
+    prizes: [
+      { position: '4 números exactos', multiplier: '50,000x', example: 'RD$10 → RD$500,000' },
+    ],
+  },
+  {
+    id: 'pega3',
+    name: 'Pega 3',
+    icon: '🔢',
+    numbers: 3,
+    numberRange: [0, 9],
+    minBet: 5,
+    description: 'Acierta 3 dígitos (0-9)',
+    payouts: { exact: 700, anyOrder: 100 },
+    prizes: [
+      { position: 'Orden Exacto', multiplier: '700x', example: 'RD$10 → RD$7,000' },
+      { position: 'Cualquier Orden', multiplier: '100x', example: 'RD$10 → RD$1,000' },
+    ],
+  },
+];
+
+// Stake options
+export const STAKE_OPTIONS = [10, 25, 50, 100, 200, 500];
+
+// Sample bancas with full information
+export const BANCAS = [
+  {
+    id: 1,
+    name: 'Banca La Fortuna',
+    address: 'Av. 27 de Febrero #123, Santo Domingo',
+    phone: '809-555-0001',
+    distance: '0.3 km',
+    rating: 4.8,
+    reviewCount: 156,
+    isOpen: true,
+    hours: 'Abierta hasta las 8:00 PM',
+    lotteries: ['Nacional', 'Leidsa', 'Real', 'Loteka'],
+    coords: { lat: 18.4693, lng: -69.8990 },
+    image: null,
+  },
+  {
+    id: 2,
+    name: 'Banca El Millonario',
+    address: 'C/ Duarte #456, Santiago',
+    phone: '809-555-0002',
+    distance: '0.8 km',
+    rating: 4.5,
+    reviewCount: 89,
+    isOpen: true,
+    hours: 'Abierta hasta las 8:55 PM',
+    lotteries: ['Nacional', 'Loteka'],
+    coords: { lat: 18.4825, lng: -69.9312 },
+    image: null,
+  },
+  {
+    id: 3,
+    name: 'Banca Suerte Total',
+    address: 'Av. Independencia #789, La Vega',
+    phone: '809-555-0003',
+    distance: '1.2 km',
+    rating: 4.7,
+    reviewCount: 234,
+    isOpen: false,
+    hours: 'Cerrada - Abre mañana 8:00 AM',
+    lotteries: ['Nacional', 'Leidsa', 'Real', 'Loteka', 'La Primera'],
+    coords: { lat: 18.4661, lng: -69.8989 },
+    image: null,
+  },
+  {
+    id: 4,
+    name: 'Banca Los Ganadores',
+    address: 'C/ El Conde #321, Zona Colonial',
+    phone: '809-555-0004',
+    distance: '1.5 km',
+    rating: 4.9,
+    reviewCount: 312,
+    isOpen: true,
+    hours: 'Abierta hasta las 6:00 PM',
+    lotteries: ['Nacional', 'Leidsa'],
+    coords: { lat: 18.4890, lng: -69.9220 },
+    image: null,
+  },
+  {
+    id: 5,
+    name: 'Banca Premium Central',
+    address: 'Av. Winston Churchill #500, Santo Domingo',
+    phone: '809-555-0005',
+    distance: '2.1 km',
+    rating: 4.6,
+    reviewCount: 178,
+    isOpen: true,
+    hours: 'Abierta 24 horas',
+    lotteries: ['Nacional', 'Leidsa', 'Real', 'Loteka', 'La Primera', 'Americana'],
+    coords: { lat: 18.4750, lng: -69.9400 },
+    image: null,
+  },
+];
+
+// Sample lottery results
+export const LOTTERY_RESULTS = [
+  {
+    id: 'result-001',
+    lotteryId: 'nacional',
+    lotteryName: 'Lotería Nacional',
+    color: '#e74c3c',
+    time: '12:30 PM',
+    date: '2024-01-16',
+    numbers: ['23', '45', '67'],
+    isLive: true,
+  },
+  {
+    id: 'result-002',
+    lotteryId: 'leidsa',
+    lotteryName: 'Leidsa',
+    color: '#27ae60',
+    time: '8:55 PM',
+    date: '2024-01-15',
+    numbers: ['12', '34', '56'],
+    isLive: false,
+  },
+  {
+    id: 'result-003',
+    lotteryId: 'real',
+    lotteryName: 'Lotería Real',
+    color: '#f39c12',
+    time: '12:55 PM',
+    date: '2024-01-16',
+    numbers: ['78', '90', '11'],
+    isLive: true,
+  },
+  {
+    id: 'result-004',
+    lotteryId: 'loteka',
+    lotteryName: 'Loteka',
+    color: '#9b59b6',
+    time: '7:55 PM',
+    date: '2024-01-15',
+    numbers: ['22', '33', '44'],
+    isLive: false,
+  },
+  {
+    id: 'result-005',
+    lotteryId: 'laprimera',
+    lotteryName: 'La Primera',
+    color: '#3498db',
+    time: '8:00 PM',
+    date: '2024-01-15',
+    numbers: ['55', '66', '77'],
+    isLive: false,
+  },
+];
+
+// Sample ticket history
+export const TICKET_HISTORY = [
+  {
+    id: 'ticket-001',
+    lotteryId: 'nacional',
+    lotteryName: 'Nacional',
+    modality: 'Quiniela',
+    numbers: ['23', '45'],
+    amount: 50,
+    status: 'won',
+    prize: 500,
+    date: '2024-01-15',
+    time: '12:30 PM',
+    banca: 'Banca La Fortuna',
+    ticketCode: 'LNK-2024-001234',
+  },
+  {
+    id: 'ticket-002',
+    lotteryId: 'leidsa',
+    lotteryName: 'Leidsa',
+    modality: 'Tripleta',
+    numbers: ['12', '34', '56'],
+    amount: 100,
+    status: 'lost',
+    prize: 0,
+    date: '2024-01-14',
+    time: '8:55 PM',
+    banca: 'Banca El Millonario',
+    ticketCode: 'LNK-2024-001235',
+  },
+  {
+    id: 'ticket-003',
+    lotteryId: 'real',
+    lotteryName: 'Real',
+    modality: 'Palé',
+    numbers: ['78', '90'],
+    amount: 25,
+    status: 'pending',
+    prize: 0,
+    date: '2024-01-16',
+    time: '12:55 PM',
+    banca: 'Banca Los Ganadores',
+    ticketCode: 'LNK-2024-001236',
+  },
+  {
+    id: 'ticket-004',
+    lotteryId: 'loteka',
+    lotteryName: 'Loteka',
+    modality: 'Tripleta',
+    numbers: ['11', '22', '33'],
+    amount: 75,
+    status: 'won',
+    prize: 1500,
+    date: '2024-01-13',
+    time: '7:55 PM',
+    banca: 'Banca Suerte Total',
+    ticketCode: 'LNK-2024-001237',
+  },
+];
+
+// Sample transactions
+export const TRANSACTIONS = [
+  {
+    id: 'txn-001',
+    type: 'deposit',
+    amount: 1000,
+    method: 'Tarjeta de Crédito',
+    status: 'completed',
+    date: '2024-01-15',
+    time: '10:30 AM',
+    reference: 'DEP-2024-001',
+  },
+  {
+    id: 'txn-002',
+    type: 'play',
+    amount: -50,
+    method: 'Balance',
+    status: 'completed',
+    date: '2024-01-15',
+    time: '11:45 AM',
+    reference: 'PLY-2024-001',
+    details: 'Nacional - Quiniela',
+  },
+  {
+    id: 'txn-003',
+    type: 'win',
+    amount: 500,
+    method: 'Premio',
+    status: 'completed',
+    date: '2024-01-15',
+    time: '1:00 PM',
+    reference: 'WIN-2024-001',
+    details: 'Nacional - Quiniela',
+  },
+  {
+    id: 'txn-004',
+    type: 'withdrawal',
+    amount: -200,
+    method: 'Transferencia Bancaria',
+    status: 'pending',
+    date: '2024-01-16',
+    time: '9:00 AM',
+    reference: 'WTH-2024-001',
+  },
+];
+
+// Sample notifications
+export const NOTIFICATIONS = [
+  {
+    id: 'notif-001',
+    type: 'win',
+    title: '¡Felicidades! Ganaste RD$500',
+    message: 'Tu jugada en Nacional - Quiniela resultó ganadora.',
+    date: '2024-01-15',
+    time: '1:00 PM',
+    read: false,
+    icon: '🏆',
+  },
+  {
+    id: 'notif-002',
+    type: 'result',
+    title: 'Resultados de Leidsa',
+    message: 'Los números ganadores son: 12, 34, 56',
+    date: '2024-01-15',
+    time: '8:55 PM',
+    read: true,
+    icon: '🎰',
+  },
+  {
+    id: 'notif-003',
+    type: 'promo',
+    title: 'Bono del 50% en tu próxima recarga',
+    message: 'Recarga hoy y recibe un 50% extra en tu balance.',
+    date: '2024-01-14',
+    time: '10:00 AM',
+    read: true,
+    icon: '🎁',
+  },
+  {
+    id: 'notif-004',
+    type: 'reminder',
+    title: 'Sorteo en 30 minutos',
+    message: 'El sorteo de Lotería Nacional comenzará pronto.',
+    date: '2024-01-16',
+    time: '6:00 PM',
+    read: false,
+    icon: '⏰',
+  },
+];
+
+// Menu options for profile
+export const MENU_OPTIONS = [
+  { id: 1, icon: '💳', label: 'Métodos de Pago', screen: 'PaymentMethods' },
+  { id: 2, icon: '🔔', label: 'Notificaciones', screen: 'Notifications' },
+  { id: 3, icon: '🔒', label: 'Seguridad', screen: 'Security' },
+  { id: 4, icon: '❓', label: 'Ayuda', screen: 'Help' },
+  { id: 5, icon: '📜', label: 'Términos y Condiciones', screen: 'Terms' },
+];
+
+// Quick actions for home screen
+export const QUICK_ACTIONS = [
+  { id: 1, icon: '🎲', label: 'Jugar Ahora', screen: 'Play' },
+  { id: 2, icon: '📍', label: 'Bancas', screen: 'Bancas' },
+  { id: 3, icon: '📊', label: 'Resultados', screen: 'Results' },
+  { id: 4, icon: '🏆', label: 'Premios', screen: 'Profile' },
+];
+
+// Most played numbers for suggestions
+export const MOST_PLAYED = {
+  Quiniela: ['08', '66', '36', '63', '42'],
+  Pale: [['08', '66'], ['36', '63']],
+  Tripleta: [['15', '26', '07'], ['12', '34', '56']],
+};
+
+// Upcoming draws
+export const UPCOMING_DRAWS = [
+  { lottery: 'Nacional', time: 'Hoy 6:00 PM', countdown: 3600000 },
+  { lottery: 'Leidsa', time: 'Hoy 8:55 PM', countdown: 7200000 },
+  { lottery: 'Loteka', time: 'Hoy 7:55 PM', countdown: 5400000 },
+  { lottery: 'Real', time: 'Mañana 12:55 PM', countdown: 64800000 },
+];

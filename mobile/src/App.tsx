@@ -9,6 +9,7 @@ import {
   StatusBar,
   StyleSheet,
   useColorScheme,
+  Text,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -22,6 +23,10 @@ import LoteriasScreen from './screens/LoteriasScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import PlayScreen from './screens/PlayScreen';
 import LoginScreen from './screens/LoginScreen';
+import ResultsScreen from './screens/ResultsScreen';
+import WalletScreen from './screens/WalletScreen';
+import TicketDetailScreen from './screens/TicketDetailScreen';
+import NotificationsScreen from './screens/NotificationsScreen';
 
 // Services
 import { AuthProvider, useAuth } from './services/AuthContext';
@@ -136,8 +141,8 @@ function MainTabs() {
 }
 
 // Simple Tab Icon Component
-function TabIcon({ name, color, size }) {
-  const icons = {
+function TabIcon({ name, color, size }: { name: string; color: string; size: number }) {
+  const icons: Record<string, string> = {
     home: '🏠',
     location: '📍',
     play: '🎲',
@@ -146,9 +151,9 @@ function TabIcon({ name, color, size }) {
   };
   
   return (
-    <React.Text style={{ fontSize: size, color }}>
+    <Text style={{ fontSize: size }}>
       {icons[name] || '●'}
-    </React.Text>
+    </Text>
   );
 }
 
@@ -172,7 +177,29 @@ function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {user ? (
-        <Stack.Screen name="Main" component={MainTabs} />
+        <>
+          <Stack.Screen name="Main" component={MainTabs} />
+          <Stack.Screen 
+            name="Results" 
+            component={ResultsScreen}
+            options={{ headerShown: true, title: 'Resultados' }}
+          />
+          <Stack.Screen 
+            name="Wallet" 
+            component={WalletScreen}
+            options={{ headerShown: true, title: 'Cartera' }}
+          />
+          <Stack.Screen 
+            name="TicketDetail" 
+            component={TicketDetailScreen}
+            options={{ headerShown: true, title: 'Detalle del Ticket' }}
+          />
+          <Stack.Screen 
+            name="Notifications" 
+            component={NotificationsScreen}
+            options={{ headerShown: true, title: 'Notificaciones' }}
+          />
+        </>
       ) : (
         <Stack.Screen name="Auth" component={AuthStack} />
       )}
