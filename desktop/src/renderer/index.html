@@ -302,6 +302,12 @@
       animation: pulse-live 2s infinite;
     }
     
+    @keyframes loading {
+      0% { width: 0%; }
+      50% { width: 70%; }
+      100% { width: 100%; }
+    }
+    
     @keyframes slideIn {
       from { transform: translateX(100%); opacity: 0; }
       to { transform: translateX(0); opacity: 1; }
@@ -1291,8 +1297,9 @@
           </div>
           <div class="flex gap-1 flex-wrap mb-4">
             ${banca.lotteries.slice(0, 3).map(l => {
-              const colors = { 'Nacional': 'red', 'Leidsa': 'green', 'Real': 'yellow', 'Loteka': 'purple', 'La Primera': 'blue' };
-              return `<span class="px-2 py-1 bg-${colors[l] || 'gray'}-100 text-${colors[l] || 'gray'}-600 text-xs rounded-full">${l}</span>`;
+              const colorMap = { 'Nacional': '#ef4444', 'Leidsa': '#22c55e', 'Real': '#eab308', 'Loteka': '#a855f7', 'La Primera': '#3b82f6' };
+              const bgColor = colorMap[l] || '#6b7280';
+              return `<span class="px-2 py-1 text-xs rounded-full" style="background: ${bgColor}22; color: ${bgColor}">${l}</span>`;
             }).join('')}
             ${banca.lotteries.length > 3 ? `<span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">+${banca.lotteries.length - 3}</span>` : ''}
           </div>
@@ -1337,10 +1344,14 @@
       const container = document.getElementById('transactions-list');
       if (!container) return;
       
-      container.innerHTML = TRANSACTIONS.map(tx => `
+      const colorMap = { 'green': '#22c55e', 'blue': '#3b82f6', 'yellow': '#eab308', 'orange': '#f97316' };
+      
+      container.innerHTML = TRANSACTIONS.map(tx => {
+        const bgColor = colorMap[tx.color] || '#6b7280';
+        return `
         <div class="flex items-center justify-between p-4">
           <div class="flex items-center gap-4">
-            <div class="w-10 h-10 bg-${tx.color}-100 rounded-full flex items-center justify-center text-lg">${tx.icon}</div>
+            <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg" style="background: ${bgColor}22">${tx.icon}</div>
             <div>
               <p class="font-medium text-gray-900">${tx.type === 'recharge' ? 'Recarga' : tx.type === 'play' ? 'Jugada' : tx.type === 'win' ? 'Premio' : 'Retiro'}</p>
               <p class="text-sm text-gray-500">${tx.method} • ${tx.date}${tx.status === 'pending' ? ' • <span class="text-yellow-600">Pendiente</span>' : ''}</p>
@@ -1348,7 +1359,7 @@
           </div>
           <span class="${tx.amount > 0 ? 'text-green-600' : 'text-gray-600'} font-bold">${tx.amount > 0 ? '+' : ''}${formatMoney(tx.amount)}</span>
         </div>
-      `).join('');
+      `}).join('');
     }
 
     function renderResultsHistory() {
