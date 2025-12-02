@@ -412,6 +412,75 @@ services:
 
 ---
 
+## 18. Próximos Pasos Sugeridos
+
+Una vez clonado el repositorio, siga estos pasos para validar y preparar el sistema:
+
+### 1. Ejecutar Tests Unitarios del Backend
+
+```bash
+cd backend
+npm install
+npm test
+```
+
+### 2. Ejecutar Tests E2E Localmente
+
+Los tests E2E requieren que los servicios estén ejecutándose:
+
+```bash
+# Terminal 1: Iniciar backend
+cd backend && npm run start:dev
+
+# Terminal 2: Iniciar mock-banca
+cd mock-banca && npm install && npm start
+
+# Terminal 3: Ejecutar tests E2E
+cd e2e && npm install && npm test
+```
+
+### 3. Ejecutar Smoke Tests
+
+Los smoke tests validan la funcionalidad crítica del sistema:
+
+```bash
+# Los scripts ya tienen permisos de ejecución
+./scripts/smoke-tests.sh
+```
+
+Si los servicios están ejecutándose en URLs diferentes:
+
+```bash
+BASE_URL=http://localhost:3000 MOCK_BANCA_URL=http://localhost:4000 ./scripts/smoke-tests.sh
+```
+
+### 4. Probar Reconciliación (Dry-run)
+
+Validar el script de reconciliación sin hacer cambios:
+
+```bash
+./scripts/reconciliation.sh --dry-run --verbose
+```
+
+### 5. Configurar Observabilidad (Prometheus/Grafana)
+
+Siga la guía detallada en [docs/OBSERVABILITY_GUIDE.md](docs/OBSERVABILITY_GUIDE.md) para:
+- Configurar Prometheus para métricas
+- Instalar Grafana para visualización
+- Configurar alertas con Alertmanager
+- Integrar con Sentry para error tracking
+
+### 6. Antes de Producción
+
+- [ ] **Contratar pentest externo** - Auditoría de seguridad por terceros
+- [ ] Configurar secrets en producción (DATABASE_URL, JWT_SECRET, HMAC_SECRET)
+- [ ] Configurar certificados TLS válidos
+- [ ] Configurar backup automatizado de base de datos
+- [ ] Configurar monitoreo con alertas (Prometheus + Grafana + PagerDuty/Slack)
+- [ ] Revisar y ajustar rate limiting según carga esperada
+
+---
+
 ## AI Virtual Assistant Integration (Luna)
 
 LotoLink incorpora a **Luna**, una asistente virtual IA integral que mejora la experiencia del usuario a través de la aplicación.

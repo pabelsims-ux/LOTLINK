@@ -11,17 +11,13 @@ import { LotolinkApiClient, generateUUID } from '../../lib/fixtures';
  */
 
 test.describe('Webhook Security', () => {
-  let apiClient: LotolinkApiClient;
 
-  test.beforeAll(async ({ request }) => {
-    apiClient = new LotolinkApiClient(
+  test('should accept webhook with valid signature', async ({ request }) => {
+    const apiClient = new LotolinkApiClient(
       request,
       process.env.BASE_URL || 'http://localhost:3000',
       process.env.HMAC_SECRET || 'test_hmac_secret'
     );
-  });
-
-  test('should accept webhook with valid signature', async () => {
     const requestId = generateUUID();
     const playIdBanca = `BANCA-${generateUUID().substring(0, 8).toUpperCase()}`;
     const ticketCode = `TKT-${generateUUID().substring(0, 8).toUpperCase()}`;
@@ -151,7 +147,12 @@ test.describe('Webhook Security', () => {
     expect(response.status()).toBe(400);
   });
 
-  test('should process confirmed webhook', async () => {
+  test('should process confirmed webhook', async ({ request }) => {
+    const apiClient = new LotolinkApiClient(
+      request,
+      process.env.BASE_URL || 'http://localhost:3000',
+      process.env.HMAC_SECRET || 'test_hmac_secret'
+    );
     const requestId = generateUUID();
     const playIdBanca = `BANCA-${generateUUID().substring(0, 8).toUpperCase()}`;
     const ticketCode = `TKT-${generateUUID().substring(0, 8).toUpperCase()}`;
@@ -172,7 +173,12 @@ test.describe('Webhook Security', () => {
     }
   });
 
-  test('should process rejected webhook', async () => {
+  test('should process rejected webhook', async ({ request }) => {
+    const apiClient = new LotolinkApiClient(
+      request,
+      process.env.BASE_URL || 'http://localhost:3000',
+      process.env.HMAC_SECRET || 'test_hmac_secret'
+    );
     const requestId = generateUUID();
     const playIdBanca = `BANCA-${generateUUID().substring(0, 8).toUpperCase()}`;
 

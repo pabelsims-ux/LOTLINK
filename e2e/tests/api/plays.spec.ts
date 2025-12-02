@@ -12,20 +12,15 @@ import { LotolinkApiClient, createTestPlayRequest, generateUUID, wait } from '..
  */
 
 test.describe('Play Creation API', () => {
-  let apiClient: LotolinkApiClient;
-  
   // Mock JWT token for testing (in real scenarios, obtain via authentication)
   const testToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0X3VzZXJfMTIzIiwiaWF0IjoxNjE2MjM5MDIyfQ.test';
 
-  test.beforeAll(async ({ request }) => {
-    apiClient = new LotolinkApiClient(
+  test('should create a new play successfully', async ({ request }) => {
+    const apiClient = new LotolinkApiClient(
       request,
       process.env.BASE_URL || 'http://localhost:3000',
       process.env.HMAC_SECRET || 'test_hmac_secret'
     );
-  });
-
-  test('should create a new play successfully', async () => {
     const playRequest = createTestPlayRequest();
     
     const { response, status } = await apiClient.createPlay(
@@ -45,7 +40,12 @@ test.describe('Play Creation API', () => {
     }
   });
 
-  test('should return same response for idempotent requests', async () => {
+  test('should return same response for idempotent requests', async ({ request }) => {
+    const apiClient = new LotolinkApiClient(
+      request,
+      process.env.BASE_URL || 'http://localhost:3000',
+      process.env.HMAC_SECRET || 'test_hmac_secret'
+    );
     const requestId = generateUUID();
     const playRequest = createTestPlayRequest({ requestId });
     
@@ -64,7 +64,12 @@ test.describe('Play Creation API', () => {
     }
   });
 
-  test('should reject request when idempotency key does not match requestId', async () => {
+  test('should reject request when idempotency key does not match requestId', async ({ request }) => {
+    const apiClient = new LotolinkApiClient(
+      request,
+      process.env.BASE_URL || 'http://localhost:3000',
+      process.env.HMAC_SECRET || 'test_hmac_secret'
+    );
     const playRequest = createTestPlayRequest();
     const differentIdempotencyKey = generateUUID();
     
@@ -95,7 +100,12 @@ test.describe('Play Creation API', () => {
     expect(response.status()).toBe(401);
   });
 
-  test('should handle concurrent idempotent requests correctly', async () => {
+  test('should handle concurrent idempotent requests correctly', async ({ request }) => {
+    const apiClient = new LotolinkApiClient(
+      request,
+      process.env.BASE_URL || 'http://localhost:3000',
+      process.env.HMAC_SECRET || 'test_hmac_secret'
+    );
     const requestId = generateUUID();
     const playRequest = createTestPlayRequest({ requestId });
     
@@ -119,24 +129,24 @@ test.describe('Play Creation API', () => {
 });
 
 test.describe('Play Query API', () => {
-  let apiClient: LotolinkApiClient;
   const testToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0X3VzZXJfMTIzIiwiaWF0IjoxNjE2MjM5MDIyfQ.test';
 
-  test.beforeAll(async ({ request }) => {
-    apiClient = new LotolinkApiClient(
+  test('should return 404 for non-existent play', async ({ request }) => {
+    const apiClient = new LotolinkApiClient(
       request,
       process.env.BASE_URL || 'http://localhost:3000'
     );
-  });
-
-  test('should return 404 for non-existent play', async () => {
     const { status } = await apiClient.getPlay(generateUUID(), testToken);
     
     // Should be 404 or 401 (if auth fails first)
     expect([404, 401]).toContain(status);
   });
 
-  test('should return plays for user', async () => {
+  test('should return plays for user', async ({ request }) => {
+    const apiClient = new LotolinkApiClient(
+      request,
+      process.env.BASE_URL || 'http://localhost:3000'
+    );
     const { status, response } = await apiClient.getPlaysByUser('test_user_123', testToken);
     
     // Should be successful or auth error
@@ -147,7 +157,11 @@ test.describe('Play Query API', () => {
     }
   });
 
-  test('should support pagination for user plays', async () => {
+  test('should support pagination for user plays', async ({ request }) => {
+    const apiClient = new LotolinkApiClient(
+      request,
+      process.env.BASE_URL || 'http://localhost:3000'
+    );
     const { status: status1 } = await apiClient.getPlaysByUser('test_user_123', testToken, 10, 0);
     const { status: status2 } = await apiClient.getPlaysByUser('test_user_123', testToken, 10, 10);
     

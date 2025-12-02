@@ -17,28 +17,24 @@ import {
  * 4. User can query confirmed play
  */
 
-test.describe('Complete Play Flow', () => {
-  let apiClient: LotolinkApiClient;
-  let bancaClient: MockBancaClient;
-  
-  // Mock JWT token for testing
-  const testToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0X3VzZXJfMTIzIiwiaWF0IjoxNjE2MjM5MDIyfQ.test';
+// Mock JWT token for testing
+const testToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0X3VzZXJfMTIzIiwiaWF0IjoxNjE2MjM5MDIyfQ.test';
 
-  test.beforeAll(async ({ request }) => {
-    apiClient = new LotolinkApiClient(
-      request,
-      process.env.BASE_URL || 'http://localhost:3000',
-      process.env.HMAC_SECRET || 'test_hmac_secret'
-    );
-    
-    bancaClient = new MockBancaClient(
-      request,
-      process.env.MOCK_BANCA_URL || 'http://localhost:4000'
-    );
-  });
+test.describe('Complete Play Flow', () => {
 
   test.describe('Synchronous Flow', () => {
-    test.beforeAll(async () => {
+    test('should create and confirm play synchronously', async ({ request }) => {
+      const apiClient = new LotolinkApiClient(
+        request,
+        process.env.BASE_URL || 'http://localhost:3000',
+        process.env.HMAC_SECRET || 'test_hmac_secret'
+      );
+      
+      const bancaClient = new MockBancaClient(
+        request,
+        process.env.MOCK_BANCA_URL || 'http://localhost:4000'
+      );
+
       // Configure mock-banca for 100% synchronous responses
       try {
         await bancaClient.configure({
@@ -48,9 +44,7 @@ test.describe('Complete Play Flow', () => {
       } catch {
         // Mock banca might not be running
       }
-    });
 
-    test('should create and confirm play synchronously', async () => {
       const playRequest = createTestPlayRequest();
       
       // Step 1: Create play
@@ -83,7 +77,18 @@ test.describe('Complete Play Flow', () => {
   });
 
   test.describe('Asynchronous Flow', () => {
-    test.beforeAll(async () => {
+    test('should create play and receive async confirmation', async ({ request }) => {
+      const apiClient = new LotolinkApiClient(
+        request,
+        process.env.BASE_URL || 'http://localhost:3000',
+        process.env.HMAC_SECRET || 'test_hmac_secret'
+      );
+      
+      const bancaClient = new MockBancaClient(
+        request,
+        process.env.MOCK_BANCA_URL || 'http://localhost:4000'
+      );
+
       // Configure mock-banca for 100% async responses
       try {
         await bancaClient.configure({
@@ -94,9 +99,7 @@ test.describe('Complete Play Flow', () => {
       } catch {
         // Mock banca might not be running
       }
-    });
 
-    test('should create play and receive async confirmation', async () => {
       const playRequest = createTestPlayRequest();
       
       // Step 1: Create play
@@ -133,7 +136,18 @@ test.describe('Complete Play Flow', () => {
   });
 
   test.describe('Rejection Flow', () => {
-    test.beforeAll(async () => {
+    test('should handle play rejection correctly', async ({ request }) => {
+      const apiClient = new LotolinkApiClient(
+        request,
+        process.env.BASE_URL || 'http://localhost:3000',
+        process.env.HMAC_SECRET || 'test_hmac_secret'
+      );
+      
+      const bancaClient = new MockBancaClient(
+        request,
+        process.env.MOCK_BANCA_URL || 'http://localhost:4000'
+      );
+
       // Configure mock-banca for 100% rejections
       try {
         await bancaClient.configure({
@@ -143,9 +157,7 @@ test.describe('Complete Play Flow', () => {
       } catch {
         // Mock banca might not be running
       }
-    });
 
-    test('should handle play rejection correctly', async () => {
       const playRequest = createTestPlayRequest();
       
       // Step 1: Create play
@@ -176,7 +188,12 @@ test.describe('Complete Play Flow', () => {
   });
 
   test.describe('Error Recovery', () => {
-    test('should handle network timeout gracefully', async () => {
+    test('should handle network timeout gracefully', async ({ request }) => {
+      const apiClient = new LotolinkApiClient(
+        request,
+        process.env.BASE_URL || 'http://localhost:3000',
+        process.env.HMAC_SECRET || 'test_hmac_secret'
+      );
       const playRequest = createTestPlayRequest();
       
       const { status } = await apiClient.createPlay(
@@ -189,7 +206,12 @@ test.describe('Complete Play Flow', () => {
       expect(status).toBeDefined();
     });
 
-    test('should not create duplicate plays on retry', async () => {
+    test('should not create duplicate plays on retry', async ({ request }) => {
+      const apiClient = new LotolinkApiClient(
+        request,
+        process.env.BASE_URL || 'http://localhost:3000',
+        process.env.HMAC_SECRET || 'test_hmac_secret'
+      );
       const requestId = generateUUID();
       const playRequest = createTestPlayRequest({ requestId });
       
