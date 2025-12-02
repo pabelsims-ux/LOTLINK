@@ -146,10 +146,16 @@ El script `scripts/generate-icons.sh` genera todos los iconos necesarios:
 Para construir releases firmados, configura estos secrets en GitHub:
 
 ### Android
-- `ANDROID_KEYSTORE_FILE` - Contenido del keystore (base64)
+- `ANDROID_KEYSTORE_BASE64` - Contenido del keystore codificado en base64
 - `ANDROID_KEYSTORE_PASSWORD` - Password del keystore
 - `ANDROID_KEY_ALIAS` - Alias de la clave
 - `ANDROID_KEY_PASSWORD` - Password de la clave
+
+Para codificar el keystore en base64:
+```bash
+base64 -i lotolink-release.keystore | pbcopy  # macOS
+base64 lotolink-release.keystore | xclip      # Linux
+```
 
 ### Desktop (opcional, para auto-actualizaciones)
 - `GH_TOKEN` - Token de GitHub para publicar releases

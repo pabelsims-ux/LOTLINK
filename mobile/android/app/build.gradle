@@ -89,9 +89,10 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            // Use release signing config if available, otherwise fall back to debug for development
+            // In production, you MUST generate your own keystore file.
+            // See https://reactnative.dev/docs/signed-apk-android
+            signingConfig project.hasProperty('LOTOLINK_UPLOAD_STORE_FILE') ? signingConfigs.release : signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
