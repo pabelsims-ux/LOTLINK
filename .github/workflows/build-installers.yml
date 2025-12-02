@@ -90,10 +90,10 @@ jobs:
           if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
             echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > app/lotolink-release.keystore
             ./gradlew assembleRelease --no-daemon \
-              -PLOTLINK_UPLOAD_STORE_FILE=app/lotolink-release.keystore \
-              -PLOTLINK_UPLOAD_STORE_PASSWORD="$ANDROID_KEYSTORE_PASSWORD" \
-              -PLOTLINK_UPLOAD_KEY_ALIAS="$ANDROID_KEY_ALIAS" \
-              -PLOTLINK_UPLOAD_KEY_PASSWORD="$ANDROID_KEY_PASSWORD"
+              -PLOTOLINK_UPLOAD_STORE_FILE=app/lotolink-release.keystore \
+              -PLOTOLINK_UPLOAD_STORE_PASSWORD="$ANDROID_KEYSTORE_PASSWORD" \
+              -PLOTOLINK_UPLOAD_KEY_ALIAS="$ANDROID_KEY_ALIAS" \
+              -PLOTOLINK_UPLOAD_KEY_PASSWORD="$ANDROID_KEY_PASSWORD"
           else
             echo "No signing configuration found, building unsigned release APK"
             ./gradlew assembleRelease --no-daemon
