@@ -8,7 +8,10 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "build:android": "cd android && ./gradlew assembleRelease",
+    "build:android:debug": "cd android && ./gradlew assembleDebug",
+    "build:android:bundle": "cd android && ./gradlew bundleRelease",
     "build:ios": "cd ios && xcodebuild -workspace LotoLink.xcworkspace -scheme LotoLink -configuration Release",
+    "clean:android": "cd android && ./gradlew clean",
     "test": "jest",
     "lint": "eslint ."
   },
