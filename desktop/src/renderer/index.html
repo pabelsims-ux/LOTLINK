@@ -3,26 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.lotolink.com;">
-  <title>LotoLink Desktop</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.lotolink.com https://api.qrserver.com https://tile.openstreetmap.org;">
+  <title>LotoLink Desktop — Premium Lottery App</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts -->
+  <!-- Leaflet Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- Font Awesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Google Fonts - Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
-    * {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-    }
+    /* ========================================
+       APPLE-INSPIRED ELEGANT DESIGN SYSTEM
+       Premium Desktop App Styling
+       ======================================== */
     
-    body {
-      -webkit-font-smoothing: antialiased;
+    :root {
+      /* Premium Color Palette - Apple inspired */
+      --primary: #0071e3;
+      --primary-dark: #0077ED;
+      --primary-light: #42a5f5;
+      --success: #34c759;
+      --warning: #ff9f0a;
+      --danger: #ff3b30;
+      --purple: #af52de;
+      
+      /* Neutral Grays - Apple style */
+      --gray-50: #fafafa;
+      --gray-100: #f5f5f7;
+      --gray-200: #e8e8ed;
+      --gray-300: #d2d2d7;
+      --gray-400: #86868b;
+      --gray-500: #6e6e73;
+      --gray-600: #1d1d1f;
+      
+      /* Glass Effect */
+      --glass-bg: rgba(255, 255, 255, 0.72);
+      --glass-border: rgba(255, 255, 255, 0.18);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      
+      /* Premium Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
+      --shadow-xl: 0 25px 50px rgba(0, 0, 0, 0.15);
+      
+      /* Border Radius - Apple style */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 24px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body { 
+      -webkit-font-smoothing: antialiased; 
       -moz-osx-font-smoothing: grayscale;
       background: linear-gradient(180deg, #f5f5f7 0%, #ffffff 100%);
+      letter-spacing: -0.01em;
     }
     
     /* macOS title bar drag region */
@@ -34,51 +88,293 @@
       -webkit-app-region: no-drag;
     }
     
-    /* Custom scrollbar */
+    /* Premium Button Styles */
+    .btn-apple-primary {
+      background: linear-gradient(180deg, #0077ED 0%, #0071e3 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+      box-shadow: 0 4px 14px rgba(0, 113, 227, 0.35);
+      cursor: pointer;
+    }
+    .btn-apple-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 113, 227, 0.45);
+    }
+    .btn-apple-primary:active {
+      transform: scale(0.98);
+    }
+    
+    .btn-apple-secondary {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--primary);
+      border: none;
+      padding: 12px 24px;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.2s ease;
+    }
+    .btn-apple-secondary:hover {
+      background: rgba(0, 113, 227, 0.1);
+    }
+
+    /* Glass Morphism Cards */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .premium-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    .premium-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    /* Premium Header */
+    .premium-header {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* Premium Toggle Switch - Apple/iOS style */
+    .toggle {
+      width: 51px; 
+      height: 31px; 
+      border-radius: var(--radius-full); 
+      background: #e9e9eb; 
+      position: relative; 
+      display: inline-block; 
+      vertical-align: middle; 
+      cursor: pointer;
+      transition: background 0.25s ease;
+    }
+    .toggle .knob {
+      width: 27px; 
+      height: 27px; 
+      border-radius: var(--radius-full); 
+      background: white; 
+      position: absolute; 
+      top: 2px; 
+      left: 2px; 
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .toggle.on { background: var(--success); }
+    .toggle.on .knob { transform: translateX(20px); }
+
+    /* ========================================
+       DARK MODE - Premium Dark Theme
+       ======================================== */
+    .dark body { 
+      background: linear-gradient(180deg, #000000 0%, #1c1c1e 100%);
+      color: #f5f5f7; 
+    }
+    .dark .bg-white { background-color: #1c1c1e !important; }
+    .dark .bg-gray-50 { background-color: #2c2c2e !important; }
+    .dark .bg-gray-100 { background-color: #2c2c2e !important; }
+    .dark .text-gray-900 { color: #f5f5f7 !important; }
+    .dark .text-gray-700 { color: #e5e5e5 !important; }
+    .dark .text-gray-600 { color: #a1a1a6 !important; }
+    .dark .text-gray-500 { color: #8e8e93 !important; }
+    .dark .border-gray-200 { border-color: #38383a !important; }
+    .dark .border-gray-300 { border-color: #48484a !important; }
+    
+    .dark .premium-header {
+      background: rgba(28, 28, 30, 0.85);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .dark .glass-card {
+      background: rgba(28, 28, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .dark .premium-card {
+      background: #1c1c1e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .dark .sidebar-glass {
+      background: rgba(28, 28, 30, 0.9) !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    
+    .dark input, .dark select, .dark textarea {
+      background-color: #2c2c2e !important;
+      border-color: #48484a !important;
+      color: #f5f5f7 !important;
+    }
+    
+    .dark .toggle {
+      background: #48484a;
+    }
+
+    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
     }
-    
     ::-webkit-scrollbar-track {
       background: transparent;
     }
-    
     ::-webkit-scrollbar-thumb {
       background: rgba(0, 0, 0, 0.2);
       border-radius: 4px;
     }
-    
     ::-webkit-scrollbar-thumb:hover {
       background: rgba(0, 0, 0, 0.3);
     }
-    
-    /* Dark mode */
-    .dark body {
-      background: linear-gradient(180deg, #000000 0%, #1c1c1e 100%);
-    }
-    
     .dark ::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.2);
     }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
     
-    /* Premium card effect */
+    /* Premium Card Hover Effect */
     .card-hover {
       transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
     }
-    
     .card-hover:hover {
       transform: translateY(-4px);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     }
     
-    /* Glow effect */
-    .glow {
-      box-shadow: 0 0 20px rgba(0, 113, 227, 0.3);
+    /* Leaflet Map Styling */
+    #bancas-leaflet-map {
+      width: 100%;
+      height: 450px;
+      border-radius: var(--radius-xl);
+      z-index: 1;
+    }
+    
+    /* Number Button */
+    .num-btn { 
+      transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+      border-radius: var(--radius-md);
+    }
+    .num-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .num-btn.selected { 
+      transform: translateY(-2px); 
+      box-shadow: 0 8px 24px rgba(0, 113, 227, 0.3); 
+    }
+    
+    /* Animations */
+    .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); }
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: translateY(12px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+    
+    @keyframes pulse-live {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .animate-pulse-live {
+      animation: pulse-live 2s infinite;
+    }
+    
+    @keyframes loading {
+      0% { width: 0%; }
+      50% { width: 70%; }
+      100% { width: 100%; }
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .animate-slide-in {
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    /* Ticket Print Styling */
+    .ticket-print {
+      width: 340px; 
+      border-radius: var(--radius-xl); 
+      background: white;
+      box-shadow: var(--shadow-xl);
+      padding: 24px; 
+      transform-origin: top center; 
+      animation: printIn 700ms cubic-bezier(.25,.1,.25,1);
+      color: #000 !important;
+    }
+    @keyframes printIn {
+      0% { transform: translateY(40px) scale(.95); opacity: 0; }
+      60% { transform: translateY(-8px) scale(1.02); opacity: 1; }
+      100% { transform: translateY(0) scale(1); }
+    }
+    
+    @media print {
+      body * { visibility: hidden; }
+      #ticket-print-area, #ticket-print-area * { visibility: visible; }
+      #ticket-print-area { position: absolute; left: 0; top: 0; width: 100%; }
+    }
+    
+    /* Premium Input Fields */
+    input, select, textarea {
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15);
+    }
+    
+    /* Trust Badge */
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, rgba(52, 199, 89, 0.1) 0%, rgba(0, 113, 227, 0.1) 100%);
+      border: 1px solid rgba(52, 199, 89, 0.2);
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--success);
+    }
+    
+    /* Active nav state */
+    .nav-item.active {
+      background: rgba(0, 113, 227, 0.1);
+      color: var(--primary);
+    }
+    .dark .nav-item.active {
+      background: rgba(0, 113, 227, 0.2);
     }
   </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen text-gray-900">
   <!-- macOS Title Bar Space -->
   <div class="titlebar-drag h-8 bg-transparent fixed top-0 left-0 right-0 z-50"></div>
   
@@ -90,14 +386,17 @@
           🎰
         </div>
         <h1 class="text-3xl font-bold text-gray-900 mb-2">LotoLink</h1>
-        <p class="text-gray-500">Cargando aplicación...</p>
+        <p class="text-gray-500">Cargando aplicación premium...</p>
+        <div class="mt-4 w-48 h-1 bg-gray-200 rounded-full mx-auto overflow-hidden">
+          <div class="h-full bg-blue-500 rounded-full" style="animation: loading 1.5s ease-in-out infinite; width: 0%;"></div>
+        </div>
       </div>
     </div>
     
     <!-- Main App Content -->
     <div id="main-content" class="hidden">
       <!-- Sidebar -->
-      <aside class="fixed left-0 top-8 bottom-0 w-64 bg-white/80 backdrop-blur-xl border-r border-gray-200 p-4 overflow-y-auto">
+      <aside class="sidebar-glass fixed left-0 top-8 bottom-0 w-64 bg-white/90 backdrop-blur-xl border-r border-gray-200 p-4 overflow-y-auto z-40">
         <div class="mb-8">
           <div class="flex items-center gap-3 mb-6">
             <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-2xl shadow-lg">
@@ -108,116 +407,132 @@
               <p class="text-xs text-gray-500">Desktop v1.0.0</p>
             </div>
           </div>
+          
+          <!-- Dark Mode Toggle -->
+          <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl mb-4">
+            <span class="text-sm text-gray-600 flex items-center gap-2">
+              <span>🌙</span> Modo Oscuro
+            </span>
+            <div id="dark-mode-toggle" class="toggle titlebar-no-drag" onclick="toggleDarkMode()">
+              <div class="knob"></div>
+            </div>
+          </div>
         </div>
         
-        <nav class="space-y-1">
-          <a href="#" onclick="navigate('home')" class="nav-item active flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+        <nav class="space-y-1 titlebar-no-drag">
+          <a href="#" onclick="navigate('home'); return false;" class="nav-item active flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
             <span class="text-xl">🏠</span>
             <span class="font-medium">Inicio</span>
           </a>
-          <a href="#" onclick="navigate('play')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+          <a href="#" onclick="navigate('play'); return false;" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
             <span class="text-xl">🎲</span>
             <span class="font-medium">Jugar</span>
           </a>
-          <a href="#" onclick="navigate('bancas')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
-            <span class="text-xl">📍</span>
+          <a href="#" onclick="navigate('bancas'); return false;" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+            <span class="text-xl">🏪</span>
             <span class="font-medium">Bancas</span>
           </a>
-          <a href="#" onclick="navigate('loterias')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+          <a href="#" onclick="navigate('loterias'); return false;" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
             <span class="text-xl">🎫</span>
             <span class="font-medium">Loterías</span>
           </a>
-          <a href="#" onclick="navigate('results')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+          <a href="#" onclick="navigate('results'); return false;" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
             <span class="text-xl">📊</span>
             <span class="font-medium">Resultados</span>
           </a>
-          <a href="#" onclick="navigate('wallet')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+          <a href="#" onclick="navigate('wallet'); return false;" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
             <span class="text-xl">💳</span>
             <span class="font-medium">Cartera</span>
           </a>
-          <a href="#" onclick="navigate('profile')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
+          <a href="#" onclick="navigate('profile'); return false;" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 transition">
             <span class="text-xl">👤</span>
             <span class="font-medium">Mi Perfil</span>
           </a>
         </nav>
         
         <!-- Balance Card -->
-        <div class="mt-8 p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl text-white">
+        <div class="mt-8 p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl text-white shadow-lg">
           <p class="text-sm opacity-80">Balance disponible</p>
-          <p class="text-2xl font-bold">RD$ 2,500</p>
+          <p id="sidebar-balance" class="text-2xl font-bold">RD$ 2,500</p>
           <button onclick="navigate('wallet')" class="mt-3 w-full bg-white/20 hover:bg-white/30 py-2 rounded-xl text-sm font-medium transition titlebar-no-drag">
             💳 Recargar
           </button>
+        </div>
+        
+        <!-- Keyboard Shortcuts -->
+        <div class="mt-6 p-3 bg-gray-50 rounded-xl text-xs text-gray-500">
+          <p class="font-semibold mb-2">⌨️ Atajos de Teclado</p>
+          <div class="space-y-1">
+            <p><kbd class="px-1 bg-gray-200 rounded">Ctrl+N</kbd> Nueva Jugada</p>
+            <p><kbd class="px-1 bg-gray-200 rounded">Ctrl+R</kbd> Resultados</p>
+            <p><kbd class="px-1 bg-gray-200 rounded">Ctrl+D</kbd> Modo Oscuro</p>
+          </div>
         </div>
       </aside>
       
       <!-- Main Content Area -->
       <main class="ml-64 p-8 min-h-screen">
         <!-- Home View -->
-        <div id="view-home" class="view">
-          <header class="mb-8">
-            <h2 class="text-3xl font-bold text-gray-900">¡Bienvenido a LotoLink!</h2>
-            <p class="text-gray-500 mt-1">Tu suerte empieza aquí</p>
+        <div id="view-home" class="view animate-fade-in">
+          <header class="mb-8 flex justify-between items-center">
+            <div>
+              <h2 class="text-3xl font-bold text-gray-900">¡Bienvenido a LotoLink!</h2>
+              <p class="text-gray-500 mt-1">Tu suerte empieza aquí • <span id="current-time"></span></p>
+            </div>
+            <div class="trust-badge">
+              <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+              100% Seguro y Confiable
+            </div>
           </header>
           
           <!-- Quick Actions -->
           <div class="grid grid-cols-4 gap-4 mb-8">
-            <button onclick="navigate('play')" class="card-hover bg-white p-6 rounded-2xl shadow-md text-center">
+            <button onclick="navigate('play')" class="premium-card p-6 text-center titlebar-no-drag">
               <span class="text-4xl block mb-3">🎲</span>
               <span class="font-semibold text-gray-900">Jugar Ahora</span>
             </button>
-            <button onclick="navigate('bancas')" class="card-hover bg-white p-6 rounded-2xl shadow-md text-center">
-              <span class="text-4xl block mb-3">📍</span>
+            <button onclick="navigate('bancas')" class="premium-card p-6 text-center titlebar-no-drag">
+              <span class="text-4xl block mb-3">🏪</span>
               <span class="font-semibold text-gray-900">Bancas</span>
             </button>
-            <button onclick="navigate('results')" class="card-hover bg-white p-6 rounded-2xl shadow-md text-center">
+            <button onclick="navigate('results')" class="premium-card p-6 text-center titlebar-no-drag">
               <span class="text-4xl block mb-3">📊</span>
               <span class="font-semibold text-gray-900">Resultados</span>
             </button>
-            <button onclick="navigate('profile')" class="card-hover bg-white p-6 rounded-2xl shadow-md text-center">
+            <button onclick="navigate('profile')" class="premium-card p-6 text-center titlebar-no-drag">
               <span class="text-4xl block mb-3">🏆</span>
               <span class="font-semibold text-gray-900">Mis Premios</span>
             </button>
           </div>
           
-          <!-- Lottery Results -->
+          <!-- Upcoming Draws with Countdown -->
+          <section class="mb-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse-live"></span>
+              Próximos Sorteos
+            </h3>
+            <div class="grid grid-cols-3 gap-4" id="upcoming-draws">
+              <!-- Sorteos se renderizan dinámicamente -->
+            </div>
+          </section>
+          
+          <!-- Live Results -->
           <section>
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-xl font-bold text-gray-900">Resultados en Vivo</h3>
-              <a href="#" onclick="navigate('results')" class="text-blue-600 hover:text-blue-700 font-medium">Ver todos →</a>
+              <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse-live"></span>
+                Resultados en Vivo
+              </h3>
+              <button onclick="navigate('results')" class="btn-apple-secondary text-sm py-2 px-4 titlebar-no-drag">Ver todos →</button>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-              <!-- Nacional -->
-              <div class="card-hover bg-white p-6 rounded-2xl shadow-md">
-                <div class="flex items-center justify-between mb-4">
-                  <span class="px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-full">Nacional</span>
-                  <span class="text-gray-500 text-sm">12:30 PM</span>
-                </div>
-                <div class="flex justify-center gap-3">
-                  <div class="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white text-xl font-bold">23</div>
-                  <div class="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white text-xl font-bold">45</div>
-                  <div class="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white text-xl font-bold">67</div>
-                </div>
-              </div>
-              
-              <!-- Leidsa -->
-              <div class="card-hover bg-white p-6 rounded-2xl shadow-md">
-                <div class="flex items-center justify-between mb-4">
-                  <span class="px-3 py-1 bg-green-500 text-white text-sm font-semibold rounded-full">Leidsa</span>
-                  <span class="text-gray-500 text-sm">8:55 PM</span>
-                </div>
-                <div class="flex justify-center gap-3">
-                  <div class="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center text-white text-xl font-bold">12</div>
-                  <div class="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center text-white text-xl font-bold">34</div>
-                  <div class="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center text-white text-xl font-bold">56</div>
-                </div>
-              </div>
+            <div class="grid grid-cols-2 gap-4" id="live-results">
+              <!-- Resultados se renderizan dinámicamente -->
             </div>
           </section>
         </div>
         
         <!-- Play View -->
-        <div id="view-play" class="view hidden">
+        <div id="view-play" class="view hidden animate-fade-in">
           <header class="mb-8">
             <h2 class="text-3xl font-bold text-gray-900">🎲 Nueva Jugada</h2>
             <p class="text-gray-500 mt-1">Selecciona lotería, modalidad y números</p>
@@ -227,86 +542,42 @@
             <!-- Left Column: Selection -->
             <div class="col-span-2 space-y-6">
               <!-- Step 1: Lottery Selection -->
-              <div class="bg-white p-6 rounded-2xl shadow-md">
+              <div class="premium-card p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">1. Selecciona una Lotería</h3>
-                <div class="grid grid-cols-4 gap-3">
-                  <button onclick="selectLottery('nacional')" id="lot-nacional" class="lottery-btn card-hover bg-gray-50 p-4 rounded-xl text-center border-2 border-transparent hover:border-red-500 focus:border-red-500 transition">
-                    <span class="text-3xl block mb-2">🎰</span>
-                    <span class="text-sm font-medium">Nacional</span>
-                  </button>
-                  <button onclick="selectLottery('leidsa')" id="lot-leidsa" class="lottery-btn card-hover bg-gray-50 p-4 rounded-xl text-center border-2 border-transparent hover:border-green-500 focus:border-green-500 transition">
-                    <span class="text-3xl block mb-2">🍀</span>
-                    <span class="text-sm font-medium">Leidsa</span>
-                  </button>
-                  <button onclick="selectLottery('real')" id="lot-real" class="lottery-btn card-hover bg-gray-50 p-4 rounded-xl text-center border-2 border-transparent hover:border-yellow-500 focus:border-yellow-500 transition">
-                    <span class="text-3xl block mb-2">👑</span>
-                    <span class="text-sm font-medium">Real</span>
-                  </button>
-                  <button onclick="selectLottery('loteka')" id="lot-loteka" class="lottery-btn card-hover bg-gray-50 p-4 rounded-xl text-center border-2 border-transparent hover:border-purple-500 focus:border-purple-500 transition">
-                    <span class="text-3xl block mb-2">💎</span>
-                    <span class="text-sm font-medium">Loteka</span>
-                  </button>
+                <div class="grid grid-cols-3 gap-3" id="lottery-selection">
+                  <!-- Loterías se renderizan dinámicamente -->
                 </div>
               </div>
               
               <!-- Step 2: Modality -->
-              <div class="bg-white p-6 rounded-2xl shadow-md">
+              <div class="premium-card p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">2. Modalidad de Juego</h3>
-                <div class="grid grid-cols-2 gap-3">
-                  <button onclick="selectModality('quiniela', 1)" class="modality-btn flex items-center gap-3 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-500 transition">
-                    <span class="text-2xl">🎯</span>
-                    <div class="text-left">
-                      <span class="font-medium block">Quiniela</span>
-                      <span class="text-sm text-gray-500">1 número • x60</span>
-                    </div>
-                  </button>
-                  <button onclick="selectModality('pale', 2)" class="modality-btn flex items-center gap-3 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-500 transition">
-                    <span class="text-2xl">🎰</span>
-                    <div class="text-left">
-                      <span class="font-medium block">Palé</span>
-                      <span class="text-sm text-gray-500">2 números • x1,000</span>
-                    </div>
-                  </button>
-                  <button onclick="selectModality('tripleta', 3)" class="modality-btn flex items-center gap-3 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-500 transition">
-                    <span class="text-2xl">🎲</span>
-                    <div class="text-left">
-                      <span class="font-medium block">Tripleta</span>
-                      <span class="text-sm text-gray-500">3 números • x20,000</span>
-                    </div>
-                  </button>
-                  <button onclick="selectModality('superpale', 4)" class="modality-btn flex items-center gap-3 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-500 transition">
-                    <span class="text-2xl">💫</span>
-                    <div class="text-left">
-                      <span class="font-medium block">Super Palé</span>
-                      <span class="text-sm text-gray-500">4 números • x50,000</span>
-                    </div>
-                  </button>
+                <div class="grid grid-cols-2 gap-3" id="modality-selection">
+                  <!-- Modalidades se renderizan dinámicamente -->
                 </div>
               </div>
               
               <!-- Step 3: Numbers Grid (00-99) -->
-              <div class="bg-white p-6 rounded-2xl shadow-md">
+              <div class="premium-card p-6">
                 <div class="flex justify-between items-center mb-4">
-                  <h3 class="text-lg font-semibold text-gray-900">3. Selecciona tus Números</h3>
-                  <button onclick="randomNumbers()" class="px-4 py-2 bg-green-500 text-white rounded-xl font-medium hover:bg-green-600 transition">
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-900">3. Selecciona tus Números</h3>
+                    <p class="text-sm text-gray-500" id="numbers-help">Selecciona <span id="required-numbers">2</span> número(s)</p>
+                  </div>
+                  <button onclick="randomNumbers()" class="btn-apple-primary text-sm py-2 px-4 titlebar-no-drag">
                     🎲 Aleatorio
                   </button>
                 </div>
                 <div id="number-grid" class="grid grid-cols-10 gap-2">
-                  <!-- Numbers 00-99 will be generated by JavaScript -->
+                  <!-- Numbers 00-99 generados por JavaScript -->
                 </div>
               </div>
               
               <!-- Step 4: Stake -->
-              <div class="bg-white p-6 rounded-2xl shadow-md">
+              <div class="premium-card p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">4. Monto de Apuesta</h3>
-                <div class="flex gap-3 flex-wrap">
-                  <button onclick="selectStake(10)" class="stake-btn px-6 py-3 bg-gray-100 rounded-xl font-semibold hover:bg-blue-50 border-2 border-transparent hover:border-blue-500 transition">RD$ 10</button>
-                  <button onclick="selectStake(25)" class="stake-btn px-6 py-3 bg-blue-500 text-white rounded-xl font-semibold shadow-md">RD$ 25</button>
-                  <button onclick="selectStake(50)" class="stake-btn px-6 py-3 bg-gray-100 rounded-xl font-semibold hover:bg-blue-50 border-2 border-transparent hover:border-blue-500 transition">RD$ 50</button>
-                  <button onclick="selectStake(100)" class="stake-btn px-6 py-3 bg-gray-100 rounded-xl font-semibold hover:bg-blue-50 border-2 border-transparent hover:border-blue-500 transition">RD$ 100</button>
-                  <button onclick="selectStake(200)" class="stake-btn px-6 py-3 bg-gray-100 rounded-xl font-semibold hover:bg-blue-50 border-2 border-transparent hover:border-blue-500 transition">RD$ 200</button>
-                  <button onclick="selectStake(500)" class="stake-btn px-6 py-3 bg-gray-100 rounded-xl font-semibold hover:bg-blue-50 border-2 border-transparent hover:border-blue-500 transition">RD$ 500</button>
+                <div class="flex gap-3 flex-wrap" id="stake-selection">
+                  <!-- Montos se renderizan dinámicamente -->
                 </div>
               </div>
             </div>
@@ -314,7 +585,7 @@
             <!-- Right Column: Summary -->
             <div class="space-y-6">
               <!-- Selected Numbers -->
-              <div class="bg-white p-6 rounded-2xl shadow-md">
+              <div class="premium-card p-6">
                 <h3 class="font-semibold text-gray-900 mb-4">Números Seleccionados</h3>
                 <div id="selected-numbers" class="flex gap-2 flex-wrap min-h-[60px]">
                   <span class="text-gray-400 text-sm">Selecciona números del grid</span>
@@ -350,392 +621,104 @@
               </div>
               
               <!-- Confirm Button -->
-              <button onclick="confirmPlay()" class="w-full py-4 bg-gradient-to-r from-green-500 to-green-600 text-white text-xl font-bold rounded-2xl shadow-lg hover:shadow-xl transition">
+              <button onclick="confirmPlay()" class="btn-apple-primary w-full py-4 text-lg titlebar-no-drag">
                 🎰 Confirmar Jugada
               </button>
             </div>
           </div>
         </div>
         
-        <!-- Bancas View -->
-        <div id="view-bancas" class="view hidden">
+        <!-- Bancas View with Leaflet Map -->
+        <div id="view-bancas" class="view hidden animate-fade-in">
           <header class="mb-8">
-            <h2 class="text-3xl font-bold text-gray-900">📍 Bancas Cercanas</h2>
-            <p class="text-gray-500 mt-1">Encuentra bancas cerca de ti</p>
+            <h2 class="text-3xl font-bold text-gray-900">🏪 Bancas Cercanas</h2>
+            <p class="text-gray-500 mt-1">Encuentra bancas cerca de ti para realizar tus jugadas</p>
           </header>
           
           <!-- View Toggle -->
           <div class="flex gap-2 mb-6">
-            <button onclick="toggleBancasView('list')" id="btn-list" class="px-4 py-2 bg-blue-500 text-white rounded-xl font-medium">
+            <button onclick="toggleBancasView('list')" id="btn-list" class="btn-apple-primary text-sm py-2 px-4 titlebar-no-drag">
               📋 Lista
             </button>
-            <button onclick="toggleBancasView('map')" id="btn-map" class="px-4 py-2 bg-white text-gray-700 rounded-xl font-medium shadow-md">
+            <button onclick="toggleBancasView('map')" id="btn-map" class="btn-apple-secondary text-sm py-2 px-4 titlebar-no-drag">
               🗺️ Mapa
             </button>
           </div>
           
           <!-- Bancas List -->
           <div id="bancas-list" class="grid grid-cols-2 gap-4">
-            <!-- Banca 1 -->
-            <div class="card-hover bg-white p-6 rounded-2xl shadow-md">
-              <div class="flex justify-between items-start mb-4">
-                <div>
-                  <h3 class="font-bold text-gray-900">Banca La Fortuna</h3>
-                  <p class="text-sm text-gray-500">Av. 27 de Febrero #123</p>
-                </div>
-                <span class="px-2 py-1 bg-green-100 text-green-600 text-xs font-medium rounded-full">Abierta</span>
-              </div>
-              <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                <span>📍 0.3 km</span>
-                <span>⭐ 4.8</span>
-                <span>🎰 4 loterías</span>
-              </div>
-              <div class="flex gap-2 mb-4">
-                <span class="px-2 py-1 bg-red-100 text-red-600 text-xs rounded-full">Nacional</span>
-                <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">Leidsa</span>
-                <span class="px-2 py-1 bg-yellow-100 text-yellow-600 text-xs rounded-full">Real</span>
-              </div>
-              <button onclick="navigate('play')" class="w-full py-2 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition">
-                Jugar Aquí
-              </button>
-            </div>
-            
-            <!-- Banca 2 -->
-            <div class="card-hover bg-white p-6 rounded-2xl shadow-md">
-              <div class="flex justify-between items-start mb-4">
-                <div>
-                  <h3 class="font-bold text-gray-900">Banca El Millonario</h3>
-                  <p class="text-sm text-gray-500">C/ Duarte #456, Santiago</p>
-                </div>
-                <span class="px-2 py-1 bg-green-100 text-green-600 text-xs font-medium rounded-full">Abierta</span>
-              </div>
-              <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                <span>📍 0.8 km</span>
-                <span>⭐ 4.5</span>
-                <span>🎰 2 loterías</span>
-              </div>
-              <div class="flex gap-2 mb-4">
-                <span class="px-2 py-1 bg-red-100 text-red-600 text-xs rounded-full">Nacional</span>
-                <span class="px-2 py-1 bg-purple-100 text-purple-600 text-xs rounded-full">Loteka</span>
-              </div>
-              <button onclick="navigate('play')" class="w-full py-2 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition">
-                Jugar Aquí
-              </button>
-            </div>
-            
-            <!-- Banca 3 -->
-            <div class="card-hover bg-white p-6 rounded-2xl shadow-md">
-              <div class="flex justify-between items-start mb-4">
-                <div>
-                  <h3 class="font-bold text-gray-900">Banca Suerte Total</h3>
-                  <p class="text-sm text-gray-500">Av. Independencia #789</p>
-                </div>
-                <span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">Cerrada</span>
-              </div>
-              <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                <span>📍 1.2 km</span>
-                <span>⭐ 4.7</span>
-                <span>🎰 5 loterías</span>
-              </div>
-              <div class="flex gap-2 flex-wrap mb-4">
-                <span class="px-2 py-1 bg-red-100 text-red-600 text-xs rounded-full">Nacional</span>
-                <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">Leidsa</span>
-                <span class="px-2 py-1 bg-yellow-100 text-yellow-600 text-xs rounded-full">Real</span>
-                <span class="px-2 py-1 bg-purple-100 text-purple-600 text-xs rounded-full">+2</span>
-              </div>
-              <button disabled class="w-full py-2 bg-gray-200 text-gray-500 rounded-xl font-medium cursor-not-allowed">
-                No disponible
-              </button>
-            </div>
-            
-            <!-- Banca 4 -->
-            <div class="card-hover bg-white p-6 rounded-2xl shadow-md">
-              <div class="flex justify-between items-start mb-4">
-                <div>
-                  <h3 class="font-bold text-gray-900">Banca Los Ganadores</h3>
-                  <p class="text-sm text-gray-500">C/ El Conde #321, Zona Colonial</p>
-                </div>
-                <span class="px-2 py-1 bg-green-100 text-green-600 text-xs font-medium rounded-full">Abierta</span>
-              </div>
-              <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                <span>📍 1.5 km</span>
-                <span>⭐ 4.9</span>
-                <span>🎰 2 loterías</span>
-              </div>
-              <div class="flex gap-2 mb-4">
-                <span class="px-2 py-1 bg-red-100 text-red-600 text-xs rounded-full">Nacional</span>
-                <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">Leidsa</span>
-              </div>
-              <button onclick="navigate('play')" class="w-full py-2 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition">
-                Jugar Aquí
-              </button>
-            </div>
+            <!-- Bancas se renderizan dinámicamente -->
           </div>
           
-          <!-- Map View (placeholder) -->
+          <!-- Map View -->
           <div id="bancas-map" class="hidden">
-            <div class="bg-white rounded-2xl shadow-md p-8 min-h-[400px] flex flex-col items-center justify-center">
-              <span class="text-6xl mb-4">🗺️</span>
-              <h3 class="text-xl font-bold text-gray-900 mb-2">Mapa de Bancas</h3>
-              <p class="text-gray-500 mb-4">4 bancas cerca de tu ubicación</p>
-              <p class="text-sm text-gray-400">Integración con Leaflet para visualizar ubicaciones</p>
-            </div>
+            <div id="bancas-leaflet-map" class="shadow-lg"></div>
+            <p class="text-center text-gray-500 text-sm mt-4">Haz clic en un marcador para ver detalles y jugar en esa banca</p>
           </div>
         </div>
         
         <!-- Loterías View -->
-        <div id="view-loterias" class="view hidden">
+        <div id="view-loterias" class="view hidden animate-fade-in">
           <header class="mb-8">
             <h2 class="text-3xl font-bold text-gray-900">🎫 Loterías Disponibles</h2>
-            <p class="text-gray-500 mt-1">Todas las loterías y sus horarios de sorteo</p>
+            <p class="text-gray-500 mt-1">Todas las loterías dominicanas y sus horarios de sorteo</p>
           </header>
           
-          <div class="grid grid-cols-3 gap-4">
-            <!-- Nacional -->
-            <div class="card-hover bg-white rounded-2xl shadow-md overflow-hidden">
-              <div class="h-2 bg-red-500"></div>
-              <div class="p-6">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center text-2xl">🎰</div>
-                  <div>
-                    <h3 class="font-bold text-gray-900">Lotería Nacional</h3>
-                    <p class="text-sm text-gray-500">La más tradicional</p>
-                  </div>
-                </div>
-                <div class="space-y-2 mb-4">
-                  <div class="flex justify-between text-sm">
-                    <span class="text-gray-500">Lun-Sab:</span>
-                    <span class="font-medium">12:30 PM, 6:00 PM</span>
-                  </div>
-                  <div class="flex justify-between text-sm">
-                    <span class="text-gray-500">Domingo:</span>
-                    <span class="font-medium">3:00 PM</span>
-                  </div>
-                </div>
-                <div class="flex gap-1 flex-wrap mb-4">
-                  <span class="px-2 py-1 bg-red-100 text-red-600 text-xs rounded-full">Quiniela</span>
-                  <span class="px-2 py-1 bg-red-100 text-red-600 text-xs rounded-full">Palé</span>
-                  <span class="px-2 py-1 bg-red-100 text-red-600 text-xs rounded-full">Tripleta</span>
-                </div>
-                <button onclick="navigate('play')" class="w-full py-2 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition">
-                  Jugar Nacional
-                </button>
-              </div>
-            </div>
-            
-            <!-- Leidsa -->
-            <div class="card-hover bg-white rounded-2xl shadow-md overflow-hidden">
-              <div class="h-2 bg-green-500"></div>
-              <div class="p-6">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center text-2xl">🍀</div>
-                  <div>
-                    <h3 class="font-bold text-gray-900">Leidsa</h3>
-                    <p class="text-sm text-gray-500">Los mejores premios</p>
-                  </div>
-                </div>
-                <div class="space-y-2 mb-4">
-                  <div class="flex justify-between text-sm">
-                    <span class="text-gray-500">Todos los días:</span>
-                    <span class="font-medium">8:55 PM</span>
-                  </div>
-                  <div class="flex justify-between text-sm">
-                    <span class="text-gray-500">Domingo:</span>
-                    <span class="font-medium">3:55 PM</span>
-                  </div>
-                </div>
-                <div class="flex gap-1 flex-wrap mb-4">
-                  <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">Quiniela</span>
-                  <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">Palé</span>
-                  <span class="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">Loto Pool</span>
-                </div>
-                <button onclick="navigate('play')" class="w-full py-2 bg-green-500 text-white rounded-xl font-medium hover:bg-green-600 transition">
-                  Jugar Leidsa
-                </button>
-              </div>
-            </div>
-            
-            <!-- Real -->
-            <div class="card-hover bg-white rounded-2xl shadow-md overflow-hidden">
-              <div class="h-2 bg-yellow-500"></div>
-              <div class="p-6">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center text-2xl">👑</div>
-                  <div>
-                    <h3 class="font-bold text-gray-900">Lotería Real</h3>
-                    <p class="text-sm text-gray-500">Premios reales</p>
-                  </div>
-                </div>
-                <div class="space-y-2 mb-4">
-                  <div class="flex justify-between text-sm">
-                    <span class="text-gray-500">Lun-Sab:</span>
-                    <span class="font-medium">12:55 PM, 7:30 PM</span>
-                  </div>
-                </div>
-                <div class="flex gap-1 flex-wrap mb-4">
-                  <span class="px-2 py-1 bg-yellow-100 text-yellow-600 text-xs rounded-full">Quiniela</span>
-                  <span class="px-2 py-1 bg-yellow-100 text-yellow-600 text-xs rounded-full">Palé</span>
-                  <span class="px-2 py-1 bg-yellow-100 text-yellow-600 text-xs rounded-full">Tripleta</span>
-                </div>
-                <button onclick="navigate('play')" class="w-full py-2 bg-yellow-500 text-white rounded-xl font-medium hover:bg-yellow-600 transition">
-                  Jugar Real
-                </button>
-              </div>
-            </div>
-            
-            <!-- Loteka -->
-            <div class="card-hover bg-white rounded-2xl shadow-md overflow-hidden">
-              <div class="h-2 bg-purple-500"></div>
-              <div class="p-6">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center text-2xl">💎</div>
-                  <div>
-                    <h3 class="font-bold text-gray-900">Loteka</h3>
-                    <p class="text-sm text-gray-500">Grandes premios</p>
-                  </div>
-                </div>
-                <div class="space-y-2 mb-4">
-                  <div class="flex justify-between text-sm">
-                    <span class="text-gray-500">Todos los días:</span>
-                    <span class="font-medium">7:55 PM</span>
-                  </div>
-                </div>
-                <div class="flex gap-1 flex-wrap mb-4">
-                  <span class="px-2 py-1 bg-purple-100 text-purple-600 text-xs rounded-full">Quiniela</span>
-                  <span class="px-2 py-1 bg-purple-100 text-purple-600 text-xs rounded-full">Mega Chances</span>
-                </div>
-                <button onclick="navigate('play')" class="w-full py-2 bg-purple-500 text-white rounded-xl font-medium hover:bg-purple-600 transition">
-                  Jugar Loteka
-                </button>
-              </div>
-            </div>
-            
-            <!-- La Primera -->
-            <div class="card-hover bg-white rounded-2xl shadow-md overflow-hidden">
-              <div class="h-2 bg-blue-500"></div>
-              <div class="p-6">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center text-2xl">🥇</div>
-                  <div>
-                    <h3 class="font-bold text-gray-900">La Primera</h3>
-                    <p class="text-sm text-gray-500">Siempre primero</p>
-                  </div>
-                </div>
-                <div class="space-y-2 mb-4">
-                  <div class="flex justify-between text-sm">
-                    <span class="text-gray-500">Lun-Sab:</span>
-                    <span class="font-medium">12:00 PM, 8:00 PM</span>
-                  </div>
-                </div>
-                <div class="flex gap-1 flex-wrap mb-4">
-                  <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded-full">Quiniela</span>
-                  <span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded-full">Palé</span>
-                </div>
-                <button onclick="navigate('play')" class="w-full py-2 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition">
-                  Jugar La Primera
-                </button>
-              </div>
-            </div>
-            
-            <!-- Americana -->
-            <div class="card-hover bg-white rounded-2xl shadow-md overflow-hidden">
-              <div class="h-2 bg-slate-700"></div>
-              <div class="p-6">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-12 h-12 bg-slate-700 rounded-xl flex items-center justify-center text-2xl">🗽</div>
-                  <div>
-                    <h3 class="font-bold text-gray-900">Americana (NY)</h3>
-                    <p class="text-sm text-gray-500">New York Lottery</p>
-                  </div>
-                </div>
-                <div class="space-y-2 mb-4">
-                  <div class="flex justify-between text-sm">
-                    <span class="text-gray-500">Todos los días:</span>
-                    <span class="font-medium">2:30 PM, 10:30 PM</span>
-                  </div>
-                </div>
-                <div class="flex gap-1 flex-wrap mb-4">
-                  <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full">Quiniela</span>
-                  <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full">Palé</span>
-                </div>
-                <button onclick="navigate('play')" class="w-full py-2 bg-slate-700 text-white rounded-xl font-medium hover:bg-slate-800 transition">
-                  Jugar Americana
-                </button>
-              </div>
-            </div>
+          <div class="grid grid-cols-3 gap-4" id="loterias-grid">
+            <!-- Loterías se renderizan dinámicamente -->
           </div>
         </div>
         
-        <!-- Results View -->
-        <div id="view-results" class="view hidden">
+        <!-- Results View with Charts -->
+        <div id="view-results" class="view hidden animate-fade-in">
           <header class="mb-8">
             <h2 class="text-3xl font-bold text-gray-900">📊 Resultados</h2>
-            <p class="text-gray-500 mt-1">Resultados de sorteos anteriores</p>
+            <p class="text-gray-500 mt-1">Resultados de sorteos y estadísticas</p>
           </header>
           
           <!-- Filters -->
           <div class="flex gap-3 mb-6">
-            <select class="px-4 py-2 bg-white rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <select id="results-lottery-filter" class="px-4 py-2 bg-white rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option>Todas las loterías</option>
               <option>Nacional</option>
               <option>Leidsa</option>
-              <option>Real</option>
               <option>Loteka</option>
+              <option>La Primera</option>
             </select>
             <input type="date" class="px-4 py-2 bg-white rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="refreshResults()" class="btn-apple-secondary text-sm py-2 px-4 titlebar-no-drag">
+              🔄 Actualizar
+            </button>
+          </div>
+          
+          <!-- Charts Section -->
+          <div class="grid grid-cols-2 gap-6 mb-8">
+            <div class="premium-card p-6">
+              <h3 class="font-semibold text-gray-900 mb-4">📈 Números más Frecuentes</h3>
+              <canvas id="frequency-chart" height="200"></canvas>
+            </div>
+            <div class="premium-card p-6">
+              <h3 class="font-semibold text-gray-900 mb-4">🥧 Distribución por Lotería</h3>
+              <canvas id="distribution-chart" height="200"></canvas>
+            </div>
           </div>
           
           <!-- Live Results -->
           <section class="mb-8">
             <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+              <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse-live"></span>
               Resultados en Vivo
+              <span id="last-update" class="text-sm text-gray-400 font-normal ml-2"></span>
             </h3>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="card-hover bg-white p-6 rounded-2xl shadow-md">
-                <div class="flex items-center justify-between mb-4">
-                  <span class="px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-full">Nacional</span>
-                  <span class="text-gray-500 text-sm">12:30 PM • Hoy</span>
-                </div>
-                <div class="flex justify-center gap-3 mb-4">
-                  <div class="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">23</div>
-                  <div class="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">45</div>
-                  <div class="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">67</div>
-                </div>
-                <div class="text-sm text-center">
-                  <span class="text-gray-500">1er: </span><span class="font-bold">23</span>
-                  <span class="text-gray-300 mx-2">|</span>
-                  <span class="text-gray-500">2do: </span><span class="font-bold">45</span>
-                  <span class="text-gray-300 mx-2">|</span>
-                  <span class="text-gray-500">3ro: </span><span class="font-bold">67</span>
-                </div>
-              </div>
-              
-              <div class="card-hover bg-white p-6 rounded-2xl shadow-md">
-                <div class="flex items-center justify-between mb-4">
-                  <span class="px-3 py-1 bg-yellow-500 text-white text-sm font-semibold rounded-full">Real</span>
-                  <span class="text-gray-500 text-sm">12:55 PM • Hoy</span>
-                </div>
-                <div class="flex justify-center gap-3 mb-4">
-                  <div class="w-14 h-14 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">78</div>
-                  <div class="w-14 h-14 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">90</div>
-                  <div class="w-14 h-14 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">11</div>
-                </div>
-                <div class="text-sm text-center">
-                  <span class="text-gray-500">1er: </span><span class="font-bold">78</span>
-                  <span class="text-gray-300 mx-2">|</span>
-                  <span class="text-gray-500">2do: </span><span class="font-bold">90</span>
-                  <span class="text-gray-300 mx-2">|</span>
-                  <span class="text-gray-500">3ro: </span><span class="font-bold">11</span>
-                </div>
-              </div>
+            <div class="grid grid-cols-2 gap-4" id="results-live-grid">
+              <!-- Resultados se renderizan dinámicamente -->
             </div>
           </section>
           
           <!-- Historical Results -->
           <section>
             <h3 class="text-lg font-bold text-gray-900 mb-4">Historial de Resultados</h3>
-            <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div class="premium-card overflow-hidden">
               <table class="w-full">
                 <thead class="bg-gray-50">
                   <tr>
@@ -745,51 +728,78 @@
                     <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Resultados</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-600 text-xs font-medium rounded-full">Leidsa</span></td>
-                    <td class="px-6 py-4 text-sm text-gray-600">Ayer</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">8:55 PM</td>
-                    <td class="px-6 py-4 text-center">
-                      <div class="flex justify-center gap-2">
-                        <span class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold">12</span>
-                        <span class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold">34</span>
-                        <span class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold">56</span>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4"><span class="px-2 py-1 bg-purple-100 text-purple-600 text-xs font-medium rounded-full">Loteka</span></td>
-                    <td class="px-6 py-4 text-sm text-gray-600">Ayer</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">7:55 PM</td>
-                    <td class="px-6 py-4 text-center">
-                      <div class="flex justify-center gap-2">
-                        <span class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">22</span>
-                        <span class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">33</span>
-                        <span class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">44</span>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4"><span class="px-2 py-1 bg-blue-100 text-blue-600 text-xs font-medium rounded-full">La Primera</span></td>
-                    <td class="px-6 py-4 text-sm text-gray-600">Ayer</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">8:00 PM</td>
-                    <td class="px-6 py-4 text-center">
-                      <div class="flex justify-center gap-2">
-                        <span class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">55</span>
-                        <span class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">66</span>
-                        <span class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">77</span>
-                      </div>
-                    </td>
-                  </tr>
+                <tbody id="results-history" class="divide-y divide-gray-100">
+                  <!-- Historial se renderiza dinámicamente -->
                 </tbody>
               </table>
             </div>
           </section>
         </div>
         
+        <!-- Wallet View -->
+        <div id="view-wallet" class="view hidden animate-fade-in">
+          <header class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-900">💳 Mi Cartera</h2>
+            <p class="text-gray-500 mt-1">Gestiona tu balance y transacciones</p>
+          </header>
+          
+          <div class="grid grid-cols-3 gap-6 mb-8">
+            <!-- Balance Card -->
+            <div class="col-span-2 bg-gradient-to-br from-blue-500 to-blue-600 p-8 rounded-2xl shadow-lg text-white">
+              <p class="opacity-80 mb-2">Balance Disponible</p>
+              <p id="wallet-balance" class="text-5xl font-bold mb-6">RD$ 2,500</p>
+              <div class="flex gap-4">
+                <button onclick="showRechargeModal()" class="flex-1 py-3 bg-white/20 hover:bg-white/30 rounded-xl font-semibold transition titlebar-no-drag">
+                  ➕ Recargar
+                </button>
+                <button onclick="showWithdrawModal()" class="flex-1 py-3 bg-white/20 hover:bg-white/30 rounded-xl font-semibold transition titlebar-no-drag">
+                  💸 Retirar
+                </button>
+              </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="premium-card p-6">
+              <h3 class="font-bold text-gray-900 mb-4">Resumen del Mes</h3>
+              <div class="space-y-4">
+                <div class="flex justify-between">
+                  <span class="text-gray-500">Ganancias</span>
+                  <span class="font-bold text-green-600">+RD$ 750</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-500">Recargas</span>
+                  <span class="font-bold">4</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-500">Jugadas</span>
+                  <span class="font-bold">12</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Balance Chart -->
+          <div class="premium-card p-6 mb-8">
+            <h3 class="font-semibold text-gray-900 mb-4">📈 Historial de Balance</h3>
+            <canvas id="balance-chart" height="100"></canvas>
+          </div>
+          
+          <!-- Transaction History -->
+          <section>
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-bold text-gray-900">Historial de Transacciones</h3>
+              <button onclick="exportTransactions()" class="btn-apple-secondary text-sm py-2 px-4 titlebar-no-drag">
+                📥 Exportar CSV
+              </button>
+            </div>
+            <div class="premium-card divide-y" id="transactions-list">
+              <!-- Transacciones se renderizan dinámicamente -->
+            </div>
+          </section>
+        </div>
+        
         <!-- Profile View -->
-        <div id="view-profile" class="view hidden">
+        <div id="view-profile" class="view hidden animate-fade-in">
           <header class="mb-8">
             <h2 class="text-3xl font-bold text-gray-900">👤 Mi Perfil</h2>
             <p class="text-gray-500 mt-1">Gestiona tu cuenta y preferencias</p>
@@ -797,9 +807,9 @@
           
           <div class="grid grid-cols-3 gap-6">
             <!-- User Info Card -->
-            <div class="bg-white p-6 rounded-2xl shadow-md">
+            <div class="premium-card p-6">
               <div class="flex items-center gap-4 mb-6">
-                <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg">
                   JP
                 </div>
                 <div>
@@ -821,56 +831,78 @@
                   <span class="font-medium">Enero 2024</span>
                 </div>
               </div>
+              <button onclick="showEditProfileModal()" class="w-full mt-4 btn-apple-secondary text-sm py-2 titlebar-no-drag">
+                ✏️ Editar Perfil
+              </button>
             </div>
             
-            <!-- Stats Card -->
-            <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl shadow-md text-white">
-              <h3 class="font-semibold mb-4">Estadísticas</h3>
-              <div class="space-y-4">
+            <!-- Stats Card with Chart -->
+            <div class="premium-card p-6">
+              <h3 class="font-bold text-gray-900 mb-4">📊 Estadísticas</h3>
+              <canvas id="profile-stats-chart" height="150"></canvas>
+              <div class="mt-4 space-y-2 text-sm">
                 <div class="flex justify-between items-center">
-                  <span class="opacity-80">Balance</span>
-                  <span class="text-2xl font-bold">RD$ 2,500</span>
+                  <span class="text-gray-500">Total Jugadas</span>
+                  <span class="font-bold text-lg">47</span>
                 </div>
                 <div class="flex justify-between items-center">
-                  <span class="opacity-80">Jugadas</span>
-                  <span class="text-xl font-bold">47</span>
+                  <span class="text-gray-500">Victorias</span>
+                  <span class="font-bold text-lg text-green-600">5 🏆</span>
                 </div>
                 <div class="flex justify-between items-center">
-                  <span class="opacity-80">Victorias</span>
-                  <span class="text-xl font-bold">5 🏆</span>
+                  <span class="text-gray-500">Racha actual</span>
+                  <span class="font-bold text-lg text-blue-600">3 🔥</span>
                 </div>
               </div>
             </div>
             
             <!-- Settings Card -->
-            <div class="bg-white p-6 rounded-2xl shadow-md">
-              <h3 class="font-bold text-gray-900 mb-4">Configuración</h3>
+            <div class="premium-card p-6">
+              <h3 class="font-bold text-gray-900 mb-4">⚙️ Configuración</h3>
               <div class="space-y-4">
                 <div class="flex justify-between items-center">
-                  <span class="text-gray-700">🔔 Notificaciones</span>
-                  <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" class="sr-only peer" checked>
-                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
-                  </label>
+                  <span class="text-gray-700 flex items-center gap-2">
+                    <span>🔔</span> Notificaciones
+                  </span>
+                  <div id="notifications-toggle" class="toggle on titlebar-no-drag" onclick="toggleNotifications()">
+                    <div class="knob"></div>
+                  </div>
                 </div>
                 <div class="flex justify-between items-center">
-                  <span class="text-gray-700">🌙 Modo Oscuro</span>
-                  <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" class="sr-only peer" id="darkModeToggle">
-                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
-                  </label>
+                  <span class="text-gray-700 flex items-center gap-2">
+                    <span>🔊</span> Sonidos
+                  </span>
+                  <div id="sounds-toggle" class="toggle on titlebar-no-drag" onclick="toggleSounds()">
+                    <div class="knob"></div>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-700 flex items-center gap-2">
+                    <span>🔄</span> Auto-refresh
+                  </span>
+                  <div id="autorefresh-toggle" class="toggle on titlebar-no-drag" onclick="toggleAutoRefresh()">
+                    <div class="knob"></div>
+                  </div>
                 </div>
               </div>
-              <button class="w-full mt-6 py-2 text-red-500 border border-red-200 rounded-xl hover:bg-red-50 transition">
+              <button onclick="logout()" class="w-full mt-6 py-2 text-red-500 border border-red-200 rounded-xl hover:bg-red-50 transition titlebar-no-drag">
                 🚪 Cerrar Sesión
               </button>
             </div>
           </div>
           
+          <!-- Badges Section -->
+          <section class="mt-8">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">🏅 Logros y Badges</h3>
+            <div class="grid grid-cols-5 gap-4" id="badges-grid">
+              <!-- Badges se renderizan dinámicamente -->
+            </div>
+          </section>
+          
           <!-- Ticket History -->
           <section class="mt-8">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Historial de Tickets</h3>
-            <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">🎫 Historial de Tickets</h3>
+            <div class="premium-card overflow-hidden">
               <table class="w-full">
                 <thead class="bg-gray-50">
                   <tr>
@@ -881,136 +913,10 @@
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Premio</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 font-medium">Nacional</td>
-                    <td class="px-6 py-4">
-                      <div class="flex gap-1">
-                        <span class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">23</span>
-                        <span class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">45</span>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4">RD$ 50</td>
-                    <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-600 text-xs font-medium rounded-full">Ganado</span></td>
-                    <td class="px-6 py-4 text-green-600 font-bold">+RD$ 500</td>
-                  </tr>
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 font-medium">Leidsa</td>
-                    <td class="px-6 py-4">
-                      <div class="flex gap-1">
-                        <span class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">12</span>
-                        <span class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">34</span>
-                        <span class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">56</span>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4">RD$ 100</td>
-                    <td class="px-6 py-4"><span class="px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full">Perdido</span></td>
-                    <td class="px-6 py-4 text-gray-400">-</td>
-                  </tr>
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 font-medium">Real</td>
-                    <td class="px-6 py-4">
-                      <div class="flex gap-1">
-                        <span class="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs">78</span>
-                        <span class="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs">90</span>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4">RD$ 25</td>
-                    <td class="px-6 py-4"><span class="px-2 py-1 bg-yellow-100 text-yellow-600 text-xs font-medium rounded-full">Pendiente</span></td>
-                    <td class="px-6 py-4 text-gray-400">-</td>
-                  </tr>
+                <tbody id="tickets-history" class="divide-y divide-gray-100">
+                  <!-- Tickets se renderizan dinámicamente -->
                 </tbody>
               </table>
-            </div>
-          </section>
-        </div>
-        
-        <!-- Wallet View -->
-        <div id="view-wallet" class="view hidden">
-          <header class="mb-8">
-            <h2 class="text-3xl font-bold text-gray-900">💳 Mi Cartera</h2>
-            <p class="text-gray-500 mt-1">Gestiona tu balance y transacciones</p>
-          </header>
-          
-          <div class="grid grid-cols-3 gap-6 mb-8">
-            <!-- Balance Card -->
-            <div class="col-span-2 bg-gradient-to-br from-blue-500 to-blue-600 p-8 rounded-2xl shadow-lg text-white">
-              <p class="opacity-80 mb-2">Balance Disponible</p>
-              <p class="text-5xl font-bold mb-6">RD$ 2,500</p>
-              <div class="flex gap-4">
-                <button class="flex-1 py-3 bg-white/20 hover:bg-white/30 rounded-xl font-semibold transition">
-                  ➕ Recargar
-                </button>
-                <button class="flex-1 py-3 bg-white/20 hover:bg-white/30 rounded-xl font-semibold transition">
-                  💸 Retirar
-                </button>
-              </div>
-            </div>
-            
-            <!-- Quick Stats -->
-            <div class="bg-white p-6 rounded-2xl shadow-md">
-              <h3 class="font-bold text-gray-900 mb-4">Resumen</h3>
-              <div class="space-y-4">
-                <div class="flex justify-between">
-                  <span class="text-gray-500">Este mes</span>
-                  <span class="font-bold text-green-600">+RD$ 750</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-gray-500">Recargas</span>
-                  <span class="font-bold">4</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-gray-500">Retiros</span>
-                  <span class="font-bold">1</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Transaction History -->
-          <section>
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Historial de Transacciones</h3>
-            <div class="bg-white rounded-2xl shadow-md divide-y">
-              <div class="flex items-center justify-between p-4">
-                <div class="flex items-center gap-4">
-                  <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-lg">➕</div>
-                  <div>
-                    <p class="font-medium text-gray-900">Recarga</p>
-                    <p class="text-sm text-gray-500">Tarjeta de Crédito • Hoy 10:30 AM</p>
-                  </div>
-                </div>
-                <span class="text-green-600 font-bold">+RD$ 1,000</span>
-              </div>
-              <div class="flex items-center justify-between p-4">
-                <div class="flex items-center gap-4">
-                  <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-lg">🎲</div>
-                  <div>
-                    <p class="font-medium text-gray-900">Jugada</p>
-                    <p class="text-sm text-gray-500">Nacional - Quiniela • Hoy 11:45 AM</p>
-                  </div>
-                </div>
-                <span class="text-red-600 font-bold">-RD$ 50</span>
-              </div>
-              <div class="flex items-center justify-between p-4">
-                <div class="flex items-center gap-4">
-                  <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center text-lg">🏆</div>
-                  <div>
-                    <p class="font-medium text-gray-900">Premio</p>
-                    <p class="text-sm text-gray-500">Nacional - Quiniela • Hoy 1:00 PM</p>
-                  </div>
-                </div>
-                <span class="text-green-600 font-bold">+RD$ 500</span>
-              </div>
-              <div class="flex items-center justify-between p-4">
-                <div class="flex items-center gap-4">
-                  <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-lg">💸</div>
-                  <div>
-                    <p class="font-medium text-gray-900">Retiro</p>
-                    <p class="text-sm text-gray-500">Transferencia • Ayer 9:00 AM • <span class="text-yellow-600">Pendiente</span></p>
-                  </div>
-                </div>
-                <span class="text-gray-600 font-bold">-RD$ 200</span>
-              </div>
             </div>
           </section>
         </div>
@@ -1018,65 +924,577 @@
     </div>
   </div>
   
+  <!-- Ticket Modal -->
+  <div id="ticket-modal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-backdrop absolute inset-0" onclick="closeTicketModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div id="ticket-content" class="ticket-print relative">
+        <!-- Ticket content se renderiza dinámicamente -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification Toast -->
+  <div id="toast-container" class="fixed top-12 right-4 z-50 space-y-2">
+    <!-- Toasts se añaden dinámicamente -->
+  </div>
+  
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
   <script>
-    // Play state
-    let selectedLottery = null;
-    let selectedModality = null;
-    let selectedNumbers = [];
-    let selectedStake = 25;
-    let maxNumbers = 2;
-    let multiplier = 60;
-    
-    const lotteryColors = {
-      'nacional': 'red',
-      'leidsa': 'green',
-      'real': 'yellow',
-      'loteka': 'purple'
+    // ========================================
+    // LOTOLINK DESKTOP APP - COMPLETE JAVASCRIPT
+    // Premium Lottery Application for Desktop
+    // ========================================
+
+    // ===== APP STATE =====
+    const appState = {
+      user: {
+        name: 'Juan Pérez',
+        email: 'juan.perez@email.com',
+        phone: '+1 809-555-1234',
+        balance: 2500,
+        memberSince: 'Enero 2024',
+        verified: true
+      },
+      selectedLottery: null,
+      selectedModality: null,
+      selectedNumbers: [],
+      selectedStake: 25,
+      maxNumbers: 2,
+      multiplier: 60,
+      darkMode: false,
+      notifications: true,
+      sounds: true,
+      autoRefresh: true,
+      autoRefreshInterval: null
     };
-    
-    const lotteryNames = {
-      'nacional': 'Nacional',
-      'leidsa': 'Leidsa',
-      'real': 'Real',
-      'loteka': 'Loteka'
+
+    // ===== MOCK DATA =====
+    const LOTTERIES = [
+      { id: 'leidsa', name: 'Leidsa', color: '#FFD700', logo: 'LD', schedule: 'Hoy 8:55 PM', modalities: ['Quiniela', 'Palé', 'Tripleta', 'Pega 3'] },
+      { id: 'loteka', name: 'Loteka', color: '#00B0DB', logo: 'LK', schedule: 'Hoy 7:55 PM', modalities: ['Quiniela', 'Palé', 'Tripleta', 'Toca 3'] },
+      { id: 'laprimera', name: 'La Primera', color: '#C81F46', logo: 'LP', schedule: 'Hoy 8:00 PM', modalities: ['Quiniela', 'Palé', 'Tripleta'] },
+      { id: 'nacional', name: 'Lotería Nacional', color: '#496079', logo: 'LN', schedule: 'Hoy 9:00 PM', modalities: ['Quiniela', 'Palé', 'Tripleta'] },
+      { id: 'real', name: 'Lotería Real', color: '#008000', logo: 'LR', schedule: 'Hoy 12:55 PM', modalities: ['Quiniela', 'Palé', 'Tripleta'] },
+      { id: 'americana', name: 'Americana (NY)', color: '#1e3a5f', logo: 'NY', schedule: 'Hoy 2:30 PM', modalities: ['Quiniela', 'Palé'] }
+    ];
+
+    const MODALITIES = {
+      'Quiniela': { numbers: 1, multiplier: 60, description: '1 número • x60' },
+      'Palé': { numbers: 2, multiplier: 1000, description: '2 números • x1,000' },
+      'Tripleta': { numbers: 3, multiplier: 20000, description: '3 números • x20,000' },
+      'Pega 3': { numbers: 3, multiplier: 700, description: '3 dígitos (0-9) • x700' },
+      'Toca 3': { numbers: 3, multiplier: 600, description: '3 dígitos (0-9) • x600' }
     };
-    
-    const modalityInfo = {
-      'quiniela': { name: 'Quiniela', numbers: 1, multiplier: 60 },
-      'pale': { name: 'Palé', numbers: 2, multiplier: 1000 },
-      'tripleta': { name: 'Tripleta', numbers: 3, multiplier: 20000 },
-      'superpale': { name: 'Super Palé', numbers: 4, multiplier: 50000 }
-    };
-    
-    // Generate number grid
+
+    const BANCAS = [
+      { id: 1, name: 'Banca La Fortuna', address: 'Av. 27 de Febrero #123, Santo Domingo', coords: [18.4693, -69.8990], status: 'open', rating: 4.8, distance: 0.3, lotteries: ['Nacional', 'Leidsa', 'Real', 'Loteka'] },
+      { id: 2, name: 'Banca El Millonario', address: 'C/ Duarte #456, Santiago', coords: [18.4825, -69.9312], status: 'open', rating: 4.5, distance: 0.8, lotteries: ['Nacional', 'Loteka'] },
+      { id: 3, name: 'Banca Suerte Total', address: 'Av. Independencia #789, Santo Domingo', coords: [18.4661, -69.8989], status: 'closed', rating: 4.7, distance: 1.2, lotteries: ['Nacional', 'Leidsa', 'Real', 'Loteka', 'La Primera'] },
+      { id: 4, name: 'Banca Los Ganadores', address: 'C/ El Conde #321, Zona Colonial', coords: [18.4890, -69.9220], status: 'open', rating: 4.9, distance: 1.5, lotteries: ['Nacional', 'Leidsa'] },
+      { id: 5, name: 'Banca Premium Plus', address: 'Av. Winston Churchill #555, Piantini', coords: [18.4750, -69.9400], status: 'open', rating: 4.6, distance: 2.0, lotteries: ['Leidsa', 'Loteka', 'La Primera'] }
+    ];
+
+    const MOCK_RESULTS = [
+      { lottery: 'Nacional', time: '12:30 PM', date: 'Hoy', numbers: ['23', '45', '67'], color: '#ef4444' },
+      { lottery: 'Leidsa', time: '8:55 PM', date: 'Ayer', numbers: ['12', '34', '56'], color: '#22c55e' },
+      { lottery: 'Loteka', time: '7:55 PM', date: 'Ayer', numbers: ['78', '90', '11'], color: '#00B0DB' },
+      { lottery: 'Real', time: '12:55 PM', date: 'Hoy', numbers: ['08', '66', '42'], color: '#008000' }
+    ];
+
+    const TRANSACTIONS = [
+      { type: 'recharge', amount: 1000, date: 'Hoy 10:30 AM', method: 'Tarjeta de Crédito', icon: '➕', color: 'green' },
+      { type: 'play', amount: -50, date: 'Hoy 11:45 AM', method: 'Nacional - Quiniela', icon: '🎲', color: 'blue' },
+      { type: 'win', amount: 500, date: 'Hoy 1:00 PM', method: 'Nacional - Quiniela', icon: '🏆', color: 'yellow' },
+      { type: 'withdraw', amount: -200, date: 'Ayer 9:00 AM', method: 'Transferencia Bancaria', icon: '💸', color: 'orange', status: 'pending' }
+    ];
+
+    const BADGES = [
+      { id: 1, name: 'Primer Jugada', icon: '🎯', earned: true },
+      { id: 2, name: 'Primera Victoria', icon: '🏆', earned: true },
+      { id: 3, name: 'Racha de 3', icon: '🔥', earned: true },
+      { id: 4, name: '10 Jugadas', icon: '🎰', earned: true },
+      { id: 5, name: 'Gran Ganador', icon: '💎', earned: false },
+      { id: 6, name: 'VIP', icon: '⭐', earned: false }
+    ];
+
+    // ===== UTILITY FUNCTIONS =====
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function formatMoney(amount) { return 'RD$ ' + amount.toLocaleString(); }
+    function uid(prefix = 'T') { return prefix + '-' + Date.now().toString(36).slice(2, 9).toUpperCase(); }
+
+    // ===== DARK MODE =====
+    function toggleDarkMode() {
+      appState.darkMode = !appState.darkMode;
+      document.documentElement.classList.toggle('dark', appState.darkMode);
+      const toggle = document.getElementById('dark-mode-toggle');
+      toggle.classList.toggle('on', appState.darkMode);
+      localStorage.setItem('darkMode', appState.darkMode);
+      
+      // Notify Electron if available
+      if (window.electronAPI) {
+        window.electronAPI.setSetting('theme', appState.darkMode ? 'dark' : 'light');
+      }
+    }
+
+    function loadDarkMode() {
+      const saved = localStorage.getItem('darkMode');
+      if (saved === 'true') {
+        appState.darkMode = true;
+        document.documentElement.classList.add('dark');
+        document.getElementById('dark-mode-toggle').classList.add('on');
+      }
+    }
+
+    // ===== NAVIGATION =====
+    function navigate(view) {
+      // Hide all views
+      document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+      
+      // Show selected view
+      const viewEl = document.getElementById('view-' + view);
+      if (viewEl) {
+        viewEl.classList.remove('hidden');
+        viewEl.classList.add('animate-fade-in');
+      }
+      
+      // Update nav items
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => {
+        if (item.getAttribute('onclick')?.includes(view)) {
+          item.classList.add('active');
+        }
+      });
+      
+      // Special initializations
+      if (view === 'bancas') {
+        setTimeout(initBancasMap, 100);
+      }
+      if (view === 'results') {
+        initResultsCharts();
+      }
+      if (view === 'wallet') {
+        initBalanceChart();
+      }
+      if (view === 'profile') {
+        initProfileChart();
+      }
+    }
+
+    // ===== NOTIFICATIONS =====
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colors = {
+        success: 'bg-green-500',
+        error: 'bg-red-500',
+        warning: 'bg-yellow-500',
+        info: 'bg-blue-500'
+      };
+      
+      toast.className = `${colors[type]} text-white px-6 py-3 rounded-xl shadow-lg animate-slide-in flex items-center gap-2`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+      
+      // Play sound if enabled
+      if (appState.sounds) {
+        playNotificationSound();
+      }
+      
+      // Use Electron notifications if available
+      if (window.electronAPI && appState.notifications) {
+        window.electronAPI.showNotification('LotoLink', message);
+      }
+    }
+
+    function playNotificationSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.value = 800;
+        g.gain.setValueAtTime(0.3, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        o.connect(g);
+        g.connect(ctx.destination);
+        o.start();
+        o.stop(ctx.currentTime + 0.3);
+      } catch (e) {}
+    }
+
+    // ===== RENDER FUNCTIONS =====
+    function renderUpcomingDraws() {
+      const container = document.getElementById('upcoming-draws');
+      if (!container) return;
+      
+      container.innerHTML = LOTTERIES.slice(0, 3).map(lottery => `
+        <div class="premium-card p-4">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm" style="background: ${lottery.color}">
+              ${lottery.logo}
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900">${lottery.name}</h4>
+              <p class="text-xs text-gray-500">${lottery.schedule}</p>
+            </div>
+          </div>
+          <div class="flex justify-center gap-2" id="countdown-${lottery.id}">
+            <div class="countdown-digit text-sm">--</div>
+            <span class="text-gray-400">:</span>
+            <div class="countdown-digit text-sm">--</div>
+            <span class="text-gray-400">:</span>
+            <div class="countdown-digit text-sm">--</div>
+          </div>
+          <button onclick="navigate('play'); selectLottery('${lottery.id}')" class="w-full mt-3 btn-apple-primary text-sm py-2 titlebar-no-drag">
+            Jugar Ahora
+          </button>
+        </div>
+      `).join('');
+      
+      // Start countdown timers
+      startCountdowns();
+    }
+
+    function startCountdowns() {
+      setInterval(() => {
+        LOTTERIES.forEach(lottery => {
+          const container = document.getElementById(`countdown-${lottery.id}`);
+          if (!container) return;
+          
+          // Simple mock countdown
+          const now = new Date();
+          const hours = 23 - now.getHours();
+          const minutes = 59 - now.getMinutes();
+          const seconds = 59 - now.getSeconds();
+          
+          container.innerHTML = `
+            <div class="countdown-digit text-sm">${pad(hours)}</div>
+            <span class="text-gray-400">:</span>
+            <div class="countdown-digit text-sm">${pad(minutes)}</div>
+            <span class="text-gray-400">:</span>
+            <div class="countdown-digit text-sm">${pad(seconds)}</div>
+          `;
+        });
+      }, 1000);
+    }
+
+    function renderLiveResults() {
+      const container = document.getElementById('live-results');
+      if (!container) return;
+      
+      container.innerHTML = MOCK_RESULTS.slice(0, 4).map(result => `
+        <div class="premium-card p-6">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 text-white text-sm font-semibold rounded-full" style="background: ${result.color}">${result.lottery}</span>
+            <span class="text-gray-500 text-sm">${result.time} • ${result.date}</span>
+          </div>
+          <div class="flex justify-center gap-3">
+            ${result.numbers.map(num => `
+              <div class="w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg" style="background: ${result.color}">${num}</div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderLotterySelection() {
+      const container = document.getElementById('lottery-selection');
+      if (!container) return;
+      
+      container.innerHTML = LOTTERIES.map(lottery => `
+        <button onclick="selectLottery('${lottery.id}')" id="lot-${lottery.id}" class="lottery-btn premium-card p-4 text-center border-2 border-transparent hover:border-blue-500 transition titlebar-no-drag">
+          <div class="w-12 h-12 mx-auto rounded-xl flex items-center justify-center text-white font-bold text-lg mb-2" style="background: ${lottery.color}">
+            ${lottery.logo}
+          </div>
+          <span class="text-sm font-medium text-gray-900">${lottery.name}</span>
+          <p class="text-xs text-gray-500 mt-1">${lottery.schedule}</p>
+        </button>
+      `).join('');
+    }
+
+    function renderModalitySelection() {
+      const container = document.getElementById('modality-selection');
+      if (!container) return;
+      
+      const lottery = LOTTERIES.find(l => l.id === appState.selectedLottery);
+      if (!lottery) {
+        container.innerHTML = '<p class="text-gray-400 text-sm col-span-2">Selecciona una lotería primero</p>';
+        return;
+      }
+      
+      container.innerHTML = lottery.modalities.map(mod => {
+        const info = MODALITIES[mod] || { numbers: 1, description: '' };
+        const icons = { 'Quiniela': '🎯', 'Palé': '🎰', 'Tripleta': '🎲', 'Pega 3': '🔢', 'Toca 3': '🔢' };
+        return `
+          <button onclick="selectModality('${mod}')" class="modality-btn flex items-center gap-3 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-500 transition titlebar-no-drag">
+            <span class="text-2xl">${icons[mod] || '🎫'}</span>
+            <div class="text-left">
+              <span class="font-medium block text-gray-900">${mod}</span>
+              <span class="text-sm text-gray-500">${info.description}</span>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderStakeSelection() {
+      const container = document.getElementById('stake-selection');
+      if (!container) return;
+      
+      const stakes = [10, 25, 50, 100, 200, 500];
+      container.innerHTML = stakes.map(stake => `
+        <button onclick="selectStake(${stake})" class="stake-btn px-6 py-3 rounded-xl font-semibold transition titlebar-no-drag ${stake === appState.selectedStake ? 'bg-blue-500 text-white shadow-md' : 'bg-gray-100 hover:bg-blue-50 border-2 border-transparent hover:border-blue-500'}">
+          RD$ ${stake}
+        </button>
+      `).join('');
+    }
+
     function generateNumberGrid() {
       const grid = document.getElementById('number-grid');
       if (!grid) return;
       
       grid.innerHTML = '';
       for (let i = 0; i <= 99; i++) {
-        const num = i.toString().padStart(2, '0');
+        const num = pad(i);
         const btn = document.createElement('button');
         btn.id = 'num-' + num;
-        btn.className = 'number-btn w-10 h-10 rounded-lg text-sm font-medium border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition';
+        btn.className = 'num-btn w-10 h-10 text-sm font-medium border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition titlebar-no-drag';
         btn.textContent = num;
         btn.onclick = () => toggleNumber(num);
         grid.appendChild(btn);
       }
     }
-    
-    // Toggle number selection
+
+    function renderBancasList() {
+      const container = document.getElementById('bancas-list');
+      if (!container) return;
+      
+      container.innerHTML = BANCAS.map(banca => `
+        <div class="premium-card p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h3 class="font-bold text-gray-900">${banca.name}</h3>
+              <p class="text-sm text-gray-500">${banca.address}</p>
+            </div>
+            <span class="px-2 py-1 ${banca.status === 'open' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'} text-xs font-medium rounded-full">
+              ${banca.status === 'open' ? 'Abierta' : 'Cerrada'}
+            </span>
+          </div>
+          <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
+            <span>📍 ${banca.distance} km</span>
+            <span>⭐ ${banca.rating}</span>
+            <span>🎰 ${banca.lotteries.length} loterías</span>
+          </div>
+          <div class="flex gap-1 flex-wrap mb-4">
+            ${banca.lotteries.slice(0, 3).map(l => {
+              const colorMap = { 'Nacional': '#ef4444', 'Leidsa': '#22c55e', 'Real': '#eab308', 'Loteka': '#a855f7', 'La Primera': '#3b82f6' };
+              const bgColor = colorMap[l] || '#6b7280';
+              return `<span class="px-2 py-1 text-xs rounded-full" style="background: ${bgColor}22; color: ${bgColor}">${l}</span>`;
+            }).join('')}
+            ${banca.lotteries.length > 3 ? `<span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">+${banca.lotteries.length - 3}</span>` : ''}
+          </div>
+          <button onclick="playAtBanca(${banca.id})" ${banca.status !== 'open' ? 'disabled' : ''} class="${banca.status === 'open' ? 'btn-apple-primary' : 'bg-gray-200 text-gray-500 cursor-not-allowed'} w-full py-2 text-sm titlebar-no-drag">
+            ${banca.status === 'open' ? 'Jugar Aquí' : 'No disponible'}
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function renderLoteriasGrid() {
+      const container = document.getElementById('loterias-grid');
+      if (!container) return;
+      
+      container.innerHTML = LOTTERIES.map(lottery => `
+        <div class="premium-card overflow-hidden">
+          <div class="h-2" style="background: ${lottery.color}"></div>
+          <div class="p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-white text-xl font-bold" style="background: ${lottery.color}">
+                ${lottery.logo}
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900">${lottery.name}</h3>
+                <p class="text-sm text-gray-500">${lottery.schedule}</p>
+              </div>
+            </div>
+            <div class="flex gap-1 flex-wrap mb-4">
+              ${lottery.modalities.map(m => `
+                <span class="px-2 py-1 text-xs rounded-full" style="background: ${lottery.color}22; color: ${lottery.color}">${m}</span>
+              `).join('')}
+            </div>
+            <button onclick="navigate('play'); selectLottery('${lottery.id}')" class="w-full py-2 text-white font-medium rounded-xl transition hover:opacity-90 titlebar-no-drag" style="background: ${lottery.color}">
+              Jugar ${lottery.name}
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderTransactions() {
+      const container = document.getElementById('transactions-list');
+      if (!container) return;
+      
+      const colorMap = { 'green': '#22c55e', 'blue': '#3b82f6', 'yellow': '#eab308', 'orange': '#f97316' };
+      
+      container.innerHTML = TRANSACTIONS.map(tx => {
+        const bgColor = colorMap[tx.color] || '#6b7280';
+        return `
+        <div class="flex items-center justify-between p-4">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg" style="background: ${bgColor}22">${tx.icon}</div>
+            <div>
+              <p class="font-medium text-gray-900">${tx.type === 'recharge' ? 'Recarga' : tx.type === 'play' ? 'Jugada' : tx.type === 'win' ? 'Premio' : 'Retiro'}</p>
+              <p class="text-sm text-gray-500">${tx.method} • ${tx.date}${tx.status === 'pending' ? ' • <span class="text-yellow-600">Pendiente</span>' : ''}</p>
+            </div>
+          </div>
+          <span class="${tx.amount > 0 ? 'text-green-600' : 'text-gray-600'} font-bold">${tx.amount > 0 ? '+' : ''}${formatMoney(tx.amount)}</span>
+        </div>
+      `}).join('');
+    }
+
+    function renderResultsHistory() {
+      const container = document.getElementById('results-history');
+      if (!container) return;
+      
+      container.innerHTML = MOCK_RESULTS.map(result => `
+        <tr class="hover:bg-gray-50">
+          <td class="px-6 py-4"><span class="px-2 py-1 text-white text-xs font-medium rounded-full" style="background: ${result.color}">${result.lottery}</span></td>
+          <td class="px-6 py-4 text-sm text-gray-600">${result.date}</td>
+          <td class="px-6 py-4 text-sm text-gray-600">${result.time}</td>
+          <td class="px-6 py-4 text-center">
+            <div class="flex justify-center gap-2">
+              ${result.numbers.map(num => `
+                <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold" style="background: ${result.color}">${num}</span>
+              `).join('')}
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderBadges() {
+      const container = document.getElementById('badges-grid');
+      if (!container) return;
+      
+      container.innerHTML = BADGES.map(badge => `
+        <div class="premium-card p-4 text-center ${badge.earned ? '' : 'opacity-40'}">
+          <div class="text-4xl mb-2">${badge.icon}</div>
+          <p class="text-sm font-medium text-gray-900">${badge.name}</p>
+          <p class="text-xs text-gray-500 mt-1">${badge.earned ? '✓ Obtenido' : 'Bloqueado'}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderTicketsHistory() {
+      const container = document.getElementById('tickets-history');
+      if (!container) return;
+      
+      const tickets = [
+        { lottery: 'Nacional', numbers: ['23', '45'], stake: 50, status: 'won', prize: 500, color: '#ef4444' },
+        { lottery: 'Leidsa', numbers: ['12', '34', '56'], stake: 100, status: 'lost', prize: 0, color: '#22c55e' },
+        { lottery: 'Real', numbers: ['78', '90'], stake: 25, status: 'pending', prize: null, color: '#eab308' }
+      ];
+      
+      container.innerHTML = tickets.map(ticket => `
+        <tr class="hover:bg-gray-50">
+          <td class="px-6 py-4 font-medium text-gray-900">${ticket.lottery}</td>
+          <td class="px-6 py-4">
+            <div class="flex gap-1">
+              ${ticket.numbers.map(num => `
+                <span class="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background: ${ticket.color}">${num}</span>
+              `).join('')}
+            </div>
+          </td>
+          <td class="px-6 py-4">${formatMoney(ticket.stake)}</td>
+          <td class="px-6 py-4">
+            <span class="px-2 py-1 ${ticket.status === 'won' ? 'bg-green-100 text-green-600' : ticket.status === 'lost' ? 'bg-red-100 text-red-600' : 'bg-yellow-100 text-yellow-600'} text-xs font-medium rounded-full">
+              ${ticket.status === 'won' ? 'Ganado' : ticket.status === 'lost' ? 'Perdido' : 'Pendiente'}
+            </span>
+          </td>
+          <td class="px-6 py-4 ${ticket.prize > 0 ? 'text-green-600 font-bold' : 'text-gray-400'}">
+            ${ticket.prize > 0 ? '+' + formatMoney(ticket.prize) : '-'}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // ===== PLAY LOGIC =====
+    function selectLottery(lotteryId) {
+      appState.selectedLottery = lotteryId;
+      
+      // Update UI
+      document.querySelectorAll('.lottery-btn').forEach(btn => {
+        btn.classList.remove('border-blue-500', 'bg-blue-50');
+        btn.classList.add('border-transparent');
+      });
+      
+      const btn = document.getElementById('lot-' + lotteryId);
+      if (btn) {
+        btn.classList.add('border-blue-500', 'bg-blue-50');
+        btn.classList.remove('border-transparent');
+      }
+      
+      // Reset modality and numbers
+      appState.selectedModality = null;
+      appState.selectedNumbers = [];
+      
+      renderModalitySelection();
+      updateSelectedNumbers();
+      updateSummary();
+    }
+
+    function selectModality(modality) {
+      appState.selectedModality = modality;
+      const info = MODALITIES[modality];
+      appState.maxNumbers = info.numbers;
+      appState.multiplier = info.multiplier;
+      
+      // Clear extra numbers
+      while (appState.selectedNumbers.length > appState.maxNumbers) {
+        const num = appState.selectedNumbers.pop();
+        const btn = document.getElementById('num-' + num);
+        if (btn) {
+          btn.classList.remove('bg-blue-500', 'text-white', 'border-blue-500');
+          btn.classList.add('border-gray-200');
+        }
+      }
+      
+      // Update UI
+      document.querySelectorAll('.modality-btn').forEach(btn => {
+        btn.classList.remove('border-blue-500', 'bg-blue-50');
+        btn.classList.add('border-gray-200');
+      });
+      event.target.closest('.modality-btn')?.classList.add('border-blue-500', 'bg-blue-50');
+      event.target.closest('.modality-btn')?.classList.remove('border-gray-200');
+      
+      // Update help text
+      document.getElementById('required-numbers').textContent = appState.maxNumbers;
+      
+      updateSelectedNumbers();
+      updateSummary();
+    }
+
     function toggleNumber(num) {
       const btn = document.getElementById('num-' + num);
       if (!btn) return;
       
-      const idx = selectedNumbers.indexOf(num);
+      const idx = appState.selectedNumbers.indexOf(num);
       if (idx > -1) {
-        selectedNumbers.splice(idx, 1);
+        appState.selectedNumbers.splice(idx, 1);
         btn.classList.remove('bg-blue-500', 'text-white', 'border-blue-500');
         btn.classList.add('border-gray-200');
-      } else if (selectedNumbers.length < maxNumbers) {
-        selectedNumbers.push(num);
+      } else if (appState.selectedNumbers.length < appState.maxNumbers) {
+        appState.selectedNumbers.push(num);
         btn.classList.add('bg-blue-500', 'text-white', 'border-blue-500');
         btn.classList.remove('border-gray-200');
       }
@@ -1084,99 +1502,23 @@
       updateSelectedNumbers();
       updateSummary();
     }
-    
-    // Update selected numbers display
-    function updateSelectedNumbers() {
-      const container = document.getElementById('selected-numbers');
-      if (!container) return;
-      
-      if (selectedNumbers.length === 0) {
-        container.innerHTML = '<span class="text-gray-400 text-sm">Selecciona números del grid</span>';
-      } else {
-        container.innerHTML = selectedNumbers.map(num => 
-          `<span class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-md">${num}</span>`
-        ).join('');
-      }
-    }
-    
-    // Select lottery
-    function selectLottery(lottery) {
-      selectedLottery = lottery;
-      document.querySelectorAll('.lottery-btn').forEach(btn => {
-        btn.classList.remove('border-red-500', 'border-green-500', 'border-yellow-500', 'border-purple-500', 'bg-red-50', 'bg-green-50', 'bg-yellow-50', 'bg-purple-50');
-        btn.classList.add('border-transparent');
-      });
-      
-      const btn = document.getElementById('lot-' + lottery);
-      if (btn) {
-        const color = lotteryColors[lottery];
-        btn.classList.add('border-' + color + '-500', 'bg-' + color + '-50');
-        btn.classList.remove('border-transparent');
-      }
-      
-      updateSummary();
-    }
-    
-    // Select modality
-    function selectModality(modality, nums) {
-      selectedModality = modality;
-      maxNumbers = modalityInfo[modality].numbers;
-      multiplier = modalityInfo[modality].multiplier;
-      
-      // Clear extra numbers if needed
-      while (selectedNumbers.length > maxNumbers) {
-        const num = selectedNumbers.pop();
-        const btn = document.getElementById('num-' + num);
-        if (btn) {
-          btn.classList.remove('bg-blue-500', 'text-white', 'border-blue-500');
-          btn.classList.add('border-gray-200');
-        }
-      }
-      
-      document.querySelectorAll('.modality-btn').forEach(btn => {
-        btn.classList.remove('border-blue-500', 'bg-blue-50');
-        btn.classList.add('border-gray-200');
-      });
-      
-      event.target.closest('.modality-btn')?.classList.add('border-blue-500', 'bg-blue-50');
-      event.target.closest('.modality-btn')?.classList.remove('border-gray-200');
-      
-      updateSelectedNumbers();
-      updateSummary();
-    }
-    
-    // Select stake
-    function selectStake(stake) {
-      selectedStake = stake;
-      
-      document.querySelectorAll('.stake-btn').forEach(btn => {
-        btn.classList.remove('bg-blue-500', 'text-white');
-        btn.classList.add('bg-gray-100');
-      });
-      
-      event.target?.classList.add('bg-blue-500', 'text-white');
-      event.target?.classList.remove('bg-gray-100');
-      
-      updateSummary();
-    }
-    
-    // Random numbers
+
     function randomNumbers() {
-      // Clear current selection
-      selectedNumbers.forEach(num => {
+      // Clear current
+      appState.selectedNumbers.forEach(num => {
         const btn = document.getElementById('num-' + num);
         if (btn) {
           btn.classList.remove('bg-blue-500', 'text-white', 'border-blue-500');
           btn.classList.add('border-gray-200');
         }
       });
-      selectedNumbers = [];
+      appState.selectedNumbers = [];
       
-      // Generate random numbers
-      while (selectedNumbers.length < maxNumbers) {
-        const num = Math.floor(Math.random() * 100).toString().padStart(2, '0');
-        if (!selectedNumbers.includes(num)) {
-          selectedNumbers.push(num);
+      // Generate random
+      while (appState.selectedNumbers.length < appState.maxNumbers) {
+        const num = pad(Math.floor(Math.random() * 100));
+        if (!appState.selectedNumbers.includes(num)) {
+          appState.selectedNumbers.push(num);
           const btn = document.getElementById('num-' + num);
           if (btn) {
             btn.classList.add('bg-blue-500', 'text-white', 'border-blue-500');
@@ -1188,72 +1530,196 @@
       updateSelectedNumbers();
       updateSummary();
     }
-    
-    // Update summary
-    function updateSummary() {
-      document.getElementById('summary-lottery').textContent = selectedLottery ? lotteryNames[selectedLottery] : '-';
-      document.getElementById('summary-modality').textContent = selectedModality ? modalityInfo[selectedModality].name : '-';
-      document.getElementById('summary-numbers').textContent = selectedNumbers.length > 0 ? selectedNumbers.join(', ') : '-';
-      document.getElementById('summary-stake').textContent = 'RD$ ' + selectedStake.toLocaleString();
-      
-      const prize = selectedStake * multiplier;
-      document.getElementById('summary-prize').textContent = 'RD$ ' + prize.toLocaleString();
+
+    function selectStake(stake) {
+      appState.selectedStake = stake;
+      renderStakeSelection();
+      updateSummary();
     }
-    
-    // Confirm play
+
+    function updateSelectedNumbers() {
+      const container = document.getElementById('selected-numbers');
+      if (!container) return;
+      
+      if (appState.selectedNumbers.length === 0) {
+        container.innerHTML = '<span class="text-gray-400 text-sm">Selecciona números del grid</span>';
+      } else {
+        container.innerHTML = appState.selectedNumbers.map(num => 
+          '<span class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-md">' + num + '</span>'
+        ).join('');
+      }
+    }
+
+    function updateSummary() {
+      const lottery = LOTTERIES.find(l => l.id === appState.selectedLottery);
+      document.getElementById('summary-lottery').textContent = lottery ? lottery.name : '-';
+      document.getElementById('summary-modality').textContent = appState.selectedModality || '-';
+      document.getElementById('summary-numbers').textContent = appState.selectedNumbers.length > 0 ? appState.selectedNumbers.join(', ') : '-';
+      document.getElementById('summary-stake').textContent = formatMoney(appState.selectedStake);
+      
+      const prize = appState.selectedStake * appState.multiplier;
+      document.getElementById('summary-prize').textContent = formatMoney(prize);
+    }
+
     function confirmPlay() {
-      if (!selectedLottery) {
-        alert('Por favor selecciona una lotería');
+      if (!appState.selectedLottery) {
+        showToast('Por favor selecciona una lotería', 'warning');
         return;
       }
-      if (!selectedModality) {
-        alert('Por favor selecciona una modalidad');
+      if (!appState.selectedModality) {
+        showToast('Por favor selecciona una modalidad', 'warning');
         return;
       }
-      if (selectedNumbers.length < maxNumbers) {
-        alert('Por favor selecciona ' + maxNumbers + ' números');
+      if (appState.selectedNumbers.length < appState.maxNumbers) {
+        showToast('Por favor selecciona ' + appState.maxNumbers + ' número(s)', 'warning');
         return;
       }
       
-      const prize = selectedStake * multiplier;
-      alert(`🎰 ¡Jugada Confirmada!\n\nLotería: ${lotteryNames[selectedLottery]}\nModalidad: ${modalityInfo[selectedModality].name}\nNúmeros: ${selectedNumbers.join(', ')}\nApuesta: RD$ ${selectedStake}\nPremio Potencial: RD$ ${prize.toLocaleString()}\n\n¡Buena suerte!`);
+      // Generate ticket
+      showTicketModal();
+    }
+
+    function showTicketModal() {
+      const lottery = LOTTERIES.find(l => l.id === appState.selectedLottery);
+      const ticketId = uid('TKT');
+      const prize = appState.selectedStake * appState.multiplier;
+      const now = new Date();
       
-      // Reset
-      selectedLottery = null;
-      selectedModality = null;
-      selectedNumbers = [];
-      selectedStake = 25;
-      maxNumbers = 2;
-      multiplier = 60;
+      const modal = document.getElementById('ticket-modal');
+      const content = document.getElementById('ticket-content');
       
-      // Reset UI
-      document.querySelectorAll('.lottery-btn').forEach(btn => {
-        btn.classList.remove('border-red-500', 'border-green-500', 'border-yellow-500', 'border-purple-500', 'bg-red-50', 'bg-green-50', 'bg-yellow-50', 'bg-purple-50');
-        btn.classList.add('border-transparent');
-      });
-      document.querySelectorAll('.modality-btn').forEach(btn => {
-        btn.classList.remove('border-blue-500', 'bg-blue-50');
-        btn.classList.add('border-gray-200');
-      });
-      document.querySelectorAll('.number-btn').forEach(btn => {
-        btn.classList.remove('bg-blue-500', 'text-white', 'border-blue-500');
-        btn.classList.add('border-gray-200');
-      });
+      content.innerHTML = '<div id="ticket-print-area" class="text-center">' +
+        '<div class="border-b border-dashed border-gray-300 pb-4 mb-4">' +
+          '<div class="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-2">🎰</div>' +
+          '<h2 class="text-2xl font-bold text-gray-900">LotoLink</h2>' +
+          '<p class="text-sm text-gray-500">Ticket de Jugada</p>' +
+        '</div>' +
+        '<div class="space-y-3 text-sm text-left mb-4">' +
+          '<div class="flex justify-between"><span class="text-gray-500">ID Ticket:</span><span class="font-mono font-bold">' + ticketId + '</span></div>' +
+          '<div class="flex justify-between"><span class="text-gray-500">Fecha:</span><span>' + now.toLocaleDateString('es-DO') + '</span></div>' +
+          '<div class="flex justify-between"><span class="text-gray-500">Hora:</span><span>' + now.toLocaleTimeString('es-DO') + '</span></div>' +
+          '<div class="flex justify-between"><span class="text-gray-500">Lotería:</span><span class="font-semibold">' + lottery.name + '</span></div>' +
+          '<div class="flex justify-between"><span class="text-gray-500">Modalidad:</span><span>' + appState.selectedModality + '</span></div>' +
+        '</div>' +
+        '<div class="bg-gray-100 rounded-xl p-4 mb-4">' +
+          '<p class="text-xs text-gray-500 mb-2">Números:</p>' +
+          '<div class="flex justify-center gap-2">' + 
+            appState.selectedNumbers.map(function(num) { 
+              return '<span class="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold" style="background: ' + lottery.color + '">' + num + '</span>'; 
+            }).join('') +
+          '</div>' +
+        '</div>' +
+        '<div class="space-y-2 text-sm">' +
+          '<div class="flex justify-between"><span>Apuesta:</span><span class="font-bold">' + formatMoney(appState.selectedStake) + '</span></div>' +
+          '<div class="flex justify-between text-green-600"><span>Premio Potencial:</span><span class="font-bold">' + formatMoney(prize) + '</span></div>' +
+        '</div>' +
+        '<div class="mt-4 flex justify-center">' +
+          '<img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' + encodeURIComponent(ticketId) + '" alt="QR" class="rounded-lg">' +
+        '</div>' +
+        '<p class="text-xs text-gray-400 mt-4">Guarda este ticket como comprobante</p>' +
+      '</div>' +
+      '<div class="flex gap-2 mt-4">' +
+        '<button onclick="printTicket()" class="flex-1 py-2 bg-gray-100 rounded-xl font-medium hover:bg-gray-200 transition">🖨️ Imprimir</button>' +
+        '<button onclick="closeTicketModal()" class="flex-1 py-2 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition">✓ Listo</button>' +
+      '</div>';
       
+      modal.classList.remove('hidden');
+      
+      // Play sound
+      if (appState.sounds) {
+        playChaChing();
+      }
+      
+      // Show notification
+      showToast('🎉 ¡Jugada confirmada! Ticket: ' + ticketId, 'success');
+      
+      // Deduct from balance
+      appState.user.balance -= appState.selectedStake;
+      updateBalanceDisplay();
+      
+      // Reset play state
+      resetPlayState();
+    }
+
+    function playChaChing() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        const now = ctx.currentTime;
+        o.frequency.setValueAtTime(600, now);
+        o.frequency.exponentialRampToValueAtTime(1200, now + 0.18);
+        g.gain.setValueAtTime(0, now);
+        g.gain.linearRampToValueAtTime(0.9, now + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        o.connect(g);
+        g.connect(ctx.destination);
+        o.start();
+        o.stop(now + 0.5);
+      } catch (e) {}
+    }
+
+    function closeTicketModal() {
+      document.getElementById('ticket-modal').classList.add('hidden');
+    }
+
+    function printTicket() {
+      window.print();
+    }
+
+    function resetPlayState() {
+      appState.selectedNumbers.forEach(function(num) {
+        const btn = document.getElementById('num-' + num);
+        if (btn) {
+          btn.classList.remove('bg-blue-500', 'text-white', 'border-blue-500');
+          btn.classList.add('border-gray-200');
+        }
+      });
+      appState.selectedNumbers = [];
       updateSelectedNumbers();
       updateSummary();
     }
-    
-    // Navigation
-    function navigate(view) {
-      document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-      document.getElementById('view-' + view)?.classList.remove('hidden');
-      
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active', 'bg-blue-50', 'text-blue-600'));
-      event?.target?.closest('.nav-item')?.classList.add('active', 'bg-blue-50', 'text-blue-600');
+
+    function updateBalanceDisplay() {
+      document.getElementById('sidebar-balance').textContent = formatMoney(appState.user.balance);
+      const walletBalance = document.getElementById('wallet-balance');
+      if (walletBalance) walletBalance.textContent = formatMoney(appState.user.balance);
     }
-    
-    // Toggle bancas view (list/map)
+
+    // ===== MAP AND CHARTS =====
+    let bancasMap = null;
+
+    function initBancasMap() {
+      const mapContainer = document.getElementById('bancas-leaflet-map');
+      if (!mapContainer) return;
+      
+      // Skip if map already initialized
+      if (bancasMap) {
+        bancasMap.invalidateSize();
+        return;
+      }
+      
+      bancasMap = L.map('bancas-leaflet-map').setView([18.4861, -69.9312], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+      }).addTo(bancasMap);
+      
+      BANCAS.forEach(function(banca) {
+        const marker = L.marker(banca.coords).addTo(bancasMap);
+        
+        const popupContent = 
+          '<div style="text-align:center; min-width: 150px;">' +
+            '<div style="font-weight:bold; margin-bottom:4px;">' + banca.name + '</div>' +
+            '<div style="font-size:12px; color:#666; margin-bottom:8px;">' + banca.address + '</div>' +
+            '<div style="font-size:11px; margin-bottom:8px;">⭐ ' + banca.rating + ' • 📍 ' + banca.distance + ' km</div>' +
+            '<button onclick="playAtBanca(' + banca.id + ')" style="background:#0071e3; color:white; border:none; padding:6px 12px; border-radius:20px; cursor:pointer; font-size:12px;">Jugar Aquí</button>' +
+          '</div>';
+        
+        marker.bindPopup(popupContent);
+      });
+    }
+
     function toggleBancasView(view) {
       const listEl = document.getElementById('bancas-list');
       const mapEl = document.getElementById('bancas-map');
@@ -1261,49 +1727,297 @@
       const btnMap = document.getElementById('btn-map');
       
       if (view === 'list') {
-        listEl?.classList.remove('hidden');
-        mapEl?.classList.add('hidden');
-        btnList?.classList.add('bg-blue-500', 'text-white');
-        btnList?.classList.remove('bg-white', 'text-gray-700');
-        btnMap?.classList.remove('bg-blue-500', 'text-white');
-        btnMap?.classList.add('bg-white', 'text-gray-700');
+        listEl.classList.remove('hidden');
+        mapEl.classList.add('hidden');
+        btnList.className = 'btn-apple-primary text-sm py-2 px-4 titlebar-no-drag';
+        btnMap.className = 'btn-apple-secondary text-sm py-2 px-4 titlebar-no-drag';
       } else {
-        listEl?.classList.add('hidden');
-        mapEl?.classList.remove('hidden');
-        btnMap?.classList.add('bg-blue-500', 'text-white');
-        btnMap?.classList.remove('bg-white', 'text-gray-700');
-        btnList?.classList.remove('bg-blue-500', 'text-white');
-        btnList?.classList.add('bg-white', 'text-gray-700');
+        listEl.classList.add('hidden');
+        mapEl.classList.remove('hidden');
+        btnMap.className = 'btn-apple-primary text-sm py-2 px-4 titlebar-no-drag';
+        btnList.className = 'btn-apple-secondary text-sm py-2 px-4 titlebar-no-drag';
+        setTimeout(function() {
+          initBancasMap();
+        }, 100);
       }
     }
-    
-    // Dark mode toggle
-    function toggleDarkMode() {
-      document.documentElement.classList.toggle('dark');
+
+    function playAtBanca(bancaId) {
+      const banca = BANCAS.find(function(b) { return b.id === bancaId; });
+      if (banca && banca.status === 'open') {
+        showToast('Seleccionada: ' + banca.name, 'success');
+        navigate('play');
+      }
     }
-    
-    // Initialize app
-    window.addEventListener('DOMContentLoaded', () => {
-      // Generate number grid
-      generateNumberGrid();
+
+    function initResultsCharts() {
+      // Frequency Chart
+      const freqCtx = document.getElementById('frequency-chart');
+      if (freqCtx && !freqCtx.chart) {
+        freqCtx.chart = new Chart(freqCtx, {
+          type: 'bar',
+          data: {
+            labels: ['08', '23', '45', '67', '12', '34', '56', '78'],
+            datasets: [{
+              label: 'Frecuencia',
+              data: [15, 12, 10, 9, 8, 8, 7, 6],
+              backgroundColor: 'rgba(0, 113, 227, 0.7)',
+              borderRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+      }
+      
+      // Distribution Chart
+      const distCtx = document.getElementById('distribution-chart');
+      if (distCtx && !distCtx.chart) {
+        distCtx.chart = new Chart(distCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Nacional', 'Leidsa', 'Loteka', 'Real'],
+            datasets: [{
+              data: [30, 25, 25, 20],
+              backgroundColor: ['#ef4444', '#22c55e', '#00B0DB', '#eab308']
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom' } }
+          }
+        });
+      }
+    }
+
+    function initBalanceChart() {
+      const ctx = document.getElementById('balance-chart');
+      if (ctx && !ctx.chart) {
+        ctx.chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+            datasets: [{
+              label: 'Balance',
+              data: [1000, 1500, 1200, 2000, 1800, 2500],
+              borderColor: '#0071e3',
+              backgroundColor: 'rgba(0, 113, 227, 0.1)',
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+      }
+    }
+
+    function initProfileChart() {
+      const ctx = document.getElementById('profile-stats-chart');
+      if (ctx && !ctx.chart) {
+        ctx.chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Jugadas', 'Victorias', 'Premios'],
+            datasets: [{
+              data: [47, 5, 8],
+              backgroundColor: ['#0071e3', '#22c55e', '#eab308']
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+      }
+    }
+
+    // ===== SETTINGS TOGGLES =====
+    function toggleNotifications() {
+      appState.notifications = !appState.notifications;
+      document.getElementById('notifications-toggle').classList.toggle('on', appState.notifications);
+      localStorage.setItem('notifications', appState.notifications);
+    }
+
+    function toggleSounds() {
+      appState.sounds = !appState.sounds;
+      document.getElementById('sounds-toggle').classList.toggle('on', appState.sounds);
+      localStorage.setItem('sounds', appState.sounds);
+    }
+
+    function toggleAutoRefresh() {
+      appState.autoRefresh = !appState.autoRefresh;
+      document.getElementById('autorefresh-toggle').classList.toggle('on', appState.autoRefresh);
+      localStorage.setItem('autoRefresh', appState.autoRefresh);
+      
+      if (appState.autoRefresh) {
+        startAutoRefresh();
+      } else {
+        stopAutoRefresh();
+      }
+    }
+
+    function startAutoRefresh() {
+      if (appState.autoRefreshInterval) return;
+      appState.autoRefreshInterval = setInterval(function() {
+        refreshResults();
+      }, 30000);
+    }
+
+    function stopAutoRefresh() {
+      if (appState.autoRefreshInterval) {
+        clearInterval(appState.autoRefreshInterval);
+        appState.autoRefreshInterval = null;
+      }
+    }
+
+    function refreshResults() {
+      const lastUpdate = document.getElementById('last-update');
+      if (lastUpdate) {
+        lastUpdate.textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-DO');
+      }
+      renderLiveResults();
+      showToast('Resultados actualizados', 'info');
+    }
+
+    // ===== MODALS =====
+    function showRechargeModal() {
+      showToast('Modal de recarga - Próximamente', 'info');
+    }
+
+    function showWithdrawModal() {
+      showToast('Modal de retiro - Próximamente', 'info');
+    }
+
+    function showEditProfileModal() {
+      showToast('Modal de edición - Próximamente', 'info');
+    }
+
+    function exportTransactions() {
+      showToast('Exportando transacciones a CSV...', 'info');
+    }
+
+    function logout() {
+      if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+        showToast('Cerrando sesión...', 'info');
+      }
+    }
+
+    // ===== KEYBOARD SHORTCUTS =====
+    document.addEventListener('keydown', function(e) {
+      // Ctrl+N = New play
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        navigate('play');
+      }
+      // Ctrl+R = Results
+      if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+        e.preventDefault();
+        navigate('results');
+      }
+      // Ctrl+D = Dark mode
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+        e.preventDefault();
+        toggleDarkMode();
+      }
+      // Escape = Close modal
+      if (e.key === 'Escape') {
+        closeTicketModal();
+      }
+    });
+
+    // ===== ELECTRON INTEGRATION =====
+    function setupElectron() {
+      if (window.electronAPI) {
+        window.electronAPI.onNavigate(function(page) {
+          navigate(page);
+        });
+        
+        window.electronAPI.onNewPlay(function() {
+          navigate('play');
+        });
+        
+        window.electronAPI.onThemeChanged(function(theme) {
+          if (theme === 'dark' && !appState.darkMode) {
+            toggleDarkMode();
+          } else if (theme === 'light' && appState.darkMode) {
+            toggleDarkMode();
+          }
+        });
+      }
+    }
+
+    // ===== UPDATE TIME =====
+    function updateCurrentTime() {
+      const el = document.getElementById('current-time');
+      if (el) {
+        el.textContent = new Date().toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' });
+      }
+    }
+
+    // ===== INITIALIZATION =====
+    window.addEventListener('DOMContentLoaded', function() {
+      // Load saved settings
+      loadDarkMode();
+      
+      // Load other settings
+      if (localStorage.getItem('notifications') === 'false') {
+        appState.notifications = false;
+      }
+      if (localStorage.getItem('sounds') === 'false') {
+        appState.sounds = false;
+      }
+      if (localStorage.getItem('autoRefresh') === 'false') {
+        appState.autoRefresh = false;
+      }
+      
+      // Setup Electron
+      setupElectron();
       
       // Simulate loading
-      setTimeout(() => {
+      setTimeout(function() {
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('main-content').classList.remove('hidden');
+        
+        // Render all components
+        renderUpcomingDraws();
+        renderLiveResults();
+        renderLotterySelection();
+        renderModalitySelection();
+        generateNumberGrid();
+        renderStakeSelection();
+        renderBancasList();
+        renderLoteriasGrid();
+        renderResultsHistory();
+        renderTransactions();
+        renderBadges();
+        renderTicketsHistory();
+        
+        // Update summary
+        updateSummary();
+        
+        // Start auto refresh
+        if (appState.autoRefresh) {
+          startAutoRefresh();
+        }
+        
+        // Update time
+        updateCurrentTime();
+        setInterval(updateCurrentTime, 60000);
+        
+        // Welcome notification
+        setTimeout(function() {
+          showToast('¡Bienvenido a LotoLink Desktop!', 'success');
+        }, 500);
+        
       }, 1500);
-      
-      // Dark mode toggle handler
-      const darkModeToggle = document.getElementById('darkModeToggle');
-      if (darkModeToggle) {
-        darkModeToggle.addEventListener('change', toggleDarkMode);
-      }
-      
-      // Listen for Electron events if available
-      if (window.electronAPI) {
-        window.electronAPI.onNavigate(navigate);
-        window.electronAPI.onNewPlay(() => navigate('play'));
-      }
     });
   </script>
 </body>
