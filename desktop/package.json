@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "LotoLink Desktop App - Premium Lottery Application for Windows, macOS, and Linux",
   "main": "src/main/main.js",
-  "author": "LotoLink Team",
+  "author": {
+    "name": "LotoLink Team",
+    "email": "support@lotolink.com"
+  },
+  "homepage": "https://lotolink.com",
   "license": "MIT",
   "scripts": {
     "start": "electron .",
@@ -45,7 +49,7 @@
           "target": "portable"
         }
       ],
-      "icon": "assets/icon.ico",
+      "icon": "assets/icon.png",
       "artifactName": "LotoLink-Setup-${version}.${ext}"
     },
     "mac": {
@@ -58,7 +62,7 @@
           "target": "zip"
         }
       ],
-      "icon": "assets/icon.icns",
+      "icon": "assets/icon.png",
       "category": "public.app-category.entertainment",
       "artifactName": "LotoLink-${version}-${arch}.${ext}"
     },
@@ -70,6 +74,7 @@
       ],
       "icon": "assets/icon.png",
       "category": "Game",
+      "maintainer": "LotoLink Team <support@lotolink.com>",
       "artifactName": "LotoLink-${version}.${ext}"
     },
     "nsis": {
@@ -82,7 +87,7 @@
     },
     "dmg": {
       "title": "LotoLink Installer",
-      "icon": "assets/icon.icns",
+      "icon": "assets/icon.png",
       "contents": [
         {
           "x": 130,
