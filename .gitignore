@@ -55,6 +55,11 @@ coverage/
 # Testing
 .jest/
 
+# E2E Testing
+e2e/playwright-report/
+e2e/test-results/
+e2e/node_modules/
+
 # Temporary files
 tmp/
 temp/
@@ -66,5 +71,3 @@ temp/
 k8s/secrets/
 *.pem
 *.key
-node_modules
-dist

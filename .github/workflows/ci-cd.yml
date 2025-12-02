@@ -14,9 +14,41 @@ env:
   NODE_VERSION: '18'
 
 jobs:
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./backend
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+        working-directory: ./backend
+        continue-on-error: true
+
+      - name: Run npm audit (mock-banca)
+        run: npm audit --audit-level=high
+        working-directory: ./mock-banca
+        continue-on-error: true
+
   lint-and-test-backend:
     name: Lint & Test Backend
     runs-on: ubuntu-latest
+    needs: security-audit
     permissions:
       contents: read
     
@@ -110,10 +142,52 @@ jobs:
           name: backend-dist
           path: backend/dist/
 
+  container-scan:
+    name: Container Security Scan
+    runs-on: ubuntu-latest
+    needs: build-backend
+    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Backend Docker image for scanning
+        run: docker build -t lotolink-backend:scan ./backend
+
+      - name: Run Trivy vulnerability scanner (Backend)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'lotolink-backend:scan'
+          format: 'sarif'
+          output: 'trivy-backend-results.sarif'
+          severity: 'CRITICAL,HIGH'
+        continue-on-error: true
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-backend-results.sarif'
+        if: always()
+        continue-on-error: true
+
+      - name: Build Mock Banca Docker image for scanning
+        run: docker build -t mock-banca:scan ./mock-banca
+
+      - name: Run Trivy vulnerability scanner (Mock Banca)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'mock-banca:scan'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+        continue-on-error: true
+
   build-docker:
     name: Build Docker Image
     runs-on: ubuntu-latest
-    needs: build-backend
+    needs: [build-backend, container-scan]
     if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
@@ -187,10 +261,27 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Install E2E dependencies
+        run: |
+          cd e2e
+          npm ci
+          npx playwright install --with-deps chromium
+
       - name: Run E2E tests
         run: |
-          echo "Running E2E tests against staging..."
-          # npm run test:e2e
+          cd e2e
+          npx playwright test --project=api-tests
+        env:
+          BASE_URL: ${{ secrets.STAGING_URL || 'http://localhost:3000' }}
+          HMAC_SECRET: ${{ secrets.HMAC_SECRET || 'test_hmac_secret' }}
+        continue-on-error: true
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-report
+          path: e2e/playwright-report/
+        if: always()
 
   deploy-production:
     name: Deploy to Production

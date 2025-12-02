@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
-import { createHmac } from 'crypto';
+import { createHmac, timingSafeEqual } from 'crypto';
 import { ConfigService } from '@nestjs/config';
 import { WebhookConfirmationDto, WebhookResponseDto } from '../dtos/webhook.dto';
 import { PlayService } from './play.service';
@@ -46,9 +46,33 @@ export class WebhookService {
   private validateSignature(signature: string, timestamp: string, body: string): void {
     const expectedSignature = this.calculateSignature('POST', '/webhooks/plays/confirmation', timestamp, body);
     
-    if (signature !== expectedSignature) {
+    // Use timing-safe comparison to prevent timing attacks
+    if (!this.timingSafeCompare(signature, expectedSignature)) {
       throw new UnauthorizedException('Invalid signature');
     }
+  }
+
+  /**
+   * Timing-safe string comparison to prevent timing attacks.
+   * Uses crypto.timingSafeEqual for constant-time comparison.
+   */
+  private timingSafeCompare(a: string, b: string): boolean {
+    if (typeof a !== 'string' || typeof b !== 'string') {
+      return false;
+    }
+    
+    const aBuffer = Buffer.from(a, 'utf8');
+    const bBuffer = Buffer.from(b, 'utf8');
+    
+    // If lengths differ, we still need to compare in constant time
+    // to avoid leaking length information
+    if (aBuffer.length !== bBuffer.length) {
+      // Compare with self to maintain constant time
+      timingSafeEqual(aBuffer, aBuffer);
+      return false;
+    }
+    
+    return timingSafeEqual(aBuffer, bBuffer);
   }
 
   private validateTimestamp(timestamp: string): void {
