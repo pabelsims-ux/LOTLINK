@@ -1755,6 +1755,419 @@
     </div>
   </div>
   
+  <!-- Payment Method Modal -->
+  <div id="payment-modal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-backdrop absolute inset-0" onclick="closePaymentModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="modal-content w-full max-w-lg p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white">
+              <i class="fas fa-credit-card"></i>
+            </div>
+            Método de Pago
+          </h3>
+          <button onclick="closePaymentModal()" class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition titlebar-no-drag">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <div id="payment-amount-display" class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl mb-6">
+          <p class="text-sm text-gray-500 dark:text-gray-400">Total a pagar</p>
+          <p id="payment-total" class="text-3xl font-bold text-gray-900 dark:text-white">RD$ 0</p>
+        </div>
+        
+        <div class="space-y-3 mb-6">
+          <button onclick="selectPaymentMethod('wallet')" id="pm-wallet" class="payment-method-btn w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl flex items-center gap-4 hover:border-blue-400 transition titlebar-no-drag">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-white">
+              <i class="fas fa-wallet text-lg"></i>
+            </div>
+            <div class="flex-1 text-left">
+              <p class="font-semibold text-gray-900 dark:text-white">Balance de Wallet</p>
+              <p id="pm-wallet-balance" class="text-sm text-gray-500">Disponible: RD$ 2,500</p>
+            </div>
+            <i class="fas fa-check-circle text-green-500 hidden" id="pm-wallet-check"></i>
+          </button>
+          
+          <button onclick="selectPaymentMethod('card')" id="pm-card" class="payment-method-btn w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl flex items-center gap-4 hover:border-blue-400 transition titlebar-no-drag">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white">
+              <i class="fas fa-credit-card text-lg"></i>
+            </div>
+            <div class="flex-1 text-left">
+              <p class="font-semibold text-gray-900 dark:text-white">Tarjeta de Crédito/Débito</p>
+              <p class="text-sm text-gray-500">Visa, Mastercard, American Express</p>
+            </div>
+            <i class="fas fa-check-circle text-green-500 hidden" id="pm-card-check"></i>
+          </button>
+          
+          <button onclick="selectPaymentMethod('transfer')" id="pm-transfer" class="payment-method-btn w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl flex items-center gap-4 hover:border-blue-400 transition titlebar-no-drag">
+            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-white">
+              <i class="fas fa-university text-lg"></i>
+            </div>
+            <div class="flex-1 text-left">
+              <p class="font-semibold text-gray-900 dark:text-white">Transferencia Bancaria</p>
+              <p class="text-sm text-gray-500">Banco Popular, BHD León, Reservas</p>
+            </div>
+            <i class="fas fa-check-circle text-green-500 hidden" id="pm-transfer-check"></i>
+          </button>
+          
+          <button onclick="selectPaymentMethod('mobile')" id="pm-mobile" class="payment-method-btn w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl flex items-center gap-4 hover:border-blue-400 transition opacity-50 cursor-not-allowed titlebar-no-drag" disabled>
+            <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center text-white">
+              <i class="fas fa-mobile-alt text-lg"></i>
+            </div>
+            <div class="flex-1 text-left">
+              <p class="font-semibold text-gray-900 dark:text-white">Pago Móvil</p>
+              <p class="text-sm text-gray-500">Próximamente</p>
+            </div>
+            <span class="px-2 py-1 bg-orange-100 text-orange-600 text-xs font-semibold rounded-full">SOON</span>
+          </button>
+        </div>
+        
+        <!-- Card Form (hidden by default) -->
+        <div id="card-form-section" class="hidden mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <i class="fas fa-lock text-green-500"></i>
+            Datos de Tarjeta
+          </h4>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número de Tarjeta</label>
+              <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" 
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 titlebar-no-drag"
+                oninput="formatCardNumber(this)">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha de Expiración</label>
+                <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5"
+                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 titlebar-no-drag"
+                  oninput="formatCardExpiry(this)">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CVV</label>
+                <input type="text" id="card-cvv" placeholder="123" maxlength="4"
+                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 titlebar-no-drag">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre en la Tarjeta</label>
+              <input type="text" id="card-name" placeholder="JUAN PEREZ"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 titlebar-no-drag">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Transfer Info (hidden by default) -->
+        <div id="transfer-info-section" class="hidden mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <i class="fas fa-info-circle text-blue-500"></i>
+            Datos para Transferencia
+          </h4>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-500 dark:text-gray-400">Banco:</span>
+              <span class="font-medium text-gray-900 dark:text-white">Banco Popular Dominicano</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500 dark:text-gray-400">Tipo de Cuenta:</span>
+              <span class="font-medium text-gray-900 dark:text-white">Corriente</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500 dark:text-gray-400">Número de Cuenta:</span>
+              <span class="font-medium text-gray-900 dark:text-white">123-456789-0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500 dark:text-gray-400">RNC:</span>
+              <span class="font-medium text-gray-900 dark:text-white">1-30-12345-6</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500 dark:text-gray-400">Titular:</span>
+              <span class="font-medium text-gray-900 dark:text-white">LotoLink SRL</span>
+            </div>
+          </div>
+          <p class="mt-4 text-xs text-gray-500 dark:text-gray-400">
+            <i class="fas fa-exclamation-triangle text-yellow-500 mr-1"></i>
+            Después de realizar la transferencia, tu pago será verificado en 24-48 horas.
+          </p>
+        </div>
+        
+        <div id="payment-loading" class="hidden text-center py-8">
+          <div class="w-16 h-16 mx-auto mb-4 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+          <p class="text-gray-600 dark:text-gray-400">Procesando pago...</p>
+        </div>
+        
+        <button id="confirm-payment-btn" onclick="processPaymentConfirmation()" class="w-full btn-premium py-4 text-lg titlebar-no-drag" disabled>
+          <i class="fas fa-lock mr-2"></i>
+          <span id="confirm-payment-text">Selecciona un método de pago</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Recharge Modal -->
+  <div id="recharge-modal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-backdrop absolute inset-0" onclick="closeRechargeModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="modal-content w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-white">
+              <i class="fas fa-plus-circle"></i>
+            </div>
+            Recargar Balance
+          </h3>
+          <button onclick="closeRechargeModal()" class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition titlebar-no-drag">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl mb-6">
+          <p class="text-sm text-gray-500 dark:text-gray-400">Balance Actual</p>
+          <p id="recharge-current-balance" class="text-3xl font-bold text-gray-900 dark:text-white">RD$ 2,500</p>
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Monto a Recargar</label>
+          <div class="grid grid-cols-3 gap-3 mb-4">
+            <button onclick="selectRechargeAmount(100)" class="recharge-amount-btn p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl font-semibold hover:border-green-400 transition titlebar-no-drag">RD$ 100</button>
+            <button onclick="selectRechargeAmount(500)" class="recharge-amount-btn p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl font-semibold hover:border-green-400 transition titlebar-no-drag">RD$ 500</button>
+            <button onclick="selectRechargeAmount(1000)" class="recharge-amount-btn p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl font-semibold hover:border-green-400 transition titlebar-no-drag">RD$ 1,000</button>
+            <button onclick="selectRechargeAmount(2000)" class="recharge-amount-btn p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl font-semibold hover:border-green-400 transition titlebar-no-drag">RD$ 2,000</button>
+            <button onclick="selectRechargeAmount(5000)" class="recharge-amount-btn p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl font-semibold hover:border-green-400 transition titlebar-no-drag">RD$ 5,000</button>
+            <button onclick="toggleCustomRechargeAmount()" class="recharge-amount-btn p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl font-semibold hover:border-green-400 transition titlebar-no-drag">
+              <i class="fas fa-edit"></i> Otro
+            </button>
+          </div>
+          <div id="custom-recharge-input" class="hidden">
+            <input type="number" id="recharge-custom-amount" placeholder="Monto personalizado" min="50" max="50000"
+              class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-green-500 titlebar-no-drag"
+              oninput="updateRechargeAmount(this.value)">
+            <p class="text-xs text-gray-500 mt-1">Mínimo RD$ 50 - Máximo RD$ 50,000</p>
+          </div>
+        </div>
+        
+        <div id="recharge-selected-amount" class="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-xl mb-6 hidden">
+          <p class="text-sm text-green-600 dark:text-green-400">Monto seleccionado</p>
+          <p id="recharge-amount-display" class="text-2xl font-bold text-green-600 dark:text-green-400">RD$ 0</p>
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Método de Pago</label>
+          <div class="space-y-3">
+            <button onclick="selectRechargeMethod('card')" id="rm-card" class="recharge-method-btn w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl flex items-center gap-4 hover:border-green-400 transition titlebar-no-drag">
+              <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <div class="flex-1 text-left">
+                <p class="font-semibold text-gray-900 dark:text-white">Tarjeta de Crédito/Débito</p>
+              </div>
+              <i class="fas fa-check-circle text-green-500 hidden" id="rm-card-check"></i>
+            </button>
+            
+            <button onclick="selectRechargeMethod('transfer')" id="rm-transfer" class="recharge-method-btn w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl flex items-center gap-4 hover:border-green-400 transition titlebar-no-drag">
+              <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-white">
+                <i class="fas fa-university"></i>
+              </div>
+              <div class="flex-1 text-left">
+                <p class="font-semibold text-gray-900 dark:text-white">Transferencia Bancaria</p>
+              </div>
+              <i class="fas fa-check-circle text-green-500 hidden" id="rm-transfer-check"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Card Form for Recharge -->
+        <div id="recharge-card-form" class="hidden mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <i class="fas fa-lock text-green-500"></i>
+            Datos de Tarjeta
+          </h4>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número de Tarjeta</label>
+              <input type="text" id="recharge-card-number" placeholder="1234 5678 9012 3456" maxlength="19" 
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-green-500 titlebar-no-drag"
+                oninput="formatCardNumber(this)">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha de Expiración</label>
+                <input type="text" id="recharge-card-expiry" placeholder="MM/AA" maxlength="5"
+                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-green-500 titlebar-no-drag"
+                  oninput="formatCardExpiry(this)">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CVV</label>
+                <input type="text" id="recharge-card-cvv" placeholder="123" maxlength="4"
+                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-green-500 titlebar-no-drag">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Transfer Info for Recharge -->
+        <div id="recharge-transfer-info" class="hidden mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <i class="fas fa-info-circle text-blue-500"></i>
+            Datos para Transferencia
+          </h4>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-500 dark:text-gray-400">Banco:</span>
+              <span class="font-medium text-gray-900 dark:text-white">Banco Popular Dominicano</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500 dark:text-gray-400">Cuenta:</span>
+              <span class="font-medium text-gray-900 dark:text-white">123-456789-0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500 dark:text-gray-400">Titular:</span>
+              <span class="font-medium text-gray-900 dark:text-white">LotoLink SRL</span>
+            </div>
+          </div>
+        </div>
+        
+        <div id="recharge-loading" class="hidden text-center py-8">
+          <div class="w-16 h-16 mx-auto mb-4 border-4 border-green-200 border-t-green-600 rounded-full animate-spin"></div>
+          <p class="text-gray-600 dark:text-gray-400">Procesando recarga...</p>
+        </div>
+        
+        <button id="confirm-recharge-btn" onclick="processRecharge()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg transition titlebar-no-drag" disabled>
+          <i class="fas fa-plus-circle mr-2"></i>
+          <span id="confirm-recharge-text">Selecciona monto y método</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Withdraw Modal -->
+  <div id="withdraw-modal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-backdrop absolute inset-0" onclick="closeWithdrawModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="modal-content w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center text-white">
+              <i class="fas fa-money-bill-wave"></i>
+            </div>
+            Retirar Fondos
+          </h3>
+          <button onclick="closeWithdrawModal()" class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition titlebar-no-drag">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl mb-6">
+          <p class="text-sm text-gray-500 dark:text-gray-400">Balance Disponible</p>
+          <p id="withdraw-available-balance" class="text-3xl font-bold text-gray-900 dark:text-white">RD$ 2,500</p>
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Monto a Retirar</label>
+          <input type="number" id="withdraw-amount" placeholder="Ingresa el monto" min="100"
+            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-orange-500 titlebar-no-drag"
+            oninput="validateWithdrawAmount(this.value)">
+          <p class="text-xs text-gray-500 mt-1">Mínimo RD$ 100</p>
+          <p id="withdraw-error" class="text-xs text-red-500 mt-1 hidden"></p>
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Método de Retiro</label>
+          <div class="space-y-3">
+            <button onclick="selectWithdrawMethod('bank')" id="wm-bank" class="withdraw-method-btn w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl flex items-center gap-4 hover:border-orange-400 transition titlebar-no-drag">
+              <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white">
+                <i class="fas fa-university"></i>
+              </div>
+              <div class="flex-1 text-left">
+                <p class="font-semibold text-gray-900 dark:text-white">Transferencia Bancaria</p>
+                <p class="text-xs text-gray-500">1-3 días hábiles</p>
+              </div>
+              <i class="fas fa-check-circle text-orange-500 hidden" id="wm-bank-check"></i>
+            </button>
+            
+            <button onclick="selectWithdrawMethod('cash')" id="wm-cash" class="withdraw-method-btn w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl flex items-center gap-4 hover:border-orange-400 transition titlebar-no-drag">
+              <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-white">
+                <i class="fas fa-store"></i>
+              </div>
+              <div class="flex-1 text-left">
+                <p class="font-semibold text-gray-900 dark:text-white">Efectivo en Banca</p>
+                <p class="text-xs text-gray-500">Recoge en cualquier banca afiliada</p>
+              </div>
+              <i class="fas fa-check-circle text-orange-500 hidden" id="wm-cash-check"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Bank Details Form -->
+        <div id="withdraw-bank-form" class="hidden mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Datos Bancarios</h4>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Banco</label>
+              <select id="withdraw-bank" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-orange-500 titlebar-no-drag">
+                <option value="">Selecciona tu banco</option>
+                <option value="popular">Banco Popular Dominicano</option>
+                <option value="bhd">BHD León</option>
+                <option value="reservas">Banreservas</option>
+                <option value="scotiabank">Scotiabank</option>
+                <option value="promerica">Promerica</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Cuenta</label>
+              <select id="withdraw-account-type" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-orange-500 titlebar-no-drag">
+                <option value="savings">Cuenta de Ahorro</option>
+                <option value="checking">Cuenta Corriente</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número de Cuenta</label>
+              <input type="text" id="withdraw-account-number" placeholder="Ingresa tu número de cuenta"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-orange-500 titlebar-no-drag">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Titular de la Cuenta</label>
+              <input type="text" id="withdraw-account-holder" placeholder="Nombre completo"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-orange-500 titlebar-no-drag">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Cash Pickup Info -->
+        <div id="withdraw-cash-info" class="hidden mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl">
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+            <i class="fas fa-info-circle text-yellow-500"></i>
+            Instrucciones para Retiro en Efectivo
+          </h4>
+          <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+            <li class="flex items-start gap-2">
+              <i class="fas fa-check text-green-500 mt-1"></i>
+              Recibirás un código de retiro por SMS y email
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fas fa-check text-green-500 mt-1"></i>
+              Presenta tu cédula y el código en cualquier banca afiliada
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fas fa-check text-green-500 mt-1"></i>
+              El código es válido por 72 horas
+            </li>
+          </ul>
+        </div>
+        
+        <div id="withdraw-loading" class="hidden text-center py-8">
+          <div class="w-16 h-16 mx-auto mb-4 border-4 border-orange-200 border-t-orange-600 rounded-full animate-spin"></div>
+          <p class="text-gray-600 dark:text-gray-400">Procesando solicitud...</p>
+        </div>
+        
+        <button id="confirm-withdraw-btn" onclick="processWithdraw()" class="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg transition titlebar-no-drag" disabled>
+          <i class="fas fa-money-bill-wave mr-2"></i>
+          <span id="confirm-withdraw-text">Completa los datos</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  
   <!-- Ticket Modal -->
   <div id="ticket-modal" class="fixed inset-0 z-50 hidden">
     <div class="modal-backdrop absolute inset-0" onclick="closeTicketModal()"></div>
@@ -1954,6 +2367,683 @@
     }
     function uid(prefix = 'T') { return prefix + '-' + Date.now().toString(36).slice(2, 9).toUpperCase(); }
 
+    // ===== PERSISTENCE FUNCTIONS =====
+    // Storage keys
+    const STORAGE_KEYS = {
+      TICKETS: 'lotolink_tickets',
+      TRANSACTIONS: 'lotolink_transactions',
+      BALANCE: 'lotolink_user_balance'
+    };
+
+    // Load balance from localStorage
+    function loadBalance() {
+      var savedBalance = localStorage.getItem(STORAGE_KEYS.BALANCE);
+      if (savedBalance !== null) {
+        appState.user.balance = parseFloat(savedBalance);
+      }
+    }
+
+    // Save balance to localStorage
+    function saveBalance() {
+      localStorage.setItem(STORAGE_KEYS.BALANCE, appState.user.balance.toString());
+    }
+
+    // Get all tickets from localStorage
+    function getTickets() {
+      try {
+        var tickets = localStorage.getItem(STORAGE_KEYS.TICKETS);
+        return tickets ? JSON.parse(tickets) : [];
+      } catch (e) {
+        console.error('Error loading tickets:', e);
+        return [];
+      }
+    }
+
+    // Save a new ticket to localStorage
+    function saveTicket(ticketData) {
+      try {
+        var tickets = getTickets();
+        var ticket = {
+          id: ticketData.id || uid('TKT'),
+          lotteryId: ticketData.lotteryId || '',
+          lotteryName: ticketData.lotteryName || ticketData.lottery || '',
+          modality: ticketData.modality || '',
+          numbers: ticketData.numbers || [],
+          stake: ticketData.stake || 0,
+          potentialPrize: ticketData.potentialPrize || 0,
+          status: ticketData.status || 'pending', // 'pending', 'won', 'lost'
+          prize: ticketData.prize || 0,
+          paymentMethod: ticketData.paymentMethod || 'wallet',
+          banca: ticketData.banca || 'Banca Online',
+          createdAt: ticketData.createdAt || new Date().toISOString(),
+          ticketCode: ticketData.ticketCode || 'LNK-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 1000000)).padStart(6, '0'),
+          drawDate: ticketData.drawDate || new Date().toISOString().split('T')[0],
+          drawTime: ticketData.drawTime || '8:55 PM'
+        };
+        tickets.unshift(ticket); // Add to beginning
+        localStorage.setItem(STORAGE_KEYS.TICKETS, JSON.stringify(tickets));
+        return ticket;
+      } catch (e) {
+        console.error('Error saving ticket:', e);
+        return null;
+      }
+    }
+
+    // Update ticket status
+    function updateTicketStatus(ticketId, status, prize) {
+      try {
+        var tickets = getTickets();
+        var ticketIndex = tickets.findIndex(function(t) { return t.id === ticketId; });
+        if (ticketIndex !== -1) {
+          tickets[ticketIndex].status = status;
+          if (prize !== undefined) {
+            tickets[ticketIndex].prize = prize;
+          }
+          localStorage.setItem(STORAGE_KEYS.TICKETS, JSON.stringify(tickets));
+          return true;
+        }
+        return false;
+      } catch (e) {
+        console.error('Error updating ticket:', e);
+        return false;
+      }
+    }
+
+    // Get all transactions from localStorage
+    function getTransactions() {
+      try {
+        var transactions = localStorage.getItem(STORAGE_KEYS.TRANSACTIONS);
+        return transactions ? JSON.parse(transactions) : [];
+      } catch (e) {
+        console.error('Error loading transactions:', e);
+        return [];
+      }
+    }
+
+    // Save a new transaction to localStorage
+    function saveTransaction(transactionData) {
+      try {
+        var transactions = getTransactions();
+        var transaction = {
+          id: transactionData.id || uid('TXN'),
+          type: transactionData.type || 'play', // 'deposit', 'play', 'win', 'withdrawal'
+          amount: transactionData.amount || 0,
+          method: transactionData.method || '',
+          status: transactionData.status || 'completed', // 'completed', 'pending', 'failed'
+          reference: transactionData.reference || uid('REF'),
+          details: transactionData.details || '',
+          createdAt: transactionData.createdAt || new Date().toISOString()
+        };
+        transactions.unshift(transaction); // Add to beginning
+        localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(transactions));
+        return transaction;
+      } catch (e) {
+        console.error('Error saving transaction:', e);
+        return null;
+      }
+    }
+
+    // ===== PAYMENT MODAL FUNCTIONS =====
+    var pendingPayment = {
+      amount: 0,
+      type: 'play', // 'play' or 'cart'
+      onSuccess: null,
+      selectedMethod: null,
+      playData: null
+    };
+
+    function showPaymentModal(amount, type, onSuccess, playData) {
+      pendingPayment.amount = amount;
+      pendingPayment.type = type;
+      pendingPayment.onSuccess = onSuccess;
+      pendingPayment.selectedMethod = null;
+      pendingPayment.playData = playData || null;
+
+      // Reset modal state
+      document.querySelectorAll('.payment-method-btn').forEach(function(btn) {
+        btn.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+        btn.classList.add('border-gray-200', 'dark:border-gray-700');
+      });
+      document.querySelectorAll('[id^="pm-"][id$="-check"]').forEach(function(el) {
+        el.classList.add('hidden');
+      });
+      document.getElementById('card-form-section').classList.add('hidden');
+      document.getElementById('transfer-info-section').classList.add('hidden');
+      document.getElementById('payment-loading').classList.add('hidden');
+
+      // Update display
+      document.getElementById('payment-total').textContent = formatMoney(amount);
+      document.getElementById('pm-wallet-balance').textContent = 'Disponible: ' + formatMoney(appState.user.balance);
+      
+      // Disable wallet if insufficient balance
+      var walletBtn = document.getElementById('pm-wallet');
+      if (amount > appState.user.balance) {
+        walletBtn.classList.add('opacity-50');
+        walletBtn.disabled = true;
+        document.getElementById('pm-wallet-balance').textContent = 'Balance insuficiente';
+      } else {
+        walletBtn.classList.remove('opacity-50');
+        walletBtn.disabled = false;
+      }
+
+      // Reset confirm button
+      var confirmBtn = document.getElementById('confirm-payment-btn');
+      confirmBtn.disabled = true;
+      document.getElementById('confirm-payment-text').textContent = 'Selecciona un método de pago';
+
+      // Clear card form
+      document.getElementById('card-number').value = '';
+      document.getElementById('card-expiry').value = '';
+      document.getElementById('card-cvv').value = '';
+      document.getElementById('card-name').value = '';
+
+      document.getElementById('payment-modal').classList.remove('hidden');
+    }
+
+    function closePaymentModal() {
+      document.getElementById('payment-modal').classList.add('hidden');
+      pendingPayment = { amount: 0, type: 'play', onSuccess: null, selectedMethod: null, playData: null };
+    }
+
+    function selectPaymentMethod(method) {
+      pendingPayment.selectedMethod = method;
+
+      // Update UI
+      document.querySelectorAll('.payment-method-btn').forEach(function(btn) {
+        btn.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+        btn.classList.add('border-gray-200', 'dark:border-gray-700');
+      });
+      document.querySelectorAll('[id^="pm-"][id$="-check"]').forEach(function(el) {
+        el.classList.add('hidden');
+      });
+
+      var selectedBtn = document.getElementById('pm-' + method);
+      if (selectedBtn) {
+        selectedBtn.classList.remove('border-gray-200', 'dark:border-gray-700');
+        selectedBtn.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+        document.getElementById('pm-' + method + '-check').classList.remove('hidden');
+      }
+
+      // Show/hide forms
+      document.getElementById('card-form-section').classList.toggle('hidden', method !== 'card');
+      document.getElementById('transfer-info-section').classList.toggle('hidden', method !== 'transfer');
+
+      // Update confirm button
+      var confirmBtn = document.getElementById('confirm-payment-btn');
+      confirmBtn.disabled = false;
+      var methodNames = { wallet: 'Pagar con Wallet', card: 'Pagar con Tarjeta', transfer: 'Confirmar Transferencia' };
+      document.getElementById('confirm-payment-text').textContent = methodNames[method] || 'Confirmar Pago';
+    }
+
+    function formatCardNumber(input) {
+      var value = input.value.replace(/\D/g, '');
+      value = value.replace(/(.{4})/g, '$1 ').trim();
+      input.value = value.substring(0, 19);
+    }
+
+    function formatCardExpiry(input) {
+      var value = input.value.replace(/\D/g, '');
+      if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+      }
+      input.value = value;
+    }
+
+    function validateCardForm() {
+      var cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+      var cardExpiry = document.getElementById('card-expiry').value;
+      var cardCvv = document.getElementById('card-cvv').value;
+      var cardName = document.getElementById('card-name').value;
+
+      if (cardNumber.length < 13 || cardNumber.length > 19) {
+        showToast('Número de tarjeta inválido', 'error');
+        return false;
+      }
+      if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+        showToast('Fecha de expiración inválida', 'error');
+        return false;
+      }
+      if (cardCvv.length < 3 || cardCvv.length > 4) {
+        showToast('CVV inválido', 'error');
+        return false;
+      }
+      if (cardName.length < 3) {
+        showToast('Nombre en tarjeta requerido', 'error');
+        return false;
+      }
+      return true;
+    }
+
+    function processPaymentConfirmation() {
+      if (!pendingPayment.selectedMethod) {
+        showToast('Selecciona un método de pago', 'warning');
+        return;
+      }
+
+      // Validate card form if card selected
+      if (pendingPayment.selectedMethod === 'card' && !validateCardForm()) {
+        return;
+      }
+
+      // Show loading
+      document.getElementById('payment-loading').classList.remove('hidden');
+      document.getElementById('confirm-payment-btn').disabled = true;
+
+      // Simulate payment processing
+      setTimeout(function() {
+        document.getElementById('payment-loading').classList.add('hidden');
+
+        var methodNames = {
+          wallet: 'Balance de Wallet',
+          card: 'Tarjeta de Crédito',
+          transfer: 'Transferencia Bancaria'
+        };
+
+        if (pendingPayment.selectedMethod === 'wallet') {
+          // Deduct from balance
+          appState.user.balance -= pendingPayment.amount;
+          saveBalance();
+          updateBalance();
+        }
+
+        // Execute success callback
+        if (pendingPayment.onSuccess) {
+          pendingPayment.onSuccess(pendingPayment.selectedMethod, methodNames[pendingPayment.selectedMethod]);
+        }
+
+        closePaymentModal();
+
+        if (pendingPayment.selectedMethod === 'transfer') {
+          showToast('Transferencia registrada. Pendiente de verificación.', 'info');
+        } else {
+          showToast('¡Pago procesado con éxito!', 'success');
+        }
+      }, 1500);
+    }
+
+    // ===== RECHARGE MODAL FUNCTIONS =====
+    var rechargeState = {
+      amount: 0,
+      method: null
+    };
+
+    function showRechargeModal() {
+      rechargeState = { amount: 0, method: null };
+
+      // Reset UI
+      document.querySelectorAll('.recharge-amount-btn').forEach(function(btn) {
+        btn.classList.remove('border-green-500', 'bg-green-50', 'dark:bg-green-900/20');
+        btn.classList.add('border-gray-200', 'dark:border-gray-700');
+      });
+      document.querySelectorAll('.recharge-method-btn').forEach(function(btn) {
+        btn.classList.remove('border-green-500', 'bg-green-50', 'dark:bg-green-900/20');
+        btn.classList.add('border-gray-200', 'dark:border-gray-700');
+      });
+      document.querySelectorAll('[id^="rm-"][id$="-check"]').forEach(function(el) {
+        el.classList.add('hidden');
+      });
+
+      document.getElementById('recharge-current-balance').textContent = formatMoney(appState.user.balance);
+      document.getElementById('recharge-selected-amount').classList.add('hidden');
+      document.getElementById('custom-recharge-input').classList.add('hidden');
+      document.getElementById('recharge-card-form').classList.add('hidden');
+      document.getElementById('recharge-transfer-info').classList.add('hidden');
+      document.getElementById('recharge-loading').classList.add('hidden');
+      document.getElementById('recharge-custom-amount').value = '';
+
+      // Clear card form
+      document.getElementById('recharge-card-number').value = '';
+      document.getElementById('recharge-card-expiry').value = '';
+      document.getElementById('recharge-card-cvv').value = '';
+
+      var confirmBtn = document.getElementById('confirm-recharge-btn');
+      confirmBtn.disabled = true;
+      document.getElementById('confirm-recharge-text').textContent = 'Selecciona monto y método';
+
+      document.getElementById('recharge-modal').classList.remove('hidden');
+    }
+
+    function closeRechargeModal() {
+      document.getElementById('recharge-modal').classList.add('hidden');
+    }
+
+    function selectRechargeAmount(amount) {
+      rechargeState.amount = amount;
+
+      document.querySelectorAll('.recharge-amount-btn').forEach(function(btn) {
+        btn.classList.remove('border-green-500', 'bg-green-50', 'dark:bg-green-900/20');
+        btn.classList.add('border-gray-200', 'dark:border-gray-700');
+      });
+      if (event && event.target) {
+        event.target.classList.remove('border-gray-200', 'dark:border-gray-700');
+        event.target.classList.add('border-green-500', 'bg-green-50', 'dark:bg-green-900/20');
+      }
+
+      document.getElementById('custom-recharge-input').classList.add('hidden');
+      document.getElementById('recharge-selected-amount').classList.remove('hidden');
+      document.getElementById('recharge-amount-display').textContent = formatMoney(amount);
+
+      updateRechargeButton();
+    }
+
+    function toggleCustomRechargeAmount() {
+      document.querySelectorAll('.recharge-amount-btn').forEach(function(btn) {
+        btn.classList.remove('border-green-500', 'bg-green-50', 'dark:bg-green-900/20');
+        btn.classList.add('border-gray-200', 'dark:border-gray-700');
+      });
+      if (event && event.target) {
+        event.target.classList.remove('border-gray-200', 'dark:border-gray-700');
+        event.target.classList.add('border-green-500', 'bg-green-50', 'dark:bg-green-900/20');
+      }
+
+      document.getElementById('custom-recharge-input').classList.remove('hidden');
+      rechargeState.amount = 0;
+      document.getElementById('recharge-selected-amount').classList.add('hidden');
+      updateRechargeButton();
+    }
+
+    function updateRechargeAmount(value) {
+      var amount = parseInt(value) || 0;
+      if (amount >= 50 && amount <= 50000) {
+        rechargeState.amount = amount;
+        document.getElementById('recharge-selected-amount').classList.remove('hidden');
+        document.getElementById('recharge-amount-display').textContent = formatMoney(amount);
+      } else {
+        rechargeState.amount = 0;
+        document.getElementById('recharge-selected-amount').classList.add('hidden');
+      }
+      updateRechargeButton();
+    }
+
+    function selectRechargeMethod(method) {
+      rechargeState.method = method;
+
+      document.querySelectorAll('.recharge-method-btn').forEach(function(btn) {
+        btn.classList.remove('border-green-500', 'bg-green-50', 'dark:bg-green-900/20');
+        btn.classList.add('border-gray-200', 'dark:border-gray-700');
+      });
+      document.querySelectorAll('[id^="rm-"][id$="-check"]').forEach(function(el) {
+        el.classList.add('hidden');
+      });
+
+      var selectedBtn = document.getElementById('rm-' + method);
+      if (selectedBtn) {
+        selectedBtn.classList.remove('border-gray-200', 'dark:border-gray-700');
+        selectedBtn.classList.add('border-green-500', 'bg-green-50', 'dark:bg-green-900/20');
+        document.getElementById('rm-' + method + '-check').classList.remove('hidden');
+      }
+
+      document.getElementById('recharge-card-form').classList.toggle('hidden', method !== 'card');
+      document.getElementById('recharge-transfer-info').classList.toggle('hidden', method !== 'transfer');
+
+      updateRechargeButton();
+    }
+
+    function updateRechargeButton() {
+      var confirmBtn = document.getElementById('confirm-recharge-btn');
+      if (rechargeState.amount >= 50 && rechargeState.method) {
+        confirmBtn.disabled = false;
+        document.getElementById('confirm-recharge-text').textContent = 'Recargar ' + formatMoney(rechargeState.amount);
+      } else {
+        confirmBtn.disabled = true;
+        document.getElementById('confirm-recharge-text').textContent = 'Selecciona monto y método';
+      }
+    }
+
+    function validateRechargeCardForm() {
+      var cardNumber = document.getElementById('recharge-card-number').value.replace(/\s/g, '');
+      var cardExpiry = document.getElementById('recharge-card-expiry').value;
+      var cardCvv = document.getElementById('recharge-card-cvv').value;
+
+      if (cardNumber.length < 13 || cardNumber.length > 19) {
+        showToast('Número de tarjeta inválido', 'error');
+        return false;
+      }
+      if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+        showToast('Fecha de expiración inválida', 'error');
+        return false;
+      }
+      if (cardCvv.length < 3 || cardCvv.length > 4) {
+        showToast('CVV inválido', 'error');
+        return false;
+      }
+      return true;
+    }
+
+    function processRecharge() {
+      if (rechargeState.amount < 50) {
+        showToast('Monto mínimo es RD$ 50', 'warning');
+        return;
+      }
+      if (!rechargeState.method) {
+        showToast('Selecciona un método de pago', 'warning');
+        return;
+      }
+      if (rechargeState.method === 'card' && !validateRechargeCardForm()) {
+        return;
+      }
+
+      document.getElementById('recharge-loading').classList.remove('hidden');
+      document.getElementById('confirm-recharge-btn').disabled = true;
+
+      setTimeout(function() {
+        document.getElementById('recharge-loading').classList.add('hidden');
+
+        var methodName = rechargeState.method === 'card' ? 'Tarjeta de Crédito' : 'Transferencia Bancaria';
+        var status = rechargeState.method === 'transfer' ? 'pending' : 'completed';
+
+        // Save transaction
+        saveTransaction({
+          type: 'deposit',
+          amount: rechargeState.amount,
+          method: methodName,
+          status: status,
+          details: 'Recarga de balance'
+        });
+
+        // Update balance (if card payment, instant; if transfer, pending)
+        if (rechargeState.method === 'card') {
+          appState.user.balance += rechargeState.amount;
+          saveBalance();
+          updateBalance();
+          showToast('¡Recarga exitosa! +' + formatMoney(rechargeState.amount), 'success');
+        } else {
+          showToast('Transferencia registrada. Tu balance se actualizará al verificar el pago.', 'info');
+        }
+
+        closeRechargeModal();
+        
+        // Refresh transactions if on wallet view
+        if (document.getElementById('view-wallet') && !document.getElementById('view-wallet').classList.contains('hidden')) {
+          renderTransactions();
+        }
+      }, 1500);
+    }
+
+    // ===== WITHDRAW MODAL FUNCTIONS =====
+    var withdrawState = {
+      amount: 0,
+      method: null,
+      isValid: false
+    };
+
+    function showWithdrawModal() {
+      withdrawState = { amount: 0, method: null, isValid: false };
+
+      document.getElementById('withdraw-available-balance').textContent = formatMoney(appState.user.balance);
+      document.getElementById('withdraw-amount').value = '';
+      document.getElementById('withdraw-error').classList.add('hidden');
+
+      document.querySelectorAll('.withdraw-method-btn').forEach(function(btn) {
+        btn.classList.remove('border-orange-500', 'bg-orange-50', 'dark:bg-orange-900/20');
+        btn.classList.add('border-gray-200', 'dark:border-gray-700');
+      });
+      document.querySelectorAll('[id^="wm-"][id$="-check"]').forEach(function(el) {
+        el.classList.add('hidden');
+      });
+
+      document.getElementById('withdraw-bank-form').classList.add('hidden');
+      document.getElementById('withdraw-cash-info').classList.add('hidden');
+      document.getElementById('withdraw-loading').classList.add('hidden');
+
+      // Clear form
+      document.getElementById('withdraw-bank').value = '';
+      document.getElementById('withdraw-account-type').value = 'savings';
+      document.getElementById('withdraw-account-number').value = '';
+      document.getElementById('withdraw-account-holder').value = '';
+
+      var confirmBtn = document.getElementById('confirm-withdraw-btn');
+      confirmBtn.disabled = true;
+      document.getElementById('confirm-withdraw-text').textContent = 'Completa los datos';
+
+      document.getElementById('withdraw-modal').classList.remove('hidden');
+    }
+
+    function closeWithdrawModal() {
+      document.getElementById('withdraw-modal').classList.add('hidden');
+    }
+
+    function validateWithdrawAmount(value) {
+      var amount = parseInt(value) || 0;
+      var errorEl = document.getElementById('withdraw-error');
+
+      if (amount < 100 && amount > 0) {
+        errorEl.textContent = 'El monto mínimo es RD$ 100';
+        errorEl.classList.remove('hidden');
+        withdrawState.isValid = false;
+      } else if (amount > appState.user.balance) {
+        errorEl.textContent = 'Monto excede tu balance disponible';
+        errorEl.classList.remove('hidden');
+        withdrawState.isValid = false;
+      } else if (amount > 0) {
+        errorEl.classList.add('hidden');
+        withdrawState.isValid = true;
+      } else {
+        errorEl.classList.add('hidden');
+        withdrawState.isValid = false;
+      }
+
+      withdrawState.amount = amount;
+      updateWithdrawButton();
+    }
+
+    function selectWithdrawMethod(method) {
+      withdrawState.method = method;
+
+      document.querySelectorAll('.withdraw-method-btn').forEach(function(btn) {
+        btn.classList.remove('border-orange-500', 'bg-orange-50', 'dark:bg-orange-900/20');
+        btn.classList.add('border-gray-200', 'dark:border-gray-700');
+      });
+      document.querySelectorAll('[id^="wm-"][id$="-check"]').forEach(function(el) {
+        el.classList.add('hidden');
+      });
+
+      var selectedBtn = document.getElementById('wm-' + method);
+      if (selectedBtn) {
+        selectedBtn.classList.remove('border-gray-200', 'dark:border-gray-700');
+        selectedBtn.classList.add('border-orange-500', 'bg-orange-50', 'dark:bg-orange-900/20');
+        document.getElementById('wm-' + method + '-check').classList.remove('hidden');
+      }
+
+      document.getElementById('withdraw-bank-form').classList.toggle('hidden', method !== 'bank');
+      document.getElementById('withdraw-cash-info').classList.toggle('hidden', method !== 'cash');
+
+      updateWithdrawButton();
+    }
+
+    function updateWithdrawButton() {
+      var confirmBtn = document.getElementById('confirm-withdraw-btn');
+      var canProcess = withdrawState.isValid && withdrawState.amount >= 100 && withdrawState.method;
+
+      if (withdrawState.method === 'bank') {
+        var bank = document.getElementById('withdraw-bank').value;
+        var accountNumber = document.getElementById('withdraw-account-number').value;
+        var accountHolder = document.getElementById('withdraw-account-holder').value;
+        canProcess = canProcess && bank && accountNumber && accountHolder;
+      }
+
+      if (canProcess) {
+        confirmBtn.disabled = false;
+        document.getElementById('confirm-withdraw-text').textContent = 'Solicitar Retiro de ' + formatMoney(withdrawState.amount);
+      } else {
+        confirmBtn.disabled = true;
+        document.getElementById('confirm-withdraw-text').textContent = 'Completa los datos';
+      }
+    }
+
+    function processWithdraw() {
+      if (!withdrawState.isValid || withdrawState.amount < 100) {
+        showToast('Ingresa un monto válido', 'warning');
+        return;
+      }
+      if (!withdrawState.method) {
+        showToast('Selecciona un método de retiro', 'warning');
+        return;
+      }
+      if (withdrawState.amount > appState.user.balance) {
+        showToast('Balance insuficiente', 'error');
+        return;
+      }
+
+      if (withdrawState.method === 'bank') {
+        var bank = document.getElementById('withdraw-bank').value;
+        var accountNumber = document.getElementById('withdraw-account-number').value;
+        var accountHolder = document.getElementById('withdraw-account-holder').value;
+        if (!bank || !accountNumber || !accountHolder) {
+          showToast('Completa los datos bancarios', 'warning');
+          return;
+        }
+      }
+
+      document.getElementById('withdraw-loading').classList.remove('hidden');
+      document.getElementById('confirm-withdraw-btn').disabled = true;
+
+      setTimeout(function() {
+        document.getElementById('withdraw-loading').classList.add('hidden');
+
+        var methodName = withdrawState.method === 'bank' ? 'Transferencia Bancaria' : 'Efectivo en Banca';
+
+        // Deduct from balance immediately
+        appState.user.balance -= withdrawState.amount;
+        saveBalance();
+        updateBalance();
+
+        // Save transaction as pending
+        saveTransaction({
+          type: 'withdrawal',
+          amount: -withdrawState.amount,
+          method: methodName,
+          status: 'pending',
+          details: 'Retiro de fondos'
+        });
+
+        closeWithdrawModal();
+
+        if (withdrawState.method === 'bank') {
+          showToast('Solicitud de retiro enviada. Procesamiento en 1-3 días hábiles.', 'success');
+        } else {
+          showToast('Código de retiro enviado a tu teléfono y email.', 'success');
+        }
+
+        // Refresh transactions if on wallet view
+        if (document.getElementById('view-wallet') && !document.getElementById('view-wallet').classList.contains('hidden')) {
+          renderTransactions();
+        }
+      }, 1500);
+    }
+
+    // Add event listeners for bank form validation
+    document.addEventListener('DOMContentLoaded', function() {
+      var bankFormFields = ['withdraw-bank', 'withdraw-account-number', 'withdraw-account-holder'];
+      bankFormFields.forEach(function(fieldId) {
+        var field = document.getElementById(fieldId);
+        if (field) {
+          field.addEventListener('input', updateWithdrawButton);
+          field.addEventListener('change', updateWithdrawButton);
+        }
+      });
+    });
+
     // ===== GLOBAL CART FUNCTIONS =====
     function addToGlobalCart(item) {
       appState.globalCart.push({
@@ -2038,21 +3128,46 @@
         return;
       }
       const total = getCartTotal();
-      if (total > appState.user.balance) {
-        showToast('Balance insuficiente para realizar esta compra', 'error');
-        return;
-      }
       
-      appState.user.balance -= total;
-      updateBalance();
-      
-      // Show success and generate tickets
-      appState.globalCart.forEach(item => {
-        showTicketModal(item.lottery, item.modality, item.numbers, item.stake);
-      });
-      
-      clearCart();
-      showToast('¡Todas las jugadas confirmadas! Buena suerte 🍀', 'success');
+      // Show payment modal for cart checkout
+      showPaymentModal(total, 'cart', function(paymentMethod, methodName) {
+        // Process each item in cart
+        appState.globalCart.forEach(function(item) {
+          // Find lottery info
+          var lottery = LOTTERIES.find(function(l) { return l.name === item.lottery; });
+          var modInfo = MODALITIES[item.modality] || { multiplier: 60 };
+          
+          // Save ticket
+          saveTicket({
+            lotteryId: lottery ? lottery.id : '',
+            lotteryName: item.lottery,
+            modality: item.modality,
+            numbers: item.numbers,
+            stake: item.stake,
+            potentialPrize: item.stake * modInfo.multiplier,
+            paymentMethod: paymentMethod,
+            banca: item.banca || 'Banca Online'
+          });
+          
+          // Save transaction for each play
+          saveTransaction({
+            type: 'play',
+            amount: -item.stake,
+            method: methodName,
+            status: 'completed',
+            details: item.lottery + ' - ' + item.modality
+          });
+        });
+        
+        // Show first ticket modal (or could show all)
+        var firstItem = appState.globalCart[0];
+        if (firstItem) {
+          showTicketModal(firstItem.lottery, firstItem.modality, firstItem.numbers, firstItem.stake, paymentMethod);
+        }
+        
+        clearCart();
+        showToast('¡Todas las jugadas confirmadas! Buena suerte 🍀', 'success');
+      }, null);
     }
 
     // ===== LUNA AI ASSISTANT FUNCTIONS =====
@@ -2528,14 +3643,55 @@
       const container = document.getElementById('recent-plays');
       if (!container) return;
       
-      const plays = [
-        { lottery: 'Nacional', numbers: ['23', '45'], stake: 50, time: 'Hace 2 horas', status: 'pending' },
-        { lottery: 'Leidsa', numbers: ['12', '34', '56'], stake: 100, time: 'Ayer', status: 'won', prize: 500 },
-        { lottery: 'Loteka', numbers: ['08', '66'], stake: 25, time: 'Hace 2 días', status: 'lost' }
-      ];
+      // Get persisted tickets, fallback to mock data if empty
+      var tickets = getTickets();
+      var plays = [];
+      
+      if (tickets.length > 0) {
+        plays = tickets.slice(0, 5).map(function(ticket) {
+          var timeAgo = '';
+          try {
+            var ticketDate = new Date(ticket.createdAt);
+            var now = new Date();
+            var diffMs = now - ticketDate;
+            var diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            if (diffHours < 1) {
+              timeAgo = 'Hace unos minutos';
+            } else if (diffHours < 24) {
+              timeAgo = 'Hace ' + diffHours + ' hora' + (diffHours > 1 ? 's' : '');
+            } else if (diffDays === 1) {
+              timeAgo = 'Ayer';
+            } else {
+              timeAgo = 'Hace ' + diffDays + ' días';
+            }
+          } catch (e) {
+            timeAgo = 'Reciente';
+          }
+          
+          return {
+            lottery: ticket.lotteryName || 'Lotería',
+            numbers: ticket.numbers || [],
+            stake: ticket.stake || 0,
+            time: timeAgo,
+            status: ticket.status || 'pending',
+            prize: ticket.prize || 0
+          };
+        });
+      } else {
+        // Fallback mock data
+        plays = [
+          { lottery: 'Nacional', numbers: ['23', '45'], stake: 50, time: 'Hace 2 horas', status: 'pending' },
+          { lottery: 'Leidsa', numbers: ['12', '34', '56'], stake: 100, time: 'Ayer', status: 'won', prize: 500 },
+          { lottery: 'Loteka', numbers: ['08', '66'], stake: 25, time: 'Hace 2 días', status: 'lost' }
+        ];
+      }
       
       container.innerHTML = plays.map(function(play) {
-        const statusColor = play.status === 'won' ? 'text-green-600 bg-green-50' : play.status === 'lost' ? 'text-gray-500 bg-gray-50' : 'text-yellow-600 bg-yellow-50';
+        const statusColor = play.status === 'won' ? 'text-green-600 bg-green-50 dark:bg-green-900/30 dark:text-green-400' : 
+                           play.status === 'lost' ? 'text-gray-500 bg-gray-50 dark:bg-gray-800 dark:text-gray-400' : 
+                           'text-yellow-600 bg-yellow-50 dark:bg-yellow-900/30 dark:text-yellow-400';
         const statusText = play.status === 'won' ? 'Ganado' : play.status === 'lost' ? 'Perdido' : 'Pendiente';
         const statusIcon = play.status === 'won' ? 'fa-trophy' : play.status === 'lost' ? 'fa-times-circle' : 'fa-clock';
         
@@ -2556,7 +3712,7 @@
             (play.prize ? '<p class="text-green-600 font-bold mt-1">+' + formatMoney(play.prize) + '</p>' : '') +
           '</div>' +
         '</div>';
-      }).join('');
+      }).join('') || '<p class="text-center text-gray-500 py-8">No hay jugadas recientes</p>';
     }
 
     function renderLotterySelection() {
@@ -2721,25 +3877,61 @@
       const container = document.getElementById('transactions-list');
       if (!container) return;
       
-      const colorMap = { green: '#22c55e', blue: '#3b82f6', yellow: '#eab308', orange: '#f97316' };
+      // Get persisted transactions, fallback to mock data if empty
+      var transactions = getTransactions();
+      if (transactions.length === 0) {
+        // Use mock data for initial display
+        transactions = TRANSACTIONS.map(function(tx) {
+          return {
+            id: uid('TXN'),
+            type: tx.type === 'recharge' ? 'deposit' : tx.type,
+            amount: tx.amount,
+            method: tx.method,
+            status: tx.status || 'completed',
+            details: tx.method,
+            createdAt: new Date().toISOString()
+          };
+        });
+      }
       
-      container.innerHTML = TRANSACTIONS.map(function(tx) {
-        const bgColor = colorMap[tx.color] || '#6b7280';
-        const typeNames = { recharge: 'Recarga', play: 'Jugada', win: 'Premio', withdraw: 'Retiro' };
+      const iconMap = { deposit: 'fa-plus-circle', play: 'fa-dice', win: 'fa-trophy', withdrawal: 'fa-money-bill-wave' };
+      const colorMap = { deposit: '#22c55e', play: '#3b82f6', win: '#eab308', withdrawal: '#f97316' };
+      const typeNames = { deposit: 'Recarga', play: 'Jugada', win: 'Premio', withdrawal: 'Retiro' };
+      
+      container.innerHTML = transactions.slice(0, 20).map(function(tx) {
+        const bgColor = colorMap[tx.type] || '#6b7280';
+        const icon = iconMap[tx.type] || 'fa-circle';
+        var dateStr = '';
+        try {
+          var txDate = new Date(tx.createdAt);
+          var today = new Date();
+          var yesterday = new Date(today);
+          yesterday.setDate(yesterday.getDate() - 1);
+          
+          if (txDate.toDateString() === today.toDateString()) {
+            dateStr = 'Hoy ' + txDate.toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' });
+          } else if (txDate.toDateString() === yesterday.toDateString()) {
+            dateStr = 'Ayer ' + txDate.toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' });
+          } else {
+            dateStr = txDate.toLocaleDateString('es-DO', { day: 'numeric', month: 'short' });
+          }
+        } catch (e) {
+          dateStr = tx.createdAt;
+        }
         
         return '<div class="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition">' +
           '<div class="flex items-center gap-4">' +
             '<div class="w-12 h-12 rounded-xl flex items-center justify-center text-lg shadow" style="background: ' + bgColor + '22; color: ' + bgColor + '">' +
-              '<i class="fas ' + tx.icon + '"></i>' +
+              '<i class="fas ' + icon + '"></i>' +
             '</div>' +
             '<div>' +
-              '<p class="font-semibold text-gray-900 dark:text-white">' + typeNames[tx.type] + '</p>' +
-              '<p class="text-sm text-gray-500">' + tx.method + ' • ' + tx.date + (tx.status === 'pending' ? ' • <span class="text-yellow-600"><i class="fas fa-clock"></i> Pendiente</span>' : '') + '</p>' +
+              '<p class="font-semibold text-gray-900 dark:text-white">' + (typeNames[tx.type] || tx.type) + '</p>' +
+              '<p class="text-sm text-gray-500">' + (tx.details || tx.method) + ' • ' + dateStr + (tx.status === 'pending' ? ' • <span class="text-yellow-600"><i class="fas fa-clock"></i> Pendiente</span>' : '') + '</p>' +
             '</div>' +
           '</div>' +
           '<span class="' + (tx.amount > 0 ? 'text-green-600' : 'text-gray-600 dark:text-gray-400') + ' font-bold text-lg">' + (tx.amount > 0 ? '+' : '') + formatMoney(tx.amount) + '</span>' +
         '</div>';
-      }).join('');
+      }).join('') || '<p class="text-center text-gray-500 py-8">No hay transacciones aún</p>';
     }
 
     function renderResultsHistory() {
@@ -2790,30 +3982,43 @@
       const container = document.getElementById('tickets-history');
       if (!container) return;
       
-      const tickets = [
-        { lottery: 'Nacional', numbers: ['23', '45'], stake: 50, status: 'won', prize: 500, color: '#ef4444' },
-        { lottery: 'Leidsa', numbers: ['12', '34', '56'], stake: 100, status: 'lost', prize: 0, color: '#22c55e' },
-        { lottery: 'Real', numbers: ['78', '90'], stake: 25, status: 'pending', prize: null, color: '#eab308' }
-      ];
+      // Get persisted tickets, fallback to mock data if empty
+      var tickets = getTickets();
+      if (tickets.length === 0) {
+        // Use mock data for initial display
+        tickets = [
+          { lotteryName: 'Nacional', numbers: ['23', '45'], stake: 50, status: 'won', prize: 500 },
+          { lotteryName: 'Leidsa', numbers: ['12', '34', '56'], stake: 100, status: 'lost', prize: 0 },
+          { lotteryName: 'Real', numbers: ['78', '90'], stake: 25, status: 'pending', prize: 0 }
+        ];
+      }
       
-      container.innerHTML = tickets.map(function(ticket) {
-        const statusClass = ticket.status === 'won' ? 'bg-green-100 text-green-700' : ticket.status === 'lost' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700';
-        const statusText = ticket.status === 'won' ? 'Ganado' : ticket.status === 'lost' ? 'Perdido' : 'Pendiente';
+      // Get lottery colors
+      var lotteryColors = {};
+      LOTTERIES.forEach(function(l) { lotteryColors[l.name] = l.color; });
+      
+      container.innerHTML = tickets.slice(0, 20).map(function(ticket) {
+        var lottery = ticket.lotteryName || ticket.lottery || 'Lotería';
+        var color = lotteryColors[lottery] || '#6b7280';
+        var statusClass = ticket.status === 'won' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 
+                          ticket.status === 'lost' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 
+                          'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
+        var statusText = ticket.status === 'won' ? 'Ganado' : ticket.status === 'lost' ? 'Perdido' : 'Pendiente';
         
         return '<tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">' +
-          '<td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">' + ticket.lottery + '</td>' +
+          '<td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">' + lottery + '</td>' +
           '<td class="px-6 py-4">' +
             '<div class="flex gap-2">' +
-              ticket.numbers.map(function(num) {
-                return '<span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shadow" style="background: ' + ticket.color + '">' + num + '</span>';
+              (ticket.numbers || []).map(function(num) {
+                return '<span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shadow" style="background: ' + color + '">' + num + '</span>';
               }).join('') +
             '</div>' +
           '</td>' +
-          '<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">' + formatMoney(ticket.stake) + '</td>' +
+          '<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">' + formatMoney(ticket.stake || 0) + '</td>' +
           '<td class="px-6 py-4"><span class="px-3 py-1 ' + statusClass + ' text-xs font-semibold rounded-full">' + statusText + '</span></td>' +
           '<td class="px-6 py-4 ' + (ticket.prize > 0 ? 'text-green-600 font-bold' : 'text-gray-400') + '">' + (ticket.prize > 0 ? '+' + formatMoney(ticket.prize) : '-') + '</td>' +
         '</tr>';
-      }).join('');
+      }).join('') || '<tr><td colspan="5" class="text-center text-gray-500 py-8">No hay tickets aún</td></tr>';
     }
 
     // ===== PLAY LOGIC =====
@@ -2997,20 +4202,48 @@
         showToast('Selecciona ' + appState.maxNumbers + ' números', 'warning');
         return;
       }
-      if (appState.selectedStake > appState.user.balance) {
-        showToast('Balance insuficiente', 'error');
-        return;
-      }
-      
-      appState.user.balance -= appState.selectedStake;
-      updateBalance();
       
       var lottery = LOTTERIES.find(function(l) { return l.id === appState.selectedLottery; });
-      showTicketModal(lottery.name, appState.selectedModality, appState.selectedNumbers, appState.selectedStake);
+      var playData = {
+        lotteryId: appState.selectedLottery,
+        lotteryName: lottery.name,
+        modality: appState.selectedModality,
+        numbers: appState.selectedNumbers.slice(),
+        stake: appState.selectedStake,
+        potentialPrize: appState.selectedStake * appState.multiplier,
+        banca: 'Banca Online'
+      };
       
-      showToast('¡Jugada confirmada! Buena suerte 🍀', 'success');
-      
-      resetPlayState();
+      // Show payment modal
+      showPaymentModal(appState.selectedStake, 'play', function(paymentMethod, methodName) {
+        // Save the ticket
+        var ticket = saveTicket({
+          lotteryId: playData.lotteryId,
+          lotteryName: playData.lotteryName,
+          modality: playData.modality,
+          numbers: playData.numbers,
+          stake: playData.stake,
+          potentialPrize: playData.potentialPrize,
+          paymentMethod: paymentMethod,
+          banca: playData.banca
+        });
+        
+        // Save the transaction
+        saveTransaction({
+          type: 'play',
+          amount: -playData.stake,
+          method: methodName,
+          status: 'completed',
+          details: playData.lotteryName + ' - ' + playData.modality
+        });
+        
+        // Show ticket modal
+        showTicketModal(playData.lotteryName, playData.modality, playData.numbers, playData.stake, paymentMethod);
+        
+        showToast('¡Jugada confirmada! Buena suerte 🍀', 'success');
+        
+        resetPlayState();
+      }, playData);
     }
 
     function addPlayToCart() {
@@ -3044,13 +4277,19 @@
       updateSummary();
     }
 
-    function showTicketModal(lottery, modality, numbers, stake) {
+    function showTicketModal(lottery, modality, numbers, stake, paymentMethod) {
       var modal = document.getElementById('ticket-modal');
       var content = document.getElementById('ticket-content');
       var ticketId = uid();
       var now = new Date();
       var dateStr = now.toLocaleDateString('es-DO', { year: 'numeric', month: 'long', day: 'numeric' });
       var timeStr = now.toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' });
+      var methodNames = {
+        wallet: 'Wallet',
+        card: 'Tarjeta',
+        transfer: 'Transferencia'
+      };
+      var paymentLabel = paymentMethod ? (methodNames[paymentMethod] || paymentMethod) : 'Wallet';
       
       content.innerHTML = 
         '<div class="watermark">L</div>' +
@@ -3082,6 +4321,7 @@
             '<div class="flex justify-between"><span class="text-gray-500">ID Ticket</span><span class="font-mono font-bold">' + ticketId + '</span></div>' +
             '<div class="flex justify-between"><span class="text-gray-500">Apuesta</span><span class="font-bold">' + formatMoney(stake) + '</span></div>' +
             '<div class="flex justify-between"><span class="text-gray-500">Premio Potencial</span><span class="font-bold text-green-600">' + formatMoney(stake * appState.multiplier) + '</span></div>' +
+            '<div class="flex justify-between"><span class="text-gray-500">Método de Pago</span><span class="font-medium">' + paymentLabel + '</span></div>' +
           '</div>' +
           '<div class="flex justify-center mb-6">' +
             '<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' + encodeURIComponent('LOTOLINK-' + ticketId) + '" alt="QR" class="rounded-lg shadow-md">' +
@@ -3285,18 +4525,33 @@
     function updateBalance() {
       document.getElementById('sidebar-balance').textContent = formatMoney(appState.user.balance);
       document.getElementById('wallet-balance').textContent = formatMoney(appState.user.balance);
-    }
-
-    function showRechargeModal() {
-      showToast('Módulo de recarga próximamente', 'info');
-    }
-
-    function showWithdrawModal() {
-      showToast('Módulo de retiro próximamente', 'info');
+      // Save balance to localStorage
+      saveBalance();
     }
 
     function exportTransactions() {
-      showToast('Exportando transacciones...', 'info');
+      var transactions = getTransactions();
+      if (transactions.length === 0) {
+        showToast('No hay transacciones para exportar', 'warning');
+        return;
+      }
+      
+      // Create CSV content
+      var csv = 'ID,Tipo,Monto,Método,Estado,Detalles,Fecha\n';
+      transactions.forEach(function(tx) {
+        csv += tx.id + ',' + tx.type + ',' + tx.amount + ',' + tx.method + ',' + tx.status + ',"' + (tx.details || '') + '",' + tx.createdAt + '\n';
+      });
+      
+      // Download file
+      var blob = new Blob([csv], { type: 'text/csv' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'lotolink_transacciones_' + new Date().toISOString().split('T')[0] + '.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      showToast('Transacciones exportadas exitosamente', 'success');
     }
 
     function showEditProfileModal() {
@@ -3371,6 +4626,7 @@
     // ===== INITIALIZE APP =====
     function initApp() {
       loadDarkMode();
+      loadBalance(); // Load persisted balance
       
       renderUpcomingDraws();
       renderLiveResults();
