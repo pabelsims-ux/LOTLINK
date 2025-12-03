@@ -4,12 +4,30 @@ Aplicación de escritorio de LotoLink para Windows, macOS y Linux, desarrollada 
 
 ## 💻 Características
 
+### Características Principales
 - **Multiplataforma**: Windows, macOS y Linux
 - **Interfaz Premium**: Diseño inspirado en Apple con modo claro/oscuro
 - **Menú Nativo**: Integración completa con el sistema operativo
 - **Bandeja del Sistema**: Acceso rápido desde la barra de tareas
 - **Auto-actualización**: Actualizaciones automáticas en segundo plano
 - **Notificaciones**: Alertas nativas del sistema
+
+### Nuevas Características (v1.1.0)
+- **🤖 Luna AI - Asistente Virtual**: Control por voz para navegar y crear jugadas
+  - Comandos de voz en español dominicano
+  - Síntesis de voz configurable (género, velocidad, acento)
+  - Flujo guiado de jugadas por voz
+- **🛒 Carrito Global de Jugadas**: Agrega múltiples jugadas antes de confirmar
+  - Visualiza todas tus jugadas pendientes
+  - Confirma todo el carrito de una vez
+  - Elimina jugadas individuales
+- **📊 Resultados en Tiempo Real**: Conexión a loteriasdominicanas.com
+- **🎰 Más Loterías**: Soporte para 8 loterías dominicanas
+  - Leidsa, Loteka, La Primera, Nacional
+  - Real, La Suerte Dominicana, LoteDom, Americana (NY)
+- **💰 Tabla de Premios Detallada**: Información completa de premios por modalidad
+- **🔥 Números Más Jugados**: Estadísticas de números populares
+- **🎉 Pantalla de Bienvenida**: Onboarding para nuevos usuarios
 
 ## 🚀 Instalación
 
@@ -88,6 +106,19 @@ Las preferencias se guardan automáticamente:
 - Tema (claro/oscuro/sistema)
 - Notificaciones
 - Minimizar a bandeja
+- Configuración de Luna AI (voz, género, velocidad)
+
+### Luna AI - Comandos de Voz
+
+| Comando | Acción |
+|---------|--------|
+| "Quiero jugar" / "Nueva jugada" | Inicia flujo guiado de jugada |
+| "Inicio" / "Home" | Navega a la pantalla principal |
+| "Bancas" / "Sucursales" | Ver bancas cercanas |
+| "Resultados" | Ver resultados en vivo |
+| "Cartera" / "Balance" | Ver balance y transacciones |
+| "Perfil" / "Mi cuenta" | Ver perfil de usuario |
+| "Ayuda" | Ver comandos disponibles |
 
 ### API Backend
 
