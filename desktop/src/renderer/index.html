@@ -1845,7 +1845,7 @@
     const MOST_PLAYED = {
       Quiniela: ["08", "66", "36", "63", "42"],
       Tripleta: [["15", "26", "07"], ["12", "34", "56"]],
-      Pale: [["08", "66"], ["36", "63"]]
+      Palé: [["08", "66"], ["36", "63"]]
     };
 
     // ===== MOCK DATA =====
@@ -2066,11 +2066,19 @@
       
       // Try to find a voice that matches the accent and gender
       const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(v => 
-        v.lang.startsWith(appState.luna.voiceAccent.split('-')[0]) && 
-        (appState.luna.voiceGender === 'female' ? v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('mujer') : true)
-      );
-      if (preferredVoice) utterance.voice = preferredVoice;
+      const langPrefix = appState.luna.voiceAccent.split('-')[0];
+      const preferredVoice = voices.find(function(v) {
+        if (!v.lang.startsWith(langPrefix)) return false;
+        var nameLower = v.name.toLowerCase();
+        if (appState.luna.voiceGender === 'female') {
+          return nameLower.includes('female') || nameLower.includes('mujer') || nameLower.includes('woman');
+        } else {
+          return nameLower.includes('male') || nameLower.includes('hombre') || nameLower.includes('man');
+        }
+      });
+      // Fallback to any voice with matching language if gender-specific not found
+      var fallbackVoice = voices.find(function(v) { return v.lang.startsWith(langPrefix); });
+      utterance.voice = preferredVoice || fallbackVoice || null;
       
       window.speechSynthesis.speak(utterance);
     }
@@ -2091,8 +2099,14 @@
       updateLunaUI();
 
       recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript.toLowerCase();
-        processVoiceCommand(transcript);
+        if (!event.results || !event.results[0] || !event.results[0][0]) {
+          showToast('No se pudo reconocer el audio', 'warning');
+          return;
+        }
+        var transcript = event.results[0][0].transcript;
+        if (transcript) {
+          processVoiceCommand(transcript.toLowerCase());
+        }
       };
 
       recognition.onerror = function(event) {
@@ -2232,21 +2246,43 @@
     }
 
     // ===== REAL-TIME LOTTERY RESULTS =====
+    // Allowed proxy domains for security
+    var ALLOWED_PROXY_DOMAINS = ['api.allorigins.win', 'corsproxy.io', 'api.codetabs.com'];
+    
+    function isValidProxyUrl(proxyUrl) {
+      try {
+        var url = new URL(proxyUrl);
+        return ALLOWED_PROXY_DOMAINS.some(function(domain) {
+          return url.hostname === domain || url.hostname.endsWith('.' + domain);
+        });
+      } catch (e) {
+        return false;
+      }
+    }
+
     async function fetchRealLotteryResults(lotteryType) {
-      const endpoint = LOTTERY_API_CONFIG.ENDPOINTS[lotteryType] || LOTTERY_API_CONFIG.ENDPOINTS.LOTEKA;
-      const url = LOTTERY_API_CONFIG.BASE_URL + endpoint;
+      var endpoint = LOTTERY_API_CONFIG.ENDPOINTS[lotteryType] || LOTTERY_API_CONFIG.ENDPOINTS.LOTEKA;
+      var url = LOTTERY_API_CONFIG.BASE_URL + endpoint;
       
-      for (const proxy of LOTTERY_API_CONFIG.CORS_PROXIES) {
+      for (var i = 0; i < LOTTERY_API_CONFIG.CORS_PROXIES.length; i++) {
+        var proxy = LOTTERY_API_CONFIG.CORS_PROXIES[i];
+        
+        // Validate proxy URL before use
+        if (!isValidProxyUrl(proxy)) {
+          console.warn('Skipping invalid proxy URL:', proxy);
+          continue;
+        }
+        
         try {
-          const response = await fetch(proxy + encodeURIComponent(url), {
+          var response = await fetch(proxy + encodeURIComponent(url), {
             method: 'GET',
             headers: { 'Accept': 'text/html', 'Cache-Control': 'no-cache' }
           });
           
           if (!response.ok) continue;
           
-          const html = await response.text();
-          const results = parseLotteryHTML(html);
+          var html = await response.text();
+          var results = parseLotteryHTML(html);
           if (results && results.numbers && results.numbers.length > 0) {
             return results;
           }
@@ -2991,7 +3027,7 @@
       addToGlobalCart({
         lottery: lottery.name,
         modality: appState.selectedModality,
-        numbers: [...appState.selectedNumbers],
+        numbers: appState.selectedNumbers.slice(),
         stake: appState.selectedStake,
         banca: 'Banca Online'
       });
