@@ -69,22 +69,27 @@ npm run build
 ## 📁 Estructura del Proyecto
 
 ```
-desktop/
-├── src/
-│   ├── main/
-│   │   ├── main.js          # Proceso principal de Electron
-│   │   └── preload.js       # Script de preload (bridge seguro)
-│   └── renderer/
-│       └── index.html       # Interfaz de usuario
-├── assets/                   # Iconos y recursos
-│   ├── icon.png             # Icono general
-│   ├── icon.ico             # Icono Windows
-│   ├── icon.icns            # Icono macOS
-│   └── tray-icon.png        # Icono de bandeja
-├── dist/                     # Ejecutables compilados
-├── package.json
-└── README.md
+LOTLINK/
+├── index.html                # Aplicación web principal (cargada por Electron)
+├── lotolink-logo.png         # Logo de la aplicación
+├── desktop/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── main.js       # Proceso principal de Electron
+│   │   │   └── preload.js    # Script de preload (bridge seguro)
+│   │   └── renderer/
+│   │       └── index.html    # UI alternativa para desktop (opcional)
+│   ├── assets/               # Iconos y recursos
+│   │   ├── icon.png          # Icono general
+│   │   ├── icon.ico          # Icono Windows (pendiente)
+│   │   ├── icon.icns         # Icono macOS (pendiente)
+│   │   └── tray-icon.png     # Icono de bandeja
+│   ├── dist/                 # Ejecutables compilados
+│   ├── package.json
+│   └── README.md
 ```
+
+**Nota:** La aplicación de escritorio carga el archivo `index.html` de la raíz del proyecto, manteniendo compatibilidad total con la aplicación web.
 
 ## 🎨 Iconos
 

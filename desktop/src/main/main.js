@@ -7,6 +7,15 @@ const { app, BrowserWindow, Menu, Tray, ipcMain, shell, nativeTheme } = require(
 const path = require('path');
 const Store = require('electron-store');
 
+// Check if app is in development mode
+const isDev = process.argv.includes('--dev');
+
+// Path constants
+// In development: project root is 3 levels up from desktop/src/main
+// In production: files are in resources folder via extraResources config
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
+const DEV_INDEX_PATH = path.join(PROJECT_ROOT, 'index.html');
+
 // Initialize electron store for persistent settings
 const store = new Store({
   defaults: {
@@ -21,9 +30,6 @@ const store = new Store({
 // Keep a global reference of the window object
 let mainWindow = null;
 let tray = null;
-
-// Check if app is in development mode
-const isDev = process.argv.includes('--dev');
 
 /**
  * Create the main application window
@@ -49,13 +55,16 @@ function createWindow() {
   });
 
   // Load the app
+  // In development: use DEV_INDEX_PATH constant
+  // In production: use extraResources folder via process.resourcesPath
+  const indexPath = isDev 
+    ? DEV_INDEX_PATH
+    : path.join(process.resourcesPath, 'index.html');
+  
+  mainWindow.loadFile(indexPath);
+  
   if (isDev) {
-    // In development, load from local server
-    mainWindow.loadURL('http://localhost:3000');
     mainWindow.webContents.openDevTools();
-  } else {
-    // In production, load the web app from file or remote URL
-    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
   }
 
   // Show window when ready

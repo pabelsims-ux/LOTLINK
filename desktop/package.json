@@ -24,11 +24,11 @@
     "electron-store": "^8.1.0"
   },
   "devDependencies": {
-    "electron": "^28.0.0",
+    "electron": "^35.7.5",
     "electron-builder": "^24.9.1"
   },
   "build": {
-    "appId": "com.lotolink.desktop",
+    "appId": "com.lotolink.app",
     "productName": "LotoLink",
     "copyright": "Copyright © 2024 LotoLink",
     "directories": {
@@ -38,6 +38,16 @@
     "files": [
       "src/**/*",
       "assets/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../index.html",
+        "to": "index.html"
+      },
+      {
+        "from": "../lotolink-logo.png",
+        "to": "lotolink-logo.png"
+      }
     ],
     "win": {
       "target": [
