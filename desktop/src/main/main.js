@@ -49,13 +49,16 @@ function createWindow() {
   });
 
   // Load the app
+  // In development, __dirname is desktop/src/main, so we go up 3 levels to reach the root
+  // In production, we use extraResources which copies files to the resources folder
+  const indexPath = isDev 
+    ? path.join(__dirname, '../../../index.html')
+    : path.join(process.resourcesPath, 'index.html');
+  
+  mainWindow.loadFile(indexPath);
+  
   if (isDev) {
-    // In development, load from local server
-    mainWindow.loadURL('http://localhost:3000');
     mainWindow.webContents.openDevTools();
-  } else {
-    // In production, load the web app from file or remote URL
-    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
   }
 
   // Show window when ready
