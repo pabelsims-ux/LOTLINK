@@ -37,9 +37,7 @@
     },
     "files": [
       "src/**/*",
-      "assets/**/*",
-      "../index.html",
-      "../lotolink-logo.png"
+      "assets/**/*"
     ],
     "extraResources": [
       {
