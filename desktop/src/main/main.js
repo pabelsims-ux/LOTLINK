@@ -11,10 +11,11 @@ const Store = require('electron-store');
 const isDev = process.argv.includes('--dev');
 
 // Path constants
-// In development: project root is 3 levels up from desktop/src/main
+// In development: load from desktop/src/renderer
 // In production: files are in resources folder via extraResources config
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
-const DEV_INDEX_PATH = path.join(PROJECT_ROOT, 'index.html');
+const RENDERER_PATH = path.join(__dirname, '..', 'renderer', 'index.html');
+const DEV_INDEX_PATH = RENDERER_PATH;
 
 // Initialize electron store for persistent settings
 const store = new Store({
@@ -55,11 +56,13 @@ function createWindow() {
   });
 
   // Load the app
-  // In development: use DEV_INDEX_PATH constant
+  // In development: use RENDERER_PATH
   // In production: use extraResources folder via process.resourcesPath
-  const indexPath = isDev 
-    ? DEV_INDEX_PATH
-    : path.join(process.resourcesPath, 'index.html');
+  const prodPath = path.join(process.resourcesPath, 'index.html');
+  const fs = require('fs');
+  const indexPath = (isDev || !fs.existsSync(prodPath))
+    ? RENDERER_PATH
+    : prodPath;
   
   mainWindow.loadFile(indexPath);
   
