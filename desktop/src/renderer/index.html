@@ -1040,6 +1040,43 @@
       border-color: #48484a !important;
       color: #f5f5f7 !important;
     }
+    
+    .dark .right-panel {
+      background: #1c1c1e;
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .dark .calendar-widget {
+      background: #2c2c2e;
+    }
+    
+    .dark .calendar-widget .calendar-day:hover {
+      background: rgba(124, 58, 237, 0.2);
+    }
+    
+    .dark .user-list-item:hover {
+      background: rgba(124, 58, 237, 0.2);
+    }
+    
+    .dark .content-card {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(168, 85, 247, 0.15) 50%, rgba(219, 39, 119, 0.1) 100%);
+    }
+    
+    .dark .pill-filter {
+      background: #2c2c2e;
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f5f5f7;
+    }
+    
+    .dark .pill-filter:hover {
+      border-color: var(--primary);
+    }
+    
+    .dark .pill-filter.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
 
     /* ========================================
        SCROLLBAR
@@ -1366,12 +1403,12 @@
             <button class="calendar-nav titlebar-no-drag">
               <i class="fas fa-chevron-left text-gray-400"></i>
             </button>
-            <span class="font-semibold text-gray-700" id="calendar-month">Diciembre 2024</span>
+            <span class="font-semibold text-gray-700 dark:text-gray-200" id="calendar-month">Diciembre 2024</span>
             <button class="calendar-nav titlebar-no-drag">
               <i class="fas fa-chevron-right text-gray-400"></i>
             </button>
           </div>
-          <div class="calendar-grid text-sm text-gray-400 mb-2">
+          <div class="calendar-grid text-sm text-gray-400 dark:text-gray-500 mb-2">
             <span>Lu</span><span>Ma</span><span>Mi</span><span>Ju</span><span>Vi</span><span>Sa</span><span>Do</span>
           </div>
           <div class="calendar-grid" id="calendar-days">
@@ -5100,8 +5137,8 @@
             '<div class="status-indicator ' + user.status + '"></div>' +
           '</div>' +
           '<div class="flex-1">' +
-            '<p class="font-medium text-gray-900 text-sm">' + user.name + '</p>' +
-            '<p class="text-xs text-gray-500">' + user.id + '</p>' +
+            '<p class="font-medium text-gray-900 dark:text-white text-sm">' + user.name + '</p>' +
+            '<p class="text-xs text-gray-500 dark:text-gray-400">' + user.id + '</p>' +
           '</div>' +
         '</div>';
       }).join('');
