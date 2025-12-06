@@ -18,10 +18,10 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
-  <!-- Google Fonts - Inter -->
+  <!-- Google Fonts - Poppins & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   
   <style>
     /* ========================================
@@ -47,7 +47,7 @@
       --gradient-sidebar: linear-gradient(180deg, #7C3AED 0%, #9333EA 50%, #A855F7 100%);
       --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
       --gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      --gradient-card: linear-gradient(135deg, #E9D5FF 0%, #FBCFE8 100%);
+      --gradient-card: linear-gradient(135deg, #EDE9FE 0%, #FCE7F3 50%, #FDF4FF 100%);
       --gradient-gold: linear-gradient(135deg, #f5af19 0%, #f12711 100%);
       
       /* Background Colors */
@@ -84,19 +84,19 @@
       --radius-full: 9999px;
       
       /* Layout */
-      --sidebar-width: 80px;
-      --right-panel-width: 320px;
+      --sidebar-width: 220px;
+      --right-panel-width: 300px;
     }
 
     * {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
       box-sizing: border-box;
     }
 
     body { 
       -webkit-font-smoothing: antialiased; 
       -moz-osx-font-smoothing: grayscale;
-      background: var(--bg-main);
+      background: linear-gradient(135deg, #E0E7FF 0%, #F5F3FF 50%, #FCE7F3 100%);
       letter-spacing: -0.01em;
       margin: 0;
       padding: 0;
@@ -244,6 +244,123 @@
       box-shadow: 4px 0 24px rgba(124, 58, 237, 0.2);
     }
     
+    /* New Full Sidebar Style - 220px with text labels */
+    .sidebar-full {
+      background: white;
+      width: var(--sidebar-width);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      padding-top: 48px; /* Account for titlebar */
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 40;
+      border-right: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    
+    .sidebar-full .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      padding: 0 8px;
+    }
+    
+    .sidebar-full .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--gradient-primary);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    
+    .sidebar-full .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gray-600);
+    }
+    
+    .sidebar-full .nav-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .sidebar-full .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-lg);
+      color: var(--gray-500);
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      position: relative;
+      text-decoration: none;
+      margin-bottom: 4px;
+    }
+    
+    .sidebar-full .nav-item:hover {
+      background: rgba(124, 58, 237, 0.08);
+      color: var(--primary);
+    }
+    
+    .sidebar-full .nav-item.active {
+      background: var(--gradient-primary);
+      color: white;
+    }
+    
+    .sidebar-full .nav-item.active svg {
+      fill: white;
+    }
+    
+    .sidebar-full .nav-item svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+    
+    .sidebar-full .nav-bottom {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    
+    .dark .sidebar-full {
+      background: #1c1c1e;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .dark .sidebar-full .logo-text {
+      color: #f5f5f7;
+    }
+    
+    .dark .sidebar-full .nav-item {
+      color: var(--gray-400);
+    }
+    
+    .dark .sidebar-full .nav-item:hover {
+      background: rgba(167, 139, 250, 0.15);
+      color: #A78BFA;
+    }
+    
+    .dark .sidebar-full .nav-item.active {
+      background: var(--gradient-primary);
+      color: white;
+    }
+    
+    .dark .sidebar-full .nav-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
     /* New Compact Sidebar Style */
     .sidebar-compact {
       background: var(--gradient-sidebar);
@@ -289,6 +406,7 @@
       background: white;
       border-left: 1px solid rgba(0, 0, 0, 0.06);
       padding: 24px;
+      padding-top: 48px; /* Account for titlebar */
       position: fixed;
       right: 0;
       top: 0;
@@ -922,6 +1040,43 @@
       border-color: #48484a !important;
       color: #f5f5f7 !important;
     }
+    
+    .dark .right-panel {
+      background: #1c1c1e;
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .dark .calendar-widget {
+      background: #2c2c2e;
+    }
+    
+    .dark .calendar-widget .calendar-day:hover {
+      background: rgba(124, 58, 237, 0.2);
+    }
+    
+    .dark .user-list-item:hover {
+      background: rgba(124, 58, 237, 0.2);
+    }
+    
+    .dark .content-card {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(168, 85, 247, 0.15) 50%, rgba(219, 39, 119, 0.1) 100%);
+    }
+    
+    .dark .pill-filter {
+      background: #2c2c2e;
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f5f5f7;
+    }
+    
+    .dark .pill-filter:hover {
+      border-color: var(--primary);
+    }
+    
+    .dark .pill-filter.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
 
     /* ========================================
        SCROLLBAR
@@ -1144,41 +1299,86 @@
     
     <!-- Main App Content -->
     <div id="main-content" class="hidden flex w-full h-full">
-      <!-- Compact Purple Sidebar -->
-      <aside class="sidebar-compact">
+      <!-- Full Width Sidebar with Labels -->
+      <aside class="sidebar-full titlebar-drag">
         <!-- Logo -->
-        <div class="mb-8">
-          <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-            <i class="fas fa-ticket-alt text-white text-lg"></i>
+        <div class="logo-container">
+          <div class="logo-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white"/>
+              <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
+          <span class="logo-text">LotLink</span>
         </div>
         
-        <!-- Main Navigation Icons -->
-        <nav class="flex-1 flex flex-col items-center gap-2 titlebar-no-drag">
-          <button onclick="navigate('home'); return false;" class="nav-icon active" title="Dashboard">
-            <i class="fas fa-th-large"></i>
+        <!-- Main Navigation -->
+        <nav class="nav-section titlebar-no-drag">
+          <button onclick="navigate('home'); return false;" class="nav-item active" id="nav-home">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="7" height="7" rx="2" fill="currentColor"/>
+              <rect x="14" y="3" width="7" height="7" rx="2" fill="currentColor"/>
+              <rect x="3" y="14" width="7" height="7" rx="2" fill="currentColor"/>
+              <rect x="14" y="14" width="7" height="7" rx="2" fill="currentColor"/>
+            </svg>
+            <span>Dashboard</span>
           </button>
-          <button onclick="navigate('play'); return false;" class="nav-icon" title="Jugar">
-            <i class="fas fa-dice"></i>
+          <button onclick="navigate('play'); return false;" class="nav-item" id="nav-play">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+              <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+              <circle cx="16" cy="8" r="1.5" fill="currentColor"/>
+              <circle cx="8" cy="16" r="1.5" fill="currentColor"/>
+              <circle cx="16" cy="16" r="1.5" fill="currentColor"/>
+              <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+            </svg>
+            <span>Juegos</span>
           </button>
-          <button onclick="navigate('results'); return false;" class="nav-icon" title="Resultados">
-            <i class="fas fa-envelope"></i>
+          <button onclick="navigate('results'); return false;" class="nav-item" id="nav-results">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span>Mensajes</span>
           </button>
-          <button onclick="navigate('bancas'); return false;" class="nav-icon" title="Bancas">
-            <i class="fas fa-users"></i>
+          <button onclick="navigate('bancas'); return false;" class="nav-item" id="nav-bancas">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="9" cy="7" r="4" fill="currentColor"/>
+              <path d="M3 21V19C3 16.79 6.13 15 10 15C10.5 15 10.97 15.04 11.42 15.11" stroke="currentColor" stroke-width="2"/>
+              <circle cx="17" cy="12" r="3" fill="currentColor"/>
+              <path d="M14 21V19C14 17.67 15.67 16.5 18 16.05" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span>Usuarios</span>
           </button>
-          <button onclick="navigate('loterias'); return false;" class="nav-icon" title="Loterías">
-            <i class="fas fa-calendar-alt"></i>
+          <button onclick="navigate('loterias'); return false;" class="nav-item" id="nav-loterias">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M16 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M8 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M3 10H21" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span>Calendario</span>
           </button>
         </nav>
         
-        <!-- Bottom Icons -->
-        <div class="flex flex-col items-center gap-2 titlebar-no-drag">
-          <button onclick="navigate('profile'); return false;" class="nav-icon" title="Configuración">
-            <i class="fas fa-cog"></i>
+        <!-- Bottom Navigation -->
+        <div class="nav-bottom titlebar-no-drag">
+          <button onclick="navigate('profile'); return false;" class="nav-item" id="nav-profile">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+              <path d="M19.4 15C19.8 14.1 20 13.1 20 12C20 10.9 19.8 9.9 19.4 9M4.6 9C4.2 9.9 4 10.9 4 12C4 13.1 4.2 14.1 4.6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 19.4C14.1 19.8 13.1 20 12 20C10.9 20 9.9 19.8 9 19.4M9 4.6C9.9 4.2 10.9 4 12 4C13.1 4 14.1 4.2 15 4.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span>Configuración</span>
           </button>
-          <button onclick="navigate('wallet'); return false;" class="nav-icon" title="Directorio">
-            <i class="fas fa-folder"></i>
+          <button onclick="navigate('wallet'); return false;" class="nav-item" id="nav-wallet">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 19C22 20.1 21.1 21 20 21H4C2.9 21 2 20.1 2 19V5C2 3.9 2.9 3 4 3H20C21.1 3 22 3.9 22 5V19Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M2 9H22" stroke="currentColor" stroke-width="2"/>
+              <path d="M6 15H10" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span>Directorio</span>
           </button>
         </div>
       </aside>
@@ -1208,12 +1408,12 @@
             <button class="calendar-nav titlebar-no-drag">
               <i class="fas fa-chevron-left text-gray-400"></i>
             </button>
-            <span class="font-semibold text-gray-700" id="calendar-month">Diciembre 2024</span>
+            <span class="font-semibold text-gray-700 dark:text-gray-200" id="calendar-month">Diciembre 2024</span>
             <button class="calendar-nav titlebar-no-drag">
               <i class="fas fa-chevron-right text-gray-400"></i>
             </button>
           </div>
-          <div class="calendar-grid text-sm text-gray-400 mb-2">
+          <div class="calendar-grid text-sm text-gray-400 dark:text-gray-500 mb-2">
             <span>Lu</span><span>Ma</span><span>Mi</span><span>Ju</span><span>Vi</span><span>Sa</span><span>Do</span>
           </div>
           <div class="calendar-grid" id="calendar-days">
@@ -1269,46 +1469,44 @@
       </div>
       
       <!-- Main Content Area -->
-      <main class="ml-20 flex-1 p-8 overflow-y-auto" style="margin-right: var(--right-panel-width)">
+      <main class="flex-1 p-8 overflow-y-auto" style="margin-left: var(--sidebar-width); margin-right: var(--right-panel-width)">
         <!-- Home View -->
         <div id="view-home" class="view animate-fade-in">
           <!-- Section Header with Search -->
           <header class="mb-8">
             <div class="flex justify-between items-center mb-6">
-              <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Loterías Disponibles</h2>
+              <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Mis Juegos</h2>
               <div class="flex items-center gap-4">
-                <div class="relative">
-                  <input type="text" placeholder="Buscar..." class="pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl w-64 focus:border-purple-400 focus:ring-2 focus:ring-purple-100">
-                  <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                </div>
                 <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl flex items-center justify-center hover:border-purple-400 transition titlebar-no-drag">
-                  <i class="fas fa-bell text-gray-500"></i>
+                  <i class="fas fa-search text-gray-500"></i>
                 </button>
-                <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl flex items-center justify-center hover:border-purple-400 transition titlebar-no-drag">
-                  <i class="fas fa-cog text-gray-500"></i>
+                <button class="w-10 h-10 bg-white border border-gray-200 rounded-xl flex items-center justify-center hover:border-purple-400 transition titlebar-no-drag relative">
+                  <i class="fas fa-bell text-gray-500"></i>
+                  <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
                 </button>
               </div>
             </div>
             
             <!-- Filter Pills -->
             <div class="flex gap-3">
-              <button class="pill-filter active titlebar-no-drag">
-                <i class="fas fa-layer-group"></i>
-                <span>Todas</span>
-              </button>
-              <button class="pill-filter titlebar-no-drag">
-                <i class="fas fa-star"></i>
-                <span>Favoritas</span>
-                <i class="fas fa-chevron-down text-xs ml-1"></i>
-              </button>
               <button class="pill-filter titlebar-no-drag">
                 <i class="fas fa-clock"></i>
-                <span>Próximas</span>
+                <span>Tiempo</span>
                 <i class="fas fa-chevron-down text-xs ml-1"></i>
               </button>
               <button class="pill-filter titlebar-no-drag">
-                <i class="fas fa-fire"></i>
-                <span>Populares</span>
+                <i class="fas fa-signal"></i>
+                <span>Nivel</span>
+                <i class="fas fa-chevron-down text-xs ml-1"></i>
+              </button>
+              <button class="pill-filter titlebar-no-drag">
+                <i class="fas fa-th-large"></i>
+                <span>Categoría</span>
+                <i class="fas fa-chevron-down text-xs ml-1"></i>
+              </button>
+              <button class="pill-filter titlebar-no-drag">
+                <i class="fas fa-filter"></i>
+                <span>Tipo</span>
                 <i class="fas fa-chevron-down text-xs ml-1"></i>
               </button>
             </div>
@@ -3750,12 +3948,22 @@
         viewEl.classList.add('animate-fade-in');
       }
       
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(item => {
-        if (item.getAttribute('onclick')?.includes(view)) {
-          item.classList.add('active');
-        }
-      });
+      // Update sidebar active state
+      document.querySelectorAll('.sidebar-full .nav-item').forEach(n => n.classList.remove('active'));
+      const navMapping = {
+        'home': 'nav-home',
+        'play': 'nav-play',
+        'results': 'nav-results',
+        'bancas': 'nav-bancas',
+        'loterias': 'nav-loterias',
+        'profile': 'nav-profile',
+        'wallet': 'nav-wallet'
+      };
+      const navId = navMapping[view];
+      if (navId) {
+        const navEl = document.getElementById(navId);
+        if (navEl) navEl.classList.add('active');
+      }
       
       if (view === 'bancas') setTimeout(initBancasMap, 100);
       if (view === 'results') initResultsCharts();
@@ -4934,8 +5142,8 @@
             '<div class="status-indicator ' + user.status + '"></div>' +
           '</div>' +
           '<div class="flex-1">' +
-            '<p class="font-medium text-gray-900 text-sm">' + user.name + '</p>' +
-            '<p class="text-xs text-gray-500">' + user.id + '</p>' +
+            '<p class="font-medium text-gray-900 dark:text-white text-sm">' + user.name + '</p>' +
+            '<p class="text-xs text-gray-500 dark:text-gray-400">' + user.id + '</p>' +
           '</div>' +
         '</div>';
       }).join('');
